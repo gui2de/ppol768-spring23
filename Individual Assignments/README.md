@@ -1,2 +1,2 @@
 
-The `Individual assignments` folder contains, for each student, your individual assignments submissions.
+The `Individual Assignments` folder contains, for each student, your individual assignments submissions.

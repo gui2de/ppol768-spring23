@@ -1,5 +1,5 @@
 
-The `Group projects` folder contains, for each group, your group assignments submissions.
+The `Group Projects` folder contains, for each group, your group assignments submissions.
 
 # Group composition
 
