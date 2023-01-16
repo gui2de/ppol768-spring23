@@ -1,19 +1,23 @@
-This week's assignments are :
+# Week 01
 
-- Join [Github](https://github.com/) and share your username with the instructors using the [following form](https://forms.gle/h8EfYG188GBXW5d88)
-- Complete the CITI Training :
-  - Register with the [CITI Program](https://www.citiprogram.org/index.cfm?pageID=154&icat=0&clear=1)
-  - Select Georgetown University for your Organization Affiliation (use the Register tab, not the Log In tabs)
-  - Create a CITI Program account
-  - Complete the Human Research (**Group 2. Social and behavioral research investigators and key personnel**) training. Below are [more instructions](https://ora.georgetown.edu/irb/trainingrequirements/hsptraining/) on how to select the correct course:
-       - After logging in, click the "Add course or update your learner groups for Georgetown University" on the "Main Menu" page 
-       - You will be directed to a page titled "Select Curriculum - Georgetown University", scroll down to question 1 and select **Group 2**
-       - Question 3 and Question 5 must be answered, however, you are not required to take these courses for the certificate, so please select "Not at this time"
-       - Scroll to the bottom of the page and click “Submit”.  You will now be able to complete the Human Subject Protection training modules. 
-  - Save the training certificate. You will upload it to Github directly as part of next week's assignment.
+This week's assignments are:
 
+## Assignment 1: Create Biography and Merge on GitHub
 
+- Clone the `ppol768-spring23` repository from GitHub to your local machine using GitKraken.
+- Create and check out a branch for this week's asssignments called `w1-initials` (replace "initials" by your initials) using GitKraken.
+- Navigate in your file browser (ie, Finder) to the repository, and open the folder with your name inside the "Individual Assignments" directory.
+- Create a `week-01` folder inside your folder in the "Individual Assignments" directory.
+- In your `week-01` folder, create a `README.md` file. In it, write a two-paragraph biography of yourself, including your program, your level of experience with Stata, GitHub, and SurveyCTO, and some other basic biographical information of your choice. Save your edits. We recommend you use a text editing software like Atom to do this.
+- Push your branch to the GitHub remote using GitKraken, and then open a Pull Request (PR) to the `main` branch using the online interface. Assign someone at random from the group to review your request.
+- When you are assigned to someone else's request, experiment with leaving comments and suggestions in the Review feature in the online interface. Leave some comments.
+- When you recieve comments from someone else, make a few changes to experiment with this feature. Then, approve and merge the PR to `main` using the online interface.
+- Delete your working branch locally and online after merging the PR.
 
-Note : the CITI course should have 16 modules looking like the ones below (they may have slightly changed, but if it looks similar you are at the right place!).
+## Assignment 2: Reflection and Goals Essay
 
-![image](https://user-images.githubusercontent.com/25214335/212437229-00789d35-6aa2-479d-af54-9b7db73469e7.png)
+- This is a more open ended assignment and will not be visible to your peers. Here, we want you to write a short (2-3pg) essay reflecting on the nature of research and outlining your current experience and your learning goals for the course.
+- You will return to this essay when you write your midterm and final self-evaluations about your learning and success in the course.
+- Please write this in Word with standard settings (Calibri 12pt). Include your name at the top and include page numbers in the bottom margin. Save it in your personal files -- do NOT save it in the class repository!
+- Name the file INITIALS_W01-GOALS.docx (replacing INITIALS with your initials). Use capital letters and the underscore and dash -- not spaces -- so the title is exactly as appears here. This is important so the files alphabetize and order correctly in our system.
+- Submit this assignment using the Box submission link: [SUBMIT](https://georgetown.app.box.com/f/e8b46836b7304c81b1461c8756615f8f). This link will remain the submission link for the private evaluations throughout the term, and we'll let you know when to use it.
