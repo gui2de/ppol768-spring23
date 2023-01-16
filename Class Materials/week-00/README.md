@@ -12,7 +12,7 @@ This week's assignments are :
        - You will be directed to a page titled "Select Curriculum - Georgetown University", scroll down to question 1 and select **Group 2**
        - Question 3 and Question 5 must be answered, however, you are not required to take these courses for the certificate, so please select "Not at this time"
        - Scroll to the bottom of the page and click “Submit”.  You will now be able to complete the Human Subject Protection training modules.
-  - Save the training certificate. You will upload it to Github directly as part of next week's assignment.
+  - Save the training certificate. You will upload it to Github directly as part of next week's assignment (due 01/23).
 
 
 
