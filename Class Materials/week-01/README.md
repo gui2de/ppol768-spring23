@@ -5,7 +5,7 @@ This week's assignments are:
 ## Assignment 1: Create Biography and Merge on GitHub
 
 - Clone the `ppol768-spring23` repository from GitHub to your local machine using GitKraken.
-- Create and check out a branch for this week's asssignments called `w1-initials` (replace "initials" by your initials) using GitKraken.
+- Create and check out a branch for this week's asssignments called `w01-initials` (replace "initials" by your initials) using GitKraken.
 - Navigate in your file browser (ie, Finder) to the repository, and open the folder with your name inside the "Individual Assignments" directory.
 - Create a `week-01` folder inside your folder in the "Individual Assignments" directory.
 - In your `week-01` folder, create a `README.md` file. In it, write a two-paragraph biography of yourself, including your program, your level of experience with Stata, GitHub, and SurveyCTO, and some other basic biographical information of your choice. Save your edits. We recommend you use a text editing software like Atom to do this.
