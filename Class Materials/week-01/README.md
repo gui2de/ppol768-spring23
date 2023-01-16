@@ -17,7 +17,9 @@ This week's assignments are:
 ## Assignment 2: Reflection and Goals Essay
 
 - This is a more open ended assignment and will not be visible to your peers. Here, we want you to write a short (2-3pg) essay reflecting on the nature of research and outlining your current experience and your learning goals for the course.
-- You will return to this essay when you write your midterm and final self-evaluations about your learning and success in the course.
+- You are encouraged to reference the class readings (required and suggested) from the first couple of weeks to feed into the content of your essay. You should reflect on what is social science research, what makes it interesting, hard or easy, and what are your personal goals related to it.
+- To write your goals, you can use [the SMART framework that Georgetown uses](https://georgetown.s3.amazonaws.com/documents/GU-FY22-Performance-Management-Terms-and-Tools.pdf) for its employees self evaluations, which recommends goals to be : Specific, Measurable, Attainable, Relevant, Time-Bound.
+- You will return to this essay when you write your midterm and final self-evaluations about your learning and success in the course. For your reference, the self-assessment template is available [here](https://docs.google.com/document/d/1tWC3z3pbHoNAn_octc_Edj3W4f7DinQd6sLhLbjo-Lw/edit?usp=sharing). 
 - Please write this in Word with standard settings (Calibri 12pt). Include your name at the top and include page numbers in the bottom margin. Save it in your personal files -- do NOT save it in the class repository!
 - Name the file `INITIALS_W01-GOALS.docx` (replacing INITIALS with your initials). Use capital letters and the underscore and dash -- not spaces -- so the title is exactly as appears here. This is important so the files alphabetize and order correctly in our system.
 - Submit this assignment using the Box submission link: [SUBMIT](https://georgetown.app.box.com/f/e8b46836b7304c81b1461c8756615f8f). This link will remain the submission link for the private evaluations throughout the term, and we'll let you know when to use it.
