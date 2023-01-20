@@ -5,7 +5,7 @@ This week's (due 01/23) assignments are:
 ## Assignment 1a : Write Biography and Upload to Your Own GitHub Repo
 
 - Install GitKraken if you don't already have a Git client (instructions [here](https://github.com/gui2de/ppol768-spring23/tree/main/Class%20Materials))
-- Create and clone your own repo following instructions available in this week's [slides](01b_intro_git.pdf)
+- Create and clone your own public repo following instructions from this week's [slides](01b_intro_git.pdf)
 - Create a README.md in your own repo and write a two-paragraph biography of yourself, including your program, your level of experience with Stata, GitHub, and SurveyCTO, and some other basic biographical information of your choice. Save your edits. We recommend you use a text editing software like Atom to do this.
 - Add a link to your own repo in your Goals Essay
 
