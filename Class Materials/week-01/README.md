@@ -15,7 +15,7 @@ This week's (due 01/23) assignments are:
 - Create and check out a branch for this week's asssignments called `w01-initials` (replace "initials" by your initials) using GitKraken.
 - Navigate in your file browser (ie, Finder) to the repository, and open the folder with your name inside the "Individual Assignments" directory.
 - Create a `week-01` folder inside your folder in the "Individual Assignments" directory.
-- In your `week-01` folder, create a `README.md` file. In it, 
+- In your `week-01` folder, create a `README.md` file. 
 - In that same folder, upload your CITI certificate.
 - Push your branch to the GitHub remote using GitKraken, and then open a Pull Request (PR) to the `main` branch using the online GitHub interface. Assign someone at random from the group to review your request by tagging the class group (@ppol768-spring23) under the Reviewers' box on the right.
 - When you are assigned to someone else's request, experiment with leaving comments and suggestions in the Review feature in the online interface. Leave some comments, including asking for additional information.
