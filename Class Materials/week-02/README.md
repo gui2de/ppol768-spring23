@@ -1,16 +1,16 @@
 # Week 02
 
-This week's assignments (due 01/30) repeats last week's assignment using the GitHub branching, PR, and merging tools:
+This week's assignments (due 01/30) updates last week's assignment using the GitHub branching, PR, and merging tools.
 
-## Assignment 1: Add your biography to the class repository and extend it using Markdown formatting features
+## Assignment 1: Extend your biography using Markdown formatting features
 
-- Clone the `ppol768-spring23` repository from GitHub to your local machine using GitKraken.
-- Create and check out a branch for this week's asssignments called `w01-initials` (replace "initials" by your initials) using GitKraken.
+- Pull the latest version of the class repository to your local machine using GitKraken.
+- Create and check out a branch for this week's asssignments called `w02-initials` (replace "initials" by your initials) using GitKraken.
 - Navigate in your file browser (ie, Finder) to the repository, and open the folder with your name inside the "Individual Assignments" directory.
 - Create a `week-02` folder inside your folder in the "Individual Assignments" directory.
-- In your `week-02` folder, create a `README.md` file. In it, copy over your two-paragraph biography of yourself, including your program, your level of experience with Stata, GitHub, and SurveyCTO, and some other basic biographical information of your choice. Save your edits. We recommend you use a text editing software like [VSCode](https://gdeiana.github.io/economics/stata-vscode/) to do this.
-- Next, create an `img` folder in the same directory. Put a profile picture of yourself in that directory.
-- Add the profile picture of yourself to the biography using the relative file path, according to [Markdown syntax](https://daringfireball.net/projects/markdown/syntax).
+- In your `week-02` folder, copy the `README.md` file you have pushed in your `week-01` subfolder from last week's assignment.
+- Next, create an `img` folder in the same directory (`week-02`). Put a profile picture of yourself in that directory, and a picture of the place you were born (or some other favorite place of yours).
+- Add both pictures to the biography using the relative file path, according to [Markdown syntax](https://daringfireball.net/projects/markdown/syntax).
 - Add a few more paragraphs about your research interests -- specifically, add at least one table, at least one list, at least one hyperlink, at least one subsection header. Try out some of the other Markdown formatting. You will continue using these tools as you submit your group project materials. For example, try inserting some [math](https://github.blog/2022-05-19-math-support-in-markdown/).
 
 ## Assignment 2: Push your branch to GitHub and merge it into `main` using the pull request and review process
