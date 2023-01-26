@@ -1,0 +1,2 @@
+I am a second year MPP student with interests in labor, income inequality, monetary policy, and machine learning applications. I have strong experiece in Stata, but limited experience in GitHub and SurveyCTO. I also have expeience with Python and R. My thesis is currently exploring inflation inequality impacts on social services. 
+I am from Des Moines, Iowa, and looking to do a career transition form comms related work to more specific DS roles. 
