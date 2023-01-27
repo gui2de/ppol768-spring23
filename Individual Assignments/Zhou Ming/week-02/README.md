@@ -12,7 +12,7 @@ Due to my study in labor economics during my undergraduate and my recent exposur
 ## Understanding the Labor Force Participation Rate
 The labor force participation rate is the percentage of the civilian non-institutional population 16 years and older that is working or actively looking for work. It indicates the relative amount of labor resources available for the production of goods and services.
 
-$ labor participation rate = (Labor Force \over Civilian Noninstitutional Population)100% $
+$$ labor participation rate = (Labor Force \over Civilian Noninstitutional Population)100% $$
 
 It is an important labor market indicator since it could have a huge impact on the overall economy and provide information about the overall health of the labor market. For example, a decline in the number of people participating in the labor force could have a negative impact on the overall economy. According to research published by the Federal Reserve Bank of Philadelphia in 2017 [1], a falling LFP rate can slow the growth of GDP, as fewer people are contributing to the production of goods and services. Additionally, a lower participation rate could lead to higher tax rates, as it would result in a narrower tax base.
 
