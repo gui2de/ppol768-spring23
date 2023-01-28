@@ -3,7 +3,7 @@
 ## Overview
 I am Xinyu Zheng, a second-year MPP student at the McCourt School of Public Policy at Georgetown University. I originally came from China and earned a bachelor's degree in Economics at Beijing Foreign Studies University. My research or policy interest is sustainable development, especially renewable energy development. 
 
-![Profile picture](img/profile_picture.jpg){height=200px} ![Picture of a mountain in my hometown](img/hometown.jpg){height=200px}
+![Profile picture](img/profile_picture.png){height=200px} ![Picture of a mountain in my hometown](img/hometown.png){height=200px}
 
 ## Technical Background
 * Stata: I have been learning Stata since my undergraduate and understand syntaxes for standard descriptive analysis and regression. I am coding in Stata for my thesis analyzing whether financial constraints on firms deter them from eco-innovation, known as green technologies, with World Bank Enterprise Survey. 
