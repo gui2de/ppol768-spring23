@@ -11,7 +11,7 @@ My main research interests are financial inclusion and entrepreneurship in devel
 |--------------------------|---------------------------|
 | Financial Inclusion      | Economic opportunities    |
 |                          | for vulnerable communities|
-
+|--------------------------|---------------------------|
 ![DianaRivas_profilepic](https://user-images.githubusercontent.com/122761747/215381966-b72f3388-7aa0-41e2-98a4-fd1da1ac5656.jpeg)
 ![SenguioMichoacan](https://user-images.githubusercontent.com/122761747/215382121-5a78da47-ec3f-4056-b45f-c55e392dff70.jpeg)
 
