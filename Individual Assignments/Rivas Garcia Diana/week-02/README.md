@@ -15,12 +15,6 @@ My main research interests are financial inclusion and entrepreneurship in devel
 Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/diana-rivas-garcia/)  
 
 
-| Topic                    |  Policy Applications         | Why am I interested in this?                                                    |
-|--------------------------|------------------------------|---------------------------------------------------------------------------------|
-| Financial Inclusion      | Creating tools for the poor  | I studied economy in undergrad and I am interested in formal vs informal sectors|
-| Entrepreneurship         | Promoting economic activity  | My family is full of entrepreneurs so I love studying this subject              |
-
-Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/diana-rivas-garcia/)  
 
 ![DianaRivas_profilepic](https://user-images.githubusercontent.com/122761747/215622048-8af94791-284d-4214-a658-84939474aeae.png)
 ![SenguioMichoacan](https://user-images.githubusercontent.com/122761747/215622093-1d6ddb40-f338-406c-b8ab-43cb42639ef4.png)
