@@ -11,7 +11,17 @@ Since coming to McCourt, I have taken a couple of data science courses such as `
 
 ## Research Interests
 
-Although I am interested in most every policy issue, I gravitate towards housing as my main focus as housing issues are often intricately intertwined with and indicators of transportation, environmental, health, and education issues as well. I previously worked on housing issues in the San Francisco Bay Area and am most familiar with California housing policy. One bill I worked on while I was a legislative fellow in the Office of State Senator Nancy Skinner was [SB 330](https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200SB330), otherwise known as the **Housing Crisis Act of 2019**.
+Although I am interested in most every policy issue, I gravitate towards housing as my main focus as housing issues are often intricately intertwined with and indicators of transportation, environmental, health, and education issues as well. I previously worked on housing issues in the San Francisco Bay Area and am most familiar with California housing policy. One bill I worked on while I was a legislative fellow in the Office of State Senator Nancy Skinner was [SB 330](https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200SB330), otherwise known as the **Housing Crisis Act of 2019**. 
+
+Currently, I am investigating vacancy rates and taxes in Baltimore, Maryland in `MPUP 755: Affordable Housing Strategies`. One of the recent assignments I had to do was report decade changes in population and housing units. This it the table I submitted :)
+
+| Census Year  | Total Population | % White | % Black | Total Units | Vacant Units|
+| ------------- | ------------- |---------| ------- | ----------- | ----------- |
+| 1980          | 786,755       | 43.9   |  54.8  |  302,680 | 21,045 |
+| 1990          | 736,014       | 39.1   | 59.2  | 303,706   | 27,222 |
+| 2000          | 651,154       | 31.6   | 64.3  | 300,477   | 42,481  |
+| 2010          | 620,961       | 29.6   | 63.7  | 296,685   | 46,782  |
+| 2020          | 585,708       | 27.8   | 57.8  | 293,249   | still looking |
 
 My favorite place on earth is Joshua Tree, California! I was also born there, so I may be a little biased. Here's a photo I took this past year on my annual pilgrammage back to the desert.
 ![Model](https://github.com/gui2de/ppol768-spring23/blob/000c6021287b1178b3d46f0986a8378cc656fd5f/Individual%20Assignments/Hill%20Hannah/wk-02/joshua-tree.png)
