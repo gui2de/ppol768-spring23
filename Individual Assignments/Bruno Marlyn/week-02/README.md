@@ -2,7 +2,7 @@
 
 ##### \*pronounced "Mar-leen" 
 
-![_me_](/img/bio_pic.jpg)
+![_me_](/img/bio_pic.png)
 _(Anyone seen AOT?)_
 
 ### Background in statistical software
@@ -11,7 +11,7 @@ My name is Marlyn, and I'm a second-year MPP student at McCourt. I've used Stata
 
 ### Research interests
 
-![chi](/img/chicago.jpg) 
+![chi](/img/chicago.png) 
 _Midwest skies can even help romanticize allies and trash bins._
 
 I'm originally from Chicago and eager to return post-McCourt. In the past, I worked on criminal-immigration issues in community organizing, legal, and program management settings. I'm still passionate about those topics, but I've been using my grad school experience to become better versed with the social policies at the local and state level. 
