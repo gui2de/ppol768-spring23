@@ -21,7 +21,7 @@ To dive into the research, here I introduce my project experience with regard to
 |Year|Title|Country|
 |:-----|:----:|------:|
 |2020|Kenya Konza DMC development project|Kenya|
-|2019 Nepal UT-1 Hydropowerplant project|Nepal|
+|2019|Nepal UT-1 Hydropowerplant project|Nepal|
 |2016|Vietnam Bentre Hospital project|Vietnam|
 
 News articles regarding development projects above
