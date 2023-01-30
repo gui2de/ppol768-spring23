@@ -11,7 +11,7 @@ I am Xinyu Zheng, a second-year MPP student at the McCourt School of Public Poli
 * SurveyCTO: I do not have any experience in using SurveyCTO.
 
 ## Research Interest
-With interest in sustainable development, I have been working on projects to answer questions about green technology, environmental justice, and renewable energy.
+A chance to write a memorandum about a power crunch in China greatly drew my attention to the topic of sustainable development. I feel that facilitating energy transition is one of the most imperative approaches to combat climate change risk and releasing energy shortage. Since then, I have been working on projects about green technology and renewable energy to deepen my understanding of sustainability.
 
 As suggested by Kaya equation $CO2 = {CO2 \over E} * {E \over GDP} * {GDP \over POP} * POP$, to reduce CO2 emission, feasible approaches are **reducing carbon intensity** measured by ${CO2 \over E}$ and **controlling energy intensity** measured by ${E \over GDP}$, both of which are discussed in the following projects.
 
