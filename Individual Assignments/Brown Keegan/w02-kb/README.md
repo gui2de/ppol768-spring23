@@ -9,7 +9,7 @@ exploring inflation inequality impacts on social services.
 
 I am from Des Moines, Iowa, and looking to do a career transition form comms related work 
 to more specific DS roles. I moved to Utah for my undergrad degree, and found my favorite
-place on earth - Big Cottonwood Canyon. 
+place on earth - Big Cottonwood Canyon. See relative path (/img/) for details.  
 
 
 Research Interests 
