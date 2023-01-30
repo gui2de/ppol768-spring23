@@ -9,7 +9,9 @@ Since coming to McCourt, I have taken a couple of data science courses such as `
 
 ![Model](https://github.com/gui2de/ppol768-spring23/blob/d3bb996f6df0fe8a607b1a61a637857b68ea80a2/Individual%20Assignments/Hill%20Hannah/wk-02/Hill,%20Cobell%20Photo.JPG)
 
+## Research Interests
 
+Although I am interested in most every policy issue, I gravitate towards housing as my main focus as housing issues are often intricately intertwined with and indicators of transportation, environmental, health, and education issues as well. I previously worked on housing issues in the San Francisco Bay Area and am most familiar with California housing policy. One bill I worked on while I was a legislative fellow in the Office of State Senator Nancy Skinner was (tps://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200SB330 "SB 330").
 
 My favorite place on earth is Joshua Tree, California! I was also born there, so I may be a little biased. Here's a photo I took this past year on my annual pilgrammage back to the desert.
 ![Model](https://github.com/gui2de/ppol768-spring23/blob/000c6021287b1178b3d46f0986a8378cc656fd5f/Individual%20Assignments/Hill%20Hannah/wk-02/joshua-tree.png)
