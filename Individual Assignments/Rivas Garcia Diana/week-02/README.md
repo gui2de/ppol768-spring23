@@ -22,8 +22,10 @@ Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/diana-riv
 
 Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/diana-rivas-garcia/)  
 
-![DianaRivas_profilepic](https://user-images.githubusercontent.com/122761747/215381966-b72f3388-7aa0-41e2-98a4-fd1da1ac5656.jpeg)
-![SenguioMichoacan](https://user-images.githubusercontent.com/122761747/215382121-5a78da47-ec3f-4056-b45f-c55e392dff70.jpeg)
+![DianaRivas_profilepic](https://user-images.githubusercontent.com/122761747/215622048-8af94791-284d-4214-a658-84939474aeae.png)
+![SenguioMichoacan](https://user-images.githubusercontent.com/122761747/215622093-1d6ddb40-f338-406c-b8ab-43cb42639ef4.png)
+
+
 
 
 
