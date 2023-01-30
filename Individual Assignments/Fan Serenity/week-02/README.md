@@ -6,7 +6,7 @@ My WASH Research Interests
 -------------
 One area Serenity is particularly interested in within WASH is the intersection between WASH and public health. Many WASH programs are implemented under the tacit assumption that they will improve health outcomes -for instance, reducing diarrhoeal incidence for <5 children- but they do not necessarily have monitoring and evaluation systems and programs in place to ensure that these health outcomes occur. One organization they are interested in that is doing evidence-based work in this space is [Dispensers for Safe Water](https://www.evidenceaction.org/dispensersforsafewater/), which is housed within the INGO Evidence Action. Another organization of personal interest conducting rigorous WASH research is [3ie](https://www.3ieimpact.org/our-work/sanitation-and-hygiene-evidence-program). 
 
-![Profile Picture](helloME.jpeg)
+![Profile Picture](helloME.png)
 ![Toronto](TDot-skyline.png)
 
 The table below provides a definitional overview of a hierarchy of designations of water quality. 
