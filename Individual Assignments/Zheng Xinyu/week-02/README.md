@@ -20,3 +20,7 @@ As suggested by Kaya equation $CO2 = {CO2 \over E} * {E \over GDP} * {GDP \over 
 | [Wind Farm Siting](https://github.com/XZXinyuZheng/onshore_wind_turbine_gis_project)  | A Shiny app to explore how the onshore wind turbine siting in the U.S. geographically related to wind speed, land cover, distance to electricity transmission lines, and demographic features of communities |
 | [China Power Crunch](https://github.com/XZXinyuZheng/data_viz_china_power_crunch) | A portfolio visualized energy data in China to analyze the causes and solutions to the power crunch in China, with a special focus on the potential of renewable energy |
 
+## Why take this class
+
+We've been taking classes in quantitative analysis and econometrics. This class is an excellent opportunity to learn research design and implementation that complements the quant techniques. Good research design, ensuring the randomness of samples drawn, can considerably reduce the complexity of econometric methods needed to solve the identification problems. Also, from my experience in data analysis, it's essential to understand the best practice of data management in research to increase the efficiency and accuracy of research.
+
