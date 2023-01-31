@@ -4,9 +4,15 @@
 
 Hello, My name is Lidia Guzmán Fernández, I was born and raised in Madrid, Spain, but left at the age of sixteen to study in the UK until the age of twenty-one. 
 
+<<<<<<< HEAD
 ![Lidia Guzman]("img/Lidia-Guzman.jpg")
 
 ![Santiago Bernabeu Stadium]("img/santiago.jpg")
+=======
+![Lidia Guzman](img/Lidia-Guzman.png "My portrait")
+
+![Santiago Bernabeu Stadium](img/santiago.png "Santiago Bernabeu Stadium")
+>>>>>>> lgf-week02
 
 For the next three years I lived and worked in the fashion industry in Barcelona, Spain, and the following three years in Paris, France. In August 2021 I arrived in DC. Here I am a second year MPP student. Below you will find a table with all the schools /universities I went to and their location:
 
@@ -28,9 +34,9 @@ To get to know me better, here is a list of my type favourite sports:
   - Surf
   - Water-ski
 - Ground sports
-  -Football ( I refuse to call it soccer)
-  -Tennis (to watch)
-  -Badminton
+  - Football ( I refuse to call it soccer)
+  - Tennis (to watch)
+  - Badminton
 - Alpine sports
   - Skying
   
