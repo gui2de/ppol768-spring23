@@ -1,4 +1,0 @@
-# BIO
-My name is Emma Nyhof and I am in my second year of the MPP program as an evening student. I am originally from Michigan but have lived in the Washington, DC area for almost 5 years now. I am currently a policy analyst at the Center on Education and the Workforce here at Georgetown, and previously I have worked as a research assistant at American Institutes for Research and the Congressional Research Service. Most of my work has focused on education and labor policy.
-
-I have quite a bit of experience with Stata, starting in my undergraduate economics program, and have worked with it extensively in each of my jobs since. In my current role I regularly use Stata to clean and analyze large public datasets, and in previous a role I have worked with data from smaller intervention-based surveys. I currently have no experience with GitHub or SurveyCTO, so I'm looking forward to gaining experience in these areas during this class.

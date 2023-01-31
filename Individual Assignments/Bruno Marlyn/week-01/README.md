@@ -1,4 +1,0 @@
-
-My name is Marlyn, and I'm a second-year MPP student at McCourt. I've used Stata in a very limited sense. Generally, I have only used it for the quant sequence at McCourt, and I'm just about to use it for my thesis analysis. I know basic commands to browse data; summarize data; and run regressions. I don't have that much experience using Stata to clean, transform, or visualize data though (I tend to prefer R for those parts of the process). I have used Git and GitHub before in a different class, but I'm new to GitKraken. GitKraken looks friendlier than using the command line in my Terminal, which is a bit of a relief. I have never used SurveyCTO.
-
-I'm originally from Chicago, which mostly explains my primary interest in social urban policy. In my past lives, I worked on criminal-immigration issues, which I'm still passionate about, but I've been using my grad school experience to become better versed with the social safety net at the local and state level. 
