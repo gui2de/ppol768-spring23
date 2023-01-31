@@ -8,7 +8,7 @@ This week's (due 02/06) assignments are:
 
 ## Assignment 2 : Submit a project pitch for your group project.
 
-- Create a subfolder called `groupX` under the `Group Projects` folder (replacing X by the number of your group)
+- Create a subfolder called `group-X` under the `Group Projects` folder (replacing X by the number of your group)
 - Create an README.md at the root of that folder, where you will write out a pitch for your group project. The pitch will present your topic and your approach for studying it.
 - In order to help you think of examples of topics, we have uploaded under the `examples` subfolder some inspiration for the final deliverable you will be producing as a group for this class : in between a pre-analysis plan and a research project presentation. The group project assignments consist of several cumulative milestones (pitch, concept note, tables, final presentation) that will slowly build up to that final product. 
 - For this first submission, we do not expect that you will use any real data or do an in-depth literature review, but you should be able to find basic information about your topic online and be able to put together a simple summary of the state of knowledge in the area.
