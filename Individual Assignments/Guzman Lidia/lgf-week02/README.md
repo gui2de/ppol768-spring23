@@ -4,9 +4,9 @@
 
 Hello, My name is Lidia Guzmán Fernández, I was born and raised in Madrid, Spain, but left at the age of sixteen to study in the UK until the age of twenty-one. 
 
-![Lidia Guzman](/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/lgf-week02/img/Lidia-Guzman.jpg "Portrait of Lidia Guzman")
+![Lidia Guzman]("img/Lidia-Guzman.jpg")
 
-![Santiago Bernabeu Stadium](/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/lgf-week02/img/santiago.jpg "Photo of the Santiago Bernabeu Stadium")
+![Santiago Bernabeu Stadium]("img/santiago.jpg")
 
 For the next three years I lived and worked in the fashion industry in Barcelona, Spain, and the following three years in Paris, France. In August 2021 I arrived in DC. Here I am a second year MPP student. Below you will find a table with all the schools /universities I went to and their location:
 
