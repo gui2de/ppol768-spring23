@@ -3,37 +3,32 @@ The `Group Projects` folder contains, for each group, your group assignments sub
 
 # Group composition
 
-Once you have formed a group, please update this document and indicate the composition of your group. You will use a pull request (ie create a dedicated branch for this modification and merge it onto main) for this change, and will mark all three instructors (`bbdaniels`, `BeaLeydier`, `hamzamajoka`) as reviewers on that pull request.
+Once you have formed a group, please respond to the appropriate [thread](https://github.com/orgs/gui2de/teams/ppol768-spring23/discussions/2) on the team Discussions. 
 
 ## Group 1
 1. Member 1
 1. Member 2
 1. Member 3
-1. Member 4
 
 ## Group 2
 1. Member 1
 1. Member 2
 1. Member 3
-1. Member 4
 
 ## Group 3
 1. Member 1
 1. Member 2
 1. Member 3
-1. Member 4
 
 ## Group 4
 1. Member 1
 1. Member 2
 1. Member 3
-1. Member 4
 
 ## Group 5
 1. Member 1
 1. Member 2
 1. Member 3
-1. Member 4
 
 ## Group 6
 1. Member 1
@@ -44,3 +39,12 @@ Once you have formed a group, please update this document and indicate the compo
 1. Member 1
 1. Member 2
 1. Member 3
+
+## Group 8
+1. Member 1
+1. Member 2
+1. Member 3
+
+## Group 9
+1. Member 1
+1. Member 2
