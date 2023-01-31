@@ -4,7 +4,7 @@ This week's (due 02/06) assignments are:
 
 ## Assignment 1 : Form a group
 
-- Follow instructions on (Group Projects)[Group Projects/README.md] to form a group and notify us via the class repository.
+- Follow instructions on [Group Projects](https://github.com/gui2de/ppol768-spring23/blob/aaa8986faf01321d0969bdbe404d887c68a0e95d/Group%20Projects/README.md) to form a group and notify us via the class repository.
 
 ## Assignment 2 : Submit a project pitch for your group project.
 
