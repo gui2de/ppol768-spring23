@@ -3,7 +3,7 @@ The `Group Projects` folder contains, for each group, your group assignments sub
 
 # Group composition
 
-Once you have formed a group, please use a pull request to update this document and indicate the composition of your group. You will mark all three instructors as reviewers on that pull request.
+Once you have formed a group, please update this document and indicate the composition of your group. You will use a pull request (ie create a dedicated branch for this modification and merge it onto main) for this change, and will mark all three instructors (`bbdaniels`, `BeaLeydier`, `hamzamajoka`) as reviewers on that pull request.
 
 ## Group 1
 1. Member 1
@@ -39,4 +39,8 @@ Once you have formed a group, please use a pull request to update this document 
 1. Member 1
 1. Member 2
 1. Member 3
-1. Member 4
+
+## Group 7
+1. Member 1
+1. Member 2
+1. Member 3
