@@ -12,8 +12,8 @@ My main research interests are centered around impact evaluation on:
 
 One fun fact about me is that I used to keep bees and work in a honey store! As an example of a table, here are my top 3 honeys that I've ever tasted:
 
-+|Rank|Brand|Origin|Comment|
-+|One|Swan's Maine Beekeeper|Albion, ME|this one is somehow creamy! great on everything!|
-+|Two|Bar Hill| Montpelier, VT|his honey is my favorite wildflower honey, both floral and earthy. Fun fact - it's also used to make and flavor gin!|
-+|Three|Laulina Farm Honey| Hana, Hawaii |a bit tart! Really unique. Pairs well with rose tea |
+|Rank|Brand|Origin|Comment|
+|One|Swan's Maine Beekeeper|Albion, ME|this one is somehow creamy! great on everything!|
+|Two|Bar Hill| Montpelier, VT|his honey is my favorite wildflower honey, both floral and earthy. Fun fact - it's also used to make and flavor gin!|
+|Three|Laulina Farm Honey| Hana, Hawaii |a bit tart! Really unique. Pairs well with rose tea |
 
