@@ -6,9 +6,9 @@ The `Group Projects` folder contains, for each group, your group assignments sub
 Once you have formed a group, please respond to the appropriate [thread](https://github.com/orgs/gui2de/teams/ppol768-spring23/discussions/2) on the team Discussions. 
 
 ## Group 1
-1. Member 1
-1. Member 2
-1. Member 3
+1. Hannah Hill @hill-hannah
+1. Peyton Weber @pew36
+1. Scott Brown @scottabrown99
 
 ## Group 2
 1. Member 1
