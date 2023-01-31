@@ -3,7 +3,7 @@ I'm from Chengdu, China, and I graduated from Sichuan University with a Bachelor
 
 ![Bio photo](img/IMG_0903.PNG )
 
-![Place where i was born](img/Hometown_photos.PNG)
+![Place where i was born](img/Hometown_photos.png)
 
 Previously, I worked as a program associate and qualitative research assistant. During the summer of 2022, I worked as a Program Coordinator in the ARCHES program at the Georgetown University School of Medicine. During the fall of 2022, I worked as a research intern with the National Center on Sex Exploitation, assisting with qualitative research related to sex exploitation reduction. Currently, I'm working on a capstone project on FWA (fraud, waste, and abuse) in Medicare using statistic software R. We intend to build a model which could examine the correlation between FWA and health outcome disparities in Medicare and detect the amplifying effects of FWA on minority populations. I have experience working with GitHub and R (in the Intro to Data Science course) and have a basic knowledge of using STATA to for quantitative analysis.
 
