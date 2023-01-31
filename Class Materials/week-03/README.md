@@ -14,13 +14,13 @@ This week's (due 02/06) assignments are:
 - For this first submission, we do not expect that you will use any real data or do an in-depth literature review, but you should be able to find basic information about your topic online and be able to put together a simple summary of the state of knowledge in the area.
 - Your project pitch should be 2-5 pages long, and respond to the following questions :
 1. Introduction    
-   - Problem statement : what is the issue?    
-   - Background and motivation : why should we care?    
+   - Problem statement: What is the issue? The issue cannot be "people are poor" or "resources are insufficient".
+   - Background and motivation: Why should we care? What are the research and knowledge implications of trying to solve this problem?  
 1. Intervention
-   - Market failure : what particular mechanism is your intervention trying to fix?
-   - Theory of change : why is your intervention going to fix it?
-   - Relevance : what will we learn from your intervention beyond its own impact?
+   - Market failure: What mechanism is your intervention trying to use to improve the situation? As above, it cannot be "relaxing resource constraints" -- there must be an _economic_ possibility as to why existing resources are being used _inefficiently_.
+   - Theory of change: How is your intervention going to fix the market failure? What are the testable implications of results, including null results?
+   - Relevance: What will we learn from your intervention beyond its local impact? What are some other situations in which that knowledge can be used?
 1. Measurement
-   - Design : what is the research design?
-   - Data : how will you measure outcomes?
-   - Complications : what issues and complications do you foresee?
+   - Design: What is the research design? Who are the research subjects? Which are the comparison groups?
+   - Data: How will you measure outcomes? How will you collect information? How much information will you collect? From who?
+   - Complications: What issues and complications do you foresee? What is the timeline? When will you have results?
