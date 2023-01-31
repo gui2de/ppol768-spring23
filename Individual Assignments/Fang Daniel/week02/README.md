@@ -19,5 +19,11 @@ For example, one of my research projects attempted to predict a demand-deficient
 3. Healthcare policy
 4. Environmental policy
 
-This is one of my favorite econometrics journal: (https://www.econometricsociety.org/publications/econometrica/browse)
+Here are some resources I think would be helpful in developing a potential research topic in this class:
+| Name               | Link                                                                |   |   |   |
+|--------------------|---------------------------------------------------------------------|---|---|---|
+| D.C. Policy Center | https://www.dcpolicycenter.org/                                     |   |   |   |
+| Analysis Group     | https://www.analysisgroup.com/Insights/                             |   |   |   |
+| Econometrica       | https://www.econometricsociety.org/publications/econometrica/browse |   |   |   |
+| World Bank         | https://www.worldbank.org/en/research                               |   |   |   |
 
