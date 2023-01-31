@@ -26,7 +26,7 @@ Overall, I am interested in how education and workforce development can be used 
 
 Unfortunately, the rising costs of college have made attaining a postsecondary degree more difficult, if not impossible, for many. I am interested in exploring policy options that increase access to higher education for those that want it, but also increase high quality job opportunities for those that don't want to go back to school.
 
-### Photos (can't figure out how to make them smaller!)
+### Photos 
 
 ![Cleveland, OH](https://github.com/gui2de/ppol768-spring23/blob/w02-en/Individual%20Assignments/Nyhof%20Emma/week-02/week-02/img/Nighttime%2BAerial%2Bof%2BCleveland%2BSkyiline%2B(Heritage%2BPark)-1.png)
 
