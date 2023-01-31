@@ -4,6 +4,7 @@ In addition to taking graduate-level coursework in quantitative research methods
 
 IMAGES
 ![pic]("D:\2021-2023, Georgetown University\2023 - Spring\Research Design & Implementation\ScottsRepo\ppol768-spring23\Individual Assignments\Brown Scott\week-02\img\pic.png")
+
 ![healy]("D:\2021-2023, Georgetown University\2023 - Spring\Research Design & Implementation\ScottsRepo\ppol768-spring23\Individual Assignments\Brown Scott\week-02\img\healy.png")
 
 RESEARCH INTERESTS
