@@ -24,4 +24,6 @@ Here is my favorite place (and favorite people) ![favorite place](/img/pic.HEIC)
 
 I love the MSE!
 
-$$ MSE = \frac{\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^{2}}{n} $$
+$$ 
+MSE = \frac{\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^{2}}{n} 
+$$
