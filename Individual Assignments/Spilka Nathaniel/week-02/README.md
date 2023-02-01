@@ -20,7 +20,11 @@ I have experience using Stata, Github, Git, R, Matlab, and Bash, but have never 
 
 ![profile picture](img/pic.png)
 
-![favorite place](img/reiss.jpeg)
+![favorite place](img/hannahs_favorite_place.png)
+
+-   this
+-   is
+-   a list
 
 I love Newton!
 
