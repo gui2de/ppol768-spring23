@@ -29,7 +29,7 @@ Understanding and developing better strategies in this field will help the globa
 | 1      | 1 |2   |
 | 2      | 2 |3   |
 
-One organization that does work in this area is the Joint Data Center on Forced Displacement. Following the [link to the webpage](https://www.jointdatacenter.org/what-we-do/) here you can see the four steps that the JDC use to breakdown issues of forced displacement for study.
+One organization that does work in this area is the Joint Data Center on Forced Displacement. Following the [https://www.jointdatacenter.org/what-we-do/] here you can see the four steps that the JDC use to breakdown issues of forced displacement for study.
 
 trial
 
