@@ -20,7 +20,7 @@ I have experience using Stata, Github, Git, R, Matlab, and Bash, but have never 
 
 ![profile picture](img/pic.png)
 
-![pic](img/favorite_place.png)
+![favorite place](img/reiss.jpeg)
 
 I love Newton!
 
