@@ -14,28 +14,7 @@ One fun fact about me is that I used to keep bees and work in a honey store! As 
 
 
 
-<table>
-    <tr>
-        <th>Rank</th>
-        <th>Brand</th>
-        <th>Origin</th>
-        <th>Comment</th>
-    </tr>
-    <tr>
-        <th>One</th>
-        <th>Swan's Maine Beekeeper</th>
-        <th>Albion, ME</th>
-        <th>This one is somehow creamy! great on everything!</th>
-    </tr>
-    <tr>
-        <th>Two</th>
-        <th>Bar Hill</th>
-        <th>Montpelier, VT</th>
-        <th>This honey is my favorite wildflower honey, both floral and earthy. Fun fact - it's also used to make and flavor gin!</th>
-    </tr>
-    <tr>
-        <th>Three</th>
-        <th>Laulina Farm Honey</th>
-        <th>Hana, Hawaii</th>
-        <th>a bit tart! pairs well with rose tea</th>
-    </tr>
+|Rank|Brand|Origin|Comment|
+|One|Swan's Maine Beekeeper|Albion, ME|this one is somehow creamy! great on everything!|
+|Two|Bar Hill| Montpelier, VT|his honey is my favorite wildflower honey, both floral and earthy. Fun fact - it's also used to make and flavor gin!|
+|Three|Laulina Farm Honey| Hana, Hawaii |a bit tart! Really unique. Pairs well with rose tea |
