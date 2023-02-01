@@ -18,12 +18,10 @@ My background prior to McCourt is largely in neuroscience/psychology research (h
 
 I have experience using Stata, Github, Git, R, Matlab, and Bash, but have never used SurveyCTO. I'm looking forward to using more Stata and learning SurveyCTO this semester! In my free time I enjoy cooking, training jiu jitsu, swimming, and playing guitar.
 
-![profile picture](img/pic.png)
-![pic](img/favorite_place.png)
+![profile picture](img/pic.png) ![pic](img/favorite_place.png)
 
-
-I love the MSE! 
+I love the MSE!
 
 $$
-MSE = \frac{\sum_{i = 1} ^ {n} (y_{i}-\hat{y}_{i})^{2}}{n} 
+MSE = \frac { \sum _ {i = 1} ^ {n} (y_{i}-\hat{y}_{i})^{2}}{n} 
 $$
