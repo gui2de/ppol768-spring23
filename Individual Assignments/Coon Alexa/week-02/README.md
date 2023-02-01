@@ -24,12 +24,12 @@ I am interested in the growing work on information collection and analysis that 
 
 Understanding and developing better strategies in this field will help the global community handle a future with more migration, more refugees, and more internal displacement. 
 
-|X         | Y | Z|
+|X       | Y | Z  |
 |--------|:-:|-:  |
 | 1      | 1 |2   |
 | 2      | 2 |3   |
 
-One organization that does work in this area is the Joint Data Center on Forced Displacement. Following the [link to the webpage] https://www.jointdatacenter.org/what-we-do/ here you can see the four steps that the JDC use to breakdown issues of forced displacement for study.
+One organization that does work in this area is the Joint Data Center on Forced Displacement. Following the [link to the webpage](https://www.jointdatacenter.org/what-we-do/) here you can see the four steps that the JDC use to breakdown issues of forced displacement for study.
 
 trial
 
