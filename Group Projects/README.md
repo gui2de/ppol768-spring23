@@ -16,9 +16,9 @@ Once you have formed a group, please respond to the appropriate [thread](https:/
 1. Member 3
 
 ## Group 3
-1. Member 1
-1. Member 2
-1. Member 3
+1. Keegan Brown - @KBGTWN 
+1. Nate Spilka - @natespilka
+1. Elena Spielmann - @elenaspielmann
 
 ## Group 4
 1. Member 1
