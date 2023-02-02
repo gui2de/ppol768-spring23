@@ -1,6 +1,6 @@
 # BIO
 
-### Intro
+## Intro
 
 My name is Emma Nyhof and I am in my second year of the MPP program as an evening student. I was born in Cleveland, Ohio, but grew up in Michigan. I moved to Washington, DC shortly after graduating from college, and have now lived in area for almost 5 years. I am currently a policy analyst at the Center on Education and the Workforce here at Georgetown, and previously I have worked as a research assistant at American Institutes for Research and the Congressional Research Service. Most of my work has focused on education and labor policy.
 
