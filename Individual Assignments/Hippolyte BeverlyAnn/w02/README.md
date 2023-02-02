@@ -9,10 +9,12 @@ My research areas of interest are food, agriculture, migration and refugee polic
 
 My career aspirations include working on valuable research projects aimed at improving the lives of vulnerable groups in developing regions specifically the Caribbean and Africa.
 
-![This is my Headshot](BAH.png)
+![This is my Headshot!](BAH.png)
 
  Economic Papers
+
 I have read the following research papers over the course of my time as a student and have found them very intriguing.
+
 My favorite being the first in the table, a working paper I came across on Twitter.
 
 | Title | Research Area | Topic |
@@ -20,7 +22,8 @@ My favorite being the first in the table, a working paper I came across on Twitt
 |Social Distance and the Mistreatment of Migrant Workers   | Migration Policy | Treatment of migrant workers in Saudia Arabia and Qatar|       
 |Efficiency and Resource Implications of Food Losses and Waste in sub-Saharan Africa | Agriculture  | Food Loss |       
 
- The following are direct links to the above mentioned papers 
+ The following are direct links to the above mentioned papers
 
-[Mistreatment of Migrant Workers](https://www.nber.org/papers/w30804).
-[Food Losses and Waste](https://journals.sagepub.com/doi/10.1177/00219096211020490).
+* [Mistreatment of Migrant Workers](https://www.nber.org/papers/w30804)
+
+* [Food Losses and Waste](https://journals.sagepub.com/doi/10.1177/00219096211020490)
