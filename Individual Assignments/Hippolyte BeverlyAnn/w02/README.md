@@ -8,3 +8,19 @@ Research Interest Areas
 My research areas of interest are food, agriculture, migration and refugee policy. My interest in food and agriculture, mainly food security, food systems transformation and sustainable agri-food systems stems from food insecurity faced by my country Saint Lucia. Following supply chain issues, a consequence of the COVID-19 pandemic, the region faced a serious food insecurity issue because of its food import dependency, an issue I think can be vastly reduced if Caribbean governments invest heavily in policies that are aimed at creating sustainable and subsistent food systems. By extension this can help reduce many of the health issues faced by the region and can improve the livelihoods of Caribbean people.
 
 My career aspirations include working on valuable research projects aimed at improving the lives of vulnerable groups in developing regions specifically the Caribbean and Africa.
+
+![This is my Headshot](BAH.png)
+
+ Economic Papers
+I have read the following research papers over the course of my time as a student and have found them very intriguing.
+My favorite being the first in the table, a working paper I came across on Twitter.
+
+| Title | Research Area | Topic |
+| ---------- | ------------- |------- |
+|Social Distance and the Mistreatment of Migrant Workers   | Migration Policy | Treatment of migrant workers in Saudia Arabia and Qatar|       
+|Efficiency and Resource Implications of Food Losses and Waste in sub-Saharan Africa | Agriculture  | Food Loss |       
+
+ The following are direct links to the above mentioned papers 
+
+[Mistreatment of Migrant Workers](https://www.nber.org/papers/w30804).
+[Food Losses and Waste](https://journals.sagepub.com/doi/10.1177/00219096211020490).
