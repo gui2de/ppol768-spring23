@@ -9,7 +9,7 @@ My research areas of interest are food, agriculture, migration and refugee polic
 
 My career aspirations include working on valuable research projects aimed at improving the lives of vulnerable groups in developing regions specifically the Caribbean and Africa.
 
-![This is my Headshot!](/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/w02/img/BAH.png)
+![This is my Headshot!](./Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/w02/img/BAH.png)
 
  Economic Papers
 
