@@ -1,6 +1,6 @@
 **Group 4: Jiawei (Selina) Sun, Ming Zhou, Xinyu Zheng**
 
-## The effectiveness and economic impacts of Cap-and-trade programs in the U.S.
+## The effectiveness and economic impacts of cap-and-trade programs in the U.S.
 
 ### 1. Introduction 
 
