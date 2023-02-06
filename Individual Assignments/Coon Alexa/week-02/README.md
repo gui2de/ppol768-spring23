@@ -33,5 +33,6 @@ One organization that does work in this area is the Joint Data Center on Forced 
 
 trial
 
-![home]("C:\Users\Alexandra\Documents\GitHub\ppol768-spring23\Individual Assignments\Coon Alexa\week-02\img\home.png")  
+!![Screenshot_20230130_082929](https://user-images.githubusercontent.com/122833872/217023646-a21a4392-baf3-457c-ba51-ad059587505d.png)
+
 ![me]("C:\Users\Alexandra\Documents\GitHub\ppol768-spring23\Individual Assignments\Coon Alexa\week-02\img\me.png")
