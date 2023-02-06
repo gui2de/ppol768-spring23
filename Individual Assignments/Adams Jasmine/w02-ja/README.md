@@ -14,7 +14,7 @@ I am interested in conducting interdisciplinary social science research after gr
 #### Some fun facts:
 
 - I have a cat 😸 named Basil who has one eye
-- I once got pushed by by Jay-J in the crowd of a Beyonce concert 😅
+- I once got pushed by by Jay-Z in the crowd of a Beyonce concert 😅
 - I am a mediocre guitarist 🎸, saxophonist 🎷, and singer 🎤 who's been in 3 cover bands
 
 <br />
