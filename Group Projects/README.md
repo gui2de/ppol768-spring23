@@ -12,10 +12,10 @@ Once you have formed a group, please update this document and indicate the compo
 1. Member 4
 
 ## Group 2
-1. Member 1
-1. Member 2
-1. Member 3
-1. Member 4
+1. `Gustavomurillov`
+1. `mikegiunti`
+1. `lgf94`
+
 
 ## Group 3
 1. Member 1
