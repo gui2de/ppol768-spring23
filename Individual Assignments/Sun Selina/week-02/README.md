@@ -13,7 +13,7 @@ I touched a little on GitHub through Intro to DS class but I am not very skilled
 
 2. Image
 
-![bio image](/img/bio.png)
+![bio image](img/bio.png)
 
 ![bio image2](img/Wuhan.png)
 
