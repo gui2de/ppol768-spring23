@@ -20,14 +20,14 @@ Intervention
 
 There have been policies implemented to increase the rate of formalization in Colombia, however, the current data shows that informality still hovers at around 60% of total employment. The Colombian government has carried out endeavors to help businesses formalize that focus on information provision and regulatory improvements. Examples of these policies are the Ventanilla Única Empresarial, which is a one stop shop for the steps and forms needed to formalize a business and INVIMA, which is the simplification and reduction of forms needed to become a formal business. Below is a diagram provided by Colombia’s government in the Ministry of Commerce, Industry and Tourism website of the simplified process to formalize a business. The diagram also provides information regarding the reduced cost of the process; .7% of the business assets paid in the first step.
 
-![Table](img\Table_1.png)
+![Table](img/Table_1.png)
 
  Another important strategy that has been implemented are a series of information campaigns funded by different government bodies to promote the benefits of formalization. All of these strategies have tried to address the economic and informational barriers entrepreneurs face when making the decision to formalize or not. Even though these policies have been implemented, the market failure of high informality persists. This means that the monetary resources being spent in the formalization efforts are not productive. Our research project aims to find proof that targeting economic and informational barriers is not efficient for women entrepreneurs because they choose to stay informal due to personal reasons. The exact personal reason we target is the incentive of schedule flexibility as a parent. 
 
 Theory of Change: 
 =================
 |ToC Component|Explanation|
-|:-----------:|:---------:|
+|:----------------:|:----------------------------------------:|
 |Goals and objectives|Increase formalization among women entrepreneurs|
 |Inputs|Free childcare arrangements for the entrepreneurs in the treatment group|
 |Activities|Participants will continue receiving the resources about formalizing their business from the government. In addition, the treatment group will receive childcare|
@@ -41,15 +41,17 @@ Relevance:
 ==========
 The expected results of our research are that women will formalize their informal business once they have childcare provided. From this, we aim to show that monetary motivations alone will not work to incentivize formalization. The government must address entrepreneurs' personal incentives for choosing informality. It is important to understand the nonmonetary incentives for informality so they can be efficiently addressed. The strategies that have been attempted have not been successful in decreasing the rates of informality because a thorough analysis of why entrepreneurs self-select into the informal economy is not taken into account. Since our project will focus on one of the many incentives that exist, it will inspire further research to measure the effect of other personal incentives such as social pressure to stay informal. 
 
-Measurement
-===========
+# Measurement
+
 
 Research Design:
 ================
 The research will be designed to compare the impact of childcare support toward the formalization of female owned businesses with other programs. The research subjects will be informal female entrepreneurs raising children under high school age in Bogota. For all subjects, childcare support will be provided as a form of coupon to send their children to the childcare center, so that they can pay just a portion of the total amount using the coupon. (“Child Care Coupon”, or “CCC”) Regardless of registering their business or not, they can get the childcare support for six months.
 
 < Comparison Groups >
+
 |Control Group|Informal female entrepreneurs raising children under high school age in Bogota RECEIVING Information campaign|
+|:-------------:|:----------------------------------------------------:|
 |Treatment Group|Informal female entrepreneurs raising children under high school age in Bogota RECEIVING CCC|
 
 
@@ -66,19 +68,19 @@ References
 ==========
 Dávila, C., & Lluch, A. (2022). Entrepreneurship in Emerging Markets: Female Entrepreneurs in Colombia since 1990. Business History Review, 96(2), 373-397. doi:10.1017/S0007680522000502
 
-[Government of Colombia. (n.d.). Formalización empresarial [FAQ]. Mipymes. Retrieved February 6, 2023, from] (https://www.mipymes.gov.co/programas/formalizacion-empresarial/preguntas-frecuentes)
+Government of Colombia. (n.d.). Formalización empresarial [FAQ]. Mipymes. Retrieved February 6, 2023, from https://www.mipymes.gov.co/programas/formalizacion-empresarial/preguntas-frecuentes
 
-[Government of Colombia. (n.d.). Comité de formalización empresarial. Colombia Competitiva. Retrieved February 6, 2023, from] (https://www.colombiacompetitiva.gov.co/snci/ct/comite-formalizacion-empresarial)
+Government of Colombia. (n.d.). Comité de formalización empresarial. Colombia Competitiva. Retrieved February 6, 2023, from https://www.colombiacompetitiva.gov.co/snci/ct/comite-formalizacion-empresarial
 
-[Government of Colombia. (n.d.). Formalización empresarial. Ministerio de Industria, Comercio y Turismo. Retrieved February 6, 2023, from] (https://www.mincit.gov.co/minindustria/estrategia-transversal/formalizacion-empresarial)
+Government of Colombia. (n.d.). Formalización empresarial. Ministerio de Industria, Comercio y Turismo. Retrieved February 6, 2023, from https://www.mincit.gov.co/minindustria/estrategia-transversal/formalizacion-empresarial)-
 
-[Government of Colombia. (n.d.). Formalización empresarial. Ministerio de Industria, Comercio y Turismo. Retrieved February 6, 2023, from] (https://www.mincit.gov.co/minindustria/estrategia-transversal/formalizacion-empresarial)
+Government of Colombia. (n.d.). Formalización empresarial. Ministerio de Industria, Comercio y Turismo. Retrieved February 6, 2023, from https://www.mincit.gov.co/minindustria/estrategia-transversal/formalizacion-empresarial
 
-[International Monetary Fund. (2021, July 28). Five things to know about the informal economy. IMF. Retrieved February 6, 2023, from] (https://www.imf.org/en/News/Articles/2021/07/28/na-072821-five-things-to-know-about-the-informal-economy)
+International Monetary Fund. (2021, July 28). Five things to know about the informal economy. IMF. Retrieved February 6, 2023, from https://www.imf.org/en/News/Articles/2021/07/28/na-072821-five-things-to-know-about-the-informal-economy
 
-[Innovations for Poverty Action. (n.d.). Promoting business formalization through information outreach in Colombia. IPA. Retrieved February 6, 2023, from] (https://www.poverty-action.org/study/promoting-business-formalization-through-information-outreach-colombia#_ftnref1)
+Innovations for Poverty Action. (n.d.). Promoting business formalization through information outreach in Colombia. IPA. Retrieved February 6, 2023, from https://www.poverty-action.org/study/promoting-business-formalization-through-information-outreach-colombia#_ftnref1
 
-[Rojas, L. (2019, October 11). Is informality bad for business? Brookings Institution. Retrieved February 6, 2023, from] (https://www.brookings.edu/blog/future-development/2019/10/11/is-informality-bad-for-business/)
+Rojas, L. (2019, October 11). Is informality bad for business? Brookings Institution. Retrieved February 6, 2023, from https://www.brookings.edu/blog/future-development/2019/10/11/is-informality-bad-for-business/
 
-[World Bank. (2018). Colombia policy notes [PDF]. Retrieved February 6, 2023, from] (https://documents1.worldbank.org/curated/en/451371544569098125/pdf/Colombia-Policy-Notes.pdf)
+World Bank. (2018). Colombia policy notes [PDF]. Retrieved February 6, 2023, from https://documents1.worldbank.org/curated/en/451371544569098125/pdf/Colombia-Policy-Notes.pdf
 
