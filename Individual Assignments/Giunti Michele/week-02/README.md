@@ -22,9 +22,9 @@ Nevertheless, I understand that I need a lot more experience to implement my ide
 
 ### Photos
 
-![Professional Picture]("img/picture_michele.png")
+![Professional Picture](img/picture_michele.png)
 
-![My City]("img/rome.png")
+![My City](img/rome.png)
 
 ### Added Research Interests Paragraph
 
