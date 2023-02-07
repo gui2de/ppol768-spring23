@@ -1,0 +1,4 @@
+Serenity Fan (they/them) is a 1st-year Georgetown student in the MIDP (Master of International Development Policy) program in the McCourt School of Public Policy. They have some experience in Stata from an introductory Stata module, as well as analysis of Nigerian household survey panel data. They have elementary experience using basic commands in GitHub to manipulate and update Python code, and have not used SurveyCTO before.  
+
+As an interdisciplinary data analyst, project manager, fundraiser, Serenity has over 4 years of professional experience - including 8 months Global South field experience - spanning rural water supply in Myanmar, immunization behaviour change in India, and refugee mental health in Canada. They have conducted scientific research doing data analysis, cleaning, and visualization in 4 research labs, in which capacity they developed proficiency in MATLAB, ArcGIS, and LaTeX/Overleaf. 
+
