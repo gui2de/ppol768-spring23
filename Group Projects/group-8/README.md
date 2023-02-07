@@ -31,11 +31,11 @@ There have been few studies on whether credit builder loans (CBL) meaningfully i
 #### Theory of change: 
   
   1. The credit union makes monthly loan payments on behalf of loan borrowers. 
-  2. Borrowers establish a history of timely payments and a higher credit score.
-  3, Having a higher credit score increases union members’ access to credit and lower interest rate loans.
+  2. Borrowers establish a history of timely payments and a higher credit score. 
+  3. Having a higher credit score increases union members’ access to credit and lower interest rate loans.
   4. These advantages help members secure other benefits, such as rental housing approvals and fair mortgage loans.<br><br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://lh4.googleusercontent.com/b_Vq2k2NM7DNb1todo1-_G5QhUHxAwMc62lecDjn0n1xO8Y1xAuC5DKTwJW0SXDbENRs-y5NWBvqytlD7Yp1LWT4G2lquvRVx1J6JhRf3FRgJwocNY_Dbt50JtWPUFD_otnqVBfSxhwWbNasKlkAqXU" alt="toc" width="250">
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://lh4.googleusercontent.com/b_Vq2k2NM7DNb1todo1-_G5QhUHxAwMc62lecDjn0n1xO8Y1xAuC5DKTwJW0SXDbENRs-y5NWBvqytlD7Yp1LWT4G2lquvRVx1J6JhRf3FRgJwocNY_Dbt50JtWPUFD_otnqVBfSxhwWbNasKlkAqXU" alt="toc" width="250"><br>
   
 #### Implications
 Whether participants’ credit scores rise and remain in good standing has implications for the effectiveness and sustainability of the program. Evaluating the access, limits, rates, and usage of loans and credit cards would provide insight into how effective and relevant the program is at increasing beneficiaries’ access to credit. Aside from implying that the CBL program was ineffective, null results could indicate a lagged effect or the need to identify and control for confounding factors. 
