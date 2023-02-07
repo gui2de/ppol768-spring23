@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: sentence
----
-
 ### Elena Spielmann, Keegan Brown, Nate Spilka
 
 # Employee Wellness Programs in Rural America
