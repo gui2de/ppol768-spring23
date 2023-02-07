@@ -1,6 +1,6 @@
 
 # Group #6 
-# Project Pitch
+# Project Pitch: Using childcare as incentive for women entrpreneurs to formalize
 **BeverlyAnn Hippolyte, Diana Rivas Garcia, Young-Ju Nam**
 
 
