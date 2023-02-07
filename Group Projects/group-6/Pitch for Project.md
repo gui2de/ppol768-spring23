@@ -1,6 +1,7 @@
 
-# Group #6 Project Pitch
-BeverlyAnn Hippolyte, Diana Rivas Garcia, Young-Ju Nam
+# Group #6 
+# Project Pitch
+**BeverlyAnn Hippolyte, Diana Rivas Garcia, Young-Ju Nam**
 
 
 ## 1. Introduction
@@ -15,20 +16,12 @@ The informal sector creates a gap between the amount of  tax revenue generated a
 ## 2. Intervention
 There have been policies implemented to increase the rate of formalization in Colombia, however, the current data shows that informality still hovers at around 60% of total employment. The Colombian government has carried out endeavors to help businesses formalize that focus on information provision and regulatory improvements. Examples of these policies are the Ventanilla Única Empresarial, which is a one stop shop for the steps and forms needed to formalize a business and INVIMA, which is the simplification and reduction of forms needed to become a formal business. Below is a diagram provided by Colombia’s government in the Ministry of Commerce, Industry and Tourism website of the simplified process to formalize a business. The diagram also provides information regarding the reduced cost of the process; .7% of the business assets paid in the first step.
 
-![Table](\img\Table_1.png)
+![Table](Table_1.png)
 
  Another important strategy that has been implemented are a series of information campaigns funded by different government bodies to promote the benefits of formalization. All of these strategies have tried to address the economic and informational barriers entrepreneurs face when making the decision to formalize or not. Even though these policies have been implemented, the market failure of high informality persists. This means that the monetary resources being spent in the formalization efforts are not productive. Our research project aims to find proof that targeting economic and informational barriers is not efficient for women entrepreneurs because they choose to stay informal due to personal reasons. The exact personal reason we target is the incentive of schedule flexibility as a parent. 
 
 ### Theory of Change: 
-|ToC Component|Explanation|
-|:----------------:|:----------------------------------------:|
-|Goals and objectives |Increase formalization among women entrepreneurs |
-|Inputs|Free childcare arrangements for the entrepreneurs in the treatment group |
-|Activities|Participants will continue receiving the resources about formalizing their business from the government. In addition, the treatment group will receive childcare|
-|Outputs|Women will formalize their business because they will have flexibility over their own schedule since their children are being taken care of| 
-|Outcomes|Inform policymakers to better target the incentives for people to be in the informal economy so that they can formalize their business| 
-|Impact|Better policies will be created to increase formalization. Further research on behavioral incentives as reasons to stay informal will be inspired| 
-|Assumptions|We are assuming women mothers care about the wellbeing of their children and their household, which motivates them to want to take care of them. This means that we assume this sector of entrepreneurs chooses family over economic growth| 
+![TOC](TOC.png)
 
 
 ### Relevance:
@@ -39,10 +32,7 @@ The expected results of our research are that women will formalize their informa
 ### Research Design:
 The research will be designed to compare the impact of childcare support toward the formalization of female owned businesses with other programs. The research subjects will be informal female entrepreneurs raising children under high school age in Bogota. For all subjects, childcare support will be provided as a form of coupon to send their children to the childcare center, so that they can pay just a portion of the total amount using the coupon. (“Child Care Coupon”, or “CCC”) Regardless of registering their business or not, they can get the childcare support for six months.
 
-< Comparison Groups >
-|Control Group|Informal female entrepreneurs raising children under high school age in Bogota RECEIVING Information campaign|
-|-------------|----------------------------------------------------|
-|Treatment Group|Informal female entrepreneurs raising children under high school age in Bogota RECEIVING CCC|
+![CG](CG.png)
 
 
 ### Data Measure:
