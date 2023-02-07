@@ -1,5 +1,6 @@
-# must-pass-class
-This is a demo repository
+# Biography
+
+Overview
 
 My name is BeverlyAnn Hippolyte, I am first-year International Development Policy (MIDP) Student and this isn't my first time working with coding software but it is my first time working with GitHub, SurveyCTO, Atom and Stata. I would like to think that I have a basic understanding of Stata and that I am capable of learning so much more and hopefully becoming a skilled data analyst which will make me a skilled policy analyst. I studied Banking and Finance at the Undergraduate level and graduate from the University of the West Indies, CaveHill campus situated in Barbados. Prior to my enrollment at Georgetown, I worked as a Credit Risk Analyst at the Saint Lucia Development Bank. My time at the Bank, fuelled my interest in International Development Policy. I really enjoyed working in this area because its purpose was to provided access to finance for higher risk citizens who would have very limited access to finance from commercial intermediaries.
 
@@ -9,7 +10,7 @@ My research areas of interest are food, agriculture, migration and refugee polic
 
 My career aspirations include working on valuable research projects aimed at improving the lives of vulnerable groups in developing regions specifically the Caribbean and Africa.
 
-![This is my Headshot!](BAH.png)
+![This is my Headshot!](./Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/w02/img/BAH.png)
 
  Economic Papers
 
