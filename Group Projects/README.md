@@ -11,9 +11,9 @@ Once you have formed a group, please respond to the appropriate [thread](https:/
 1. Scott Brown @scottabrown99
 
 ## Group 2
-1. Member 1
-1. Member 2
-1. Member 3
+1. `Gustavomurillov`
+1. `mikegiunti`
+1. `lgf94`
 
 ## Group 3
 1. Member 1
