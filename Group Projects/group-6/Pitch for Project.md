@@ -1,5 +1,5 @@
 
-# Group #6 Project Pitch
+### Group #6 Project Pitch
 BeverlyAnn Hippolyte, Diana Rivas Garcia, Young-Ju Nam
 
 
@@ -20,7 +20,7 @@ Intervention
 
 There have been policies implemented to increase the rate of formalization in Colombia, however, the current data shows that informality still hovers at around 60% of total employment. The Colombian government has carried out endeavors to help businesses formalize that focus on information provision and regulatory improvements. Examples of these policies are the Ventanilla Única Empresarial, which is a one stop shop for the steps and forms needed to formalize a business and INVIMA, which is the simplification and reduction of forms needed to become a formal business. Below is a diagram provided by Colombia’s government in the Ministry of Commerce, Industry and Tourism website of the simplified process to formalize a business. The diagram also provides information regarding the reduced cost of the process; .7% of the business assets paid in the first step.
 
-![Table](img/Table_1.png)
+![Table](Table_1.png)
 
  Another important strategy that has been implemented are a series of information campaigns funded by different government bodies to promote the benefits of formalization. All of these strategies have tried to address the economic and informational barriers entrepreneurs face when making the decision to formalize or not. Even though these policies have been implemented, the market failure of high informality persists. This means that the monetary resources being spent in the formalization efforts are not productive. Our research project aims to find proof that targeting economic and informational barriers is not efficient for women entrepreneurs because they choose to stay informal due to personal reasons. The exact personal reason we target is the incentive of schedule flexibility as a parent. 
 
@@ -51,7 +51,7 @@ The research will be designed to compare the impact of childcare support toward 
 < Comparison Groups >
 
 |Control Group|Informal female entrepreneurs raising children under high school age in Bogota RECEIVING Information campaign|
-|:-------------:|:----------------------------------------------------:|
+|-------------|----------------------------------------------------|
 |Treatment Group|Informal female entrepreneurs raising children under high school age in Bogota RECEIVING CCC|
 
 
