@@ -34,6 +34,8 @@ ACFT Pass Rate (Active Duty)
 
 ![Elena Spielmann](\img\not_distorted_selfie_via_gimp.png "My portrait")
 
+Test change
+
 ![WSMR_museum_Missile_Park](jpg "Selfie")
 
 This is where I'll be working when I return to the Army. Las Cruces is a hidden _gem_. 10/10 would recommend.
