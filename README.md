@@ -15,3 +15,10 @@ We will use it for all class documents, assignments and peer reviews purposes. H
 2. `Individual Assignments` contains, for each student, your individual assignments submissions
 
 You will use Pull Requests to submit your work, review your peers', and receive feedback. Feel free to create Issues to start discussions within your teams, with your peers, and with your instructors as well!
+
+“DRiP”: Bjärkefur, Kristoffer, Luíza Cardoso de Andrade, Benjamin Daniels, and Maria Ruth Jones. 
+Development Research in Practice: The DIME Analytics Data Handbook. World Bank Publications, 2021. 
+Online at: https://openknowledge.worldbank.org/handle/10986/35594
+ 
+Tufte, Edward R. Data Analysis for Politics and Policy. Englewood Cliffs, NJ: Prentice-Hall, 1974. 
+Online at: https://www.edwardtufte.com/tufte/dapp/
