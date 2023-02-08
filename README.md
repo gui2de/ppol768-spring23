@@ -4,6 +4,8 @@ Welcome to our class repository!
 
 [Syllabus can be found at this link.](https://docs.google.com/document/d/1syrSSsWNsHKSSiqoVOryFDt70G8fDXED/edit?usp=sharing&ouid=102777842561489392064&rtpof=true&sd=true) 
 
+[Class recordings can be found at this link.](https://georgetown.box.com/s/pmng4njzlpb3633wh1k9qfhoypcnrme5)
+
 [Announcements and discussions can be found in the Discussions tab of the repository.](https://github.com/gui2de/ppol768-spring23/discussions)
 
 We will use it for all class documents, assignments and peer reviews purposes. Here is how it is organized
