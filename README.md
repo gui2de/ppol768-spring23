@@ -18,9 +18,9 @@ You will use Pull Requests to submit your work, review your peers', and receive 
 
 ## Textbooks
 
-“DRiP”: Bjärkefur, Kristoffer, Luíza Cardoso de Andrade, Benjamin Daniels, and Maria Ruth Jones. 
-Development Research in Practice: The DIME Analytics Data Handbook. World Bank Publications, 2021. 
+**"DRiP"**: Bjärkefur, Kristoffer, Luíza Cardoso de Andrade, Benjamin Daniels, and Maria Ruth Jones. 
+_Development Research in Practice: The DIME Analytics Data Handbook_. World Bank Publications, 2021. 
 Online at: https://openknowledge.worldbank.org/handle/10986/35594
  
-Tufte, Edward R. Data Analysis for Politics and Policy. Englewood Cliffs, NJ: Prentice-Hall, 1974. 
+**Tufte**, Edward R. _Data Analysis for Politics and Policy_. Englewood Cliffs, NJ: Prentice-Hall, 1974. 
 Online at: https://www.edwardtufte.com/tufte/dapp/
