@@ -8,8 +8,8 @@ I have started learning Stata last semester in the Quant course. Besides that,  
 Pictures
 ========
 
-![Profile photo](/img/4506_0627650.png)
-![City photo](/img/wuhan-city-photo0.png)
+![Profile photo](img/4506_0627650.png)
+![City photo](img/wuhan-city-photo0.png)
 
 
 Research Interest
@@ -20,11 +20,11 @@ I am interest in equal and social justice. In terms of policy ares, this would b
 
 I have developed interest in this area through previous study of political philosophy as I was majored in philosophy at undergrad. Here is a table of writings that you might find useful to read if you want to explore this topic for a little bit.
 
-| Title               | Author          |
-|---------------------| Author          |
-| Luck and Equality   | Richard Arneson |
-| What is equality    | Ronald Dworkin  |
-| A Theory of Justice | John Rawls      |
+| Title|Author|
+|------|------------| 
+| Luck and Equality| RichardArneson |
+| What is equality | Ronald Dworkin |
+| A Theory of Justice |John Rawls|
 
 Richard Arneson is the only author above that has a personal website and this is the [link](http://philosophyfaculty.ucsd.edu/faculty/rarneson/)
 
