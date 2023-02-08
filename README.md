@@ -8,13 +8,15 @@ Welcome to our class repository!
 
 [Announcements and discussions can be found in the Discussions tab of the repository.](https://github.com/gui2de/ppol768-spring23/discussions)
 
-We will use it for all class documents, assignments and peer reviews purposes. Here is how it is organized
+## Repository Organization
 
 1. `Class Materials` contains, for each week, readings, slides (if relevant), and assignment prompts
 2. `Group Projects` contains, for each group, your group assignments submissions
 2. `Individual Assignments` contains, for each student, your individual assignments submissions
 
 You will use Pull Requests to submit your work, review your peers', and receive feedback. Feel free to create Issues to start discussions within your teams, with your peers, and with your instructors as well!
+
+## Textbooks
 
 “DRiP”: Bjärkefur, Kristoffer, Luíza Cardoso de Andrade, Benjamin Daniels, and Maria Ruth Jones. 
 Development Research in Practice: The DIME Analytics Data Handbook. World Bank Publications, 2021. 
