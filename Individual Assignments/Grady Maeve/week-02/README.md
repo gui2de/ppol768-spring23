@@ -1,4 +1,4 @@
-## Introductory Bio
+### Introductory Bio
 
 Hi! My name is Maeve and I've been kicking around McCourt for a year and half working towards an MPP. Like the rest of us, I've learned STATA in this time, but immensely prefer to work in R. In R I'm mostly self-taught as a result of different jobs here and there but had some formal training in undergrad. Similarly,I have only limited git and GitHub experience from poking around on the internet and occaisional freelance work. I don't have much experience with SurveyCTO, but have used Alchemer a bit. Excited to solidfy some skills in this class and be ready to integrate into real-world projects! 
 
