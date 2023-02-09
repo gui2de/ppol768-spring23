@@ -92,6 +92,7 @@
 
 #######################
 # Include some additional file formats in any folder.
+!/**/*.dta
 !/**/*.txt
 !/**/*.csv
 !/**/*.xml
@@ -99,5 +100,6 @@
 !/**/*.svg
 !/**/*.pdf
 !/**/*.png
+!/**/*.jpg
 !/**/*.docx
 !/**/*.xlsx
