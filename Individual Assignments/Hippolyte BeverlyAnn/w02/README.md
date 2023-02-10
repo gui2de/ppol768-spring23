@@ -8,9 +8,15 @@ Research Interest Areas
 
 My research areas of interest are food, agriculture, migration and refugee policy. My interest in food and agriculture, mainly food security, food systems transformation and sustainable agri-food systems stems from food insecurity faced by my country Saint Lucia. Following supply chain issues, a consequence of the COVID-19 pandemic, the region faced a serious food insecurity issue because of its food import dependency, an issue I think can be vastly reduced if Caribbean governments invest heavily in policies that are aimed at creating sustainable and subsistent food systems. By extension this can help reduce many of the health issues faced by the region and can improve the livelihoods of Caribbean people.
 
-My career aspirations include working on valuable research projects aimed at improving the lives of vulnerable groups in developing regions specifically the Caribbean and Africa.
+My career aspirations include working on valuable research projects aimed at improving the lives of vulnerable groups in developing regions specifically the Caribbean and Africa, specifically smallholde farmers, women and children. 
 
+
+<img width="507" alt="Screenshot 2023-02-06 at 11 10 47 AM" src="https://user-images.githubusercontent.com/122580464/217128299-73fa65ee-5c91-4082-baf3-8ea149becdd3.png">
+
+<<<<<<< HEAD
 ![This is my Headshot!](./Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/w02/img/BAH.png)
+=======
+>>>>>>> main
 
  Economic Papers
 
