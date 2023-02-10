@@ -14,7 +14,6 @@ My career aspirations include working on valuable research projects aimed at imp
 <img width="507" alt="Screenshot 2023-02-06 at 11 10 47 AM" src="https://user-images.githubusercontent.com/122580464/217128299-73fa65ee-5c91-4082-baf3-8ea149becdd3.png">
 
 
-
  Economic Papers
 
 I have read the following research papers over the course of my time as a student and have found them very intriguing.
