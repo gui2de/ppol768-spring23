@@ -1,0 +1,152 @@
+/* Marlyn Bruno
+PPOL 768
+Week 4 Assignment*/
+
+**********************************************************************************
+
+						*Question 1: Crop Insurance in Kenya*
+						
+***********************************************************************************
+
+*Setting up working directory
+global wd "/Users/marlyn/GitHub/ppol768-spring23/Individual Assignments/Bruno Marlyn/week-04"
+use "/Users/marlyn/GitHub/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q1_village_pixel.dta", clear
+
+
+if c(username)=="ah1152" {
+	global wd "C:/Users/ah1152/Documents/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
+	use "q1_village_pixel.dta", clear
+}
+
+* Ali Hamza 2 (MacOS)
+else if c(username)=="Zambeel" {
+	global wd "/Users/Zambeel/Downloads/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
+	use "q1_village_pixel.dta", clear
+}
+
+* Beatrice Leydier
+else if c(username)=="Pytha" {
+	global wd "C:/Users/Pytha/Box Drive/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
+	use "q1_village_pixel.dta", clear
+}
+
+else {
+	display as error "Please define global wd before running this do file"
+}
+
+*a) Payout variable should be consistent within a pixel, confirm if that is the case. 
+bysort pixel: tab payout //confirming it's the case and it is
+
+*a) Create a new dummy variable (pixel_consistent), this variable =1 if payout variable isn't consistent within that pixel (i.e. =0 when all the payouts are exactly the same, =1 if there is even a single different payout in the pixel)
+bysort pixel: egen pixel_mean = mean(payout)
+
+gen pixel_inconsistent = 0
+replace pixel_inconsistent = 1 if pixel_mean != 0 & pixel_mean != 1
+count if pixel_inconsistent == 1
+
+*b) Usually the households in a particular village are within the same pixel but it is possible that some villages are in multiple pixels (boundary cases). Create a new dummy variable (pixel_village), =0 for the entire village when all the households from the village are within a particular pixel, =1 if households from a particular village are in more than 1 pixel. Hint: This variable is at village level.
+
+sort village pixel
+bysort village (pixel): gen serial = _n
+bysort village (pixel): gen hh_max = _N
+
+gen pixel_first = ""
+replace pixel_first = pixel if serial == 1
+gen pixel_last = ""
+replace pixel_last = pixel if serial == hh_max
+
+* Creating a check to see when boundary cases occur 
+preserve //since I'll be dropping observations, I want to preserve my dataset first
+
+drop if pixel_first == "" & pixel_last == ""
+
+replace pixel_last = pixel_last[_n+1] if pixel_last == "" 
+replace pixel_first = pixel_first[_n-1] if pixel_first == ""
+
+gen pixel_village = 0
+replace pixel_village = 1 if pixel_first != pixel_last // =1 if households from a village are in more than one pixel
+
+* Seeing which villages are a boundary case
+tab village if pixel_village == 1
+
+/*bysort village pixel: gen pixel_village = 0
+bysort village pixel: replace pixel_village=1 if pixel[_n] != pixel[_n+1] 
+bysort village pixel: replace pixel_village=1 if pixel[_n] != pixel[_n-1]*/
+
+
+*c) For this experiment, it is only an issue if villages are in different pixels AND have different payout status. For this purpose, divide the households in the following three categories: These 3 categories are mutually exclusive AND exhaustive i.e. every single observation should fall in one of the 3 categories.
+
+*First, I want to create a dummy to check if the pixels have the same payout status
+bysort village: egen pixel_mean_payout = mean(payout)
+	
+gen village_category = 0
+replace village_category = 1 if pixel_village == 0 //I. this will be the "baseline" category, which will end up being villages in the same pixel (==1) 
+replace village_category = 2 if pixel_village == 1 & pixel_mean_payout != 0.5 //II. Villages that are in different pixels AND have same payout status (Create a list of all hhids in such villages) (==2)
+replace village_category = 3 if pixel_village == 1 & pixel_mean_payout == 0.5 //III. Villages that are in different pixels AND have different payout status (==3)
+
+tab village if village_category == 3 //to specifically see the villages that would pose an issue
+
+restore //restoring my dataset 
+
+
+/*********************************************************************************
+
+						Question 2: National IDs in Pakistan
+						
+*********************************************************************************/
+
+*We have the information of adults that have computerized national ID card in the following pdf: Pakistan_district_table21.pdf. This pdf has 135 tables (one for each district.) We extracted data through an OCR software but unfortunately it wasn't very accurate. We need to extract column 2-13 from the first row ("18 and above") from each table. Create a dataset where each row contains information for a particular district. The hint do file contains the code to loop through each sheet, you need to find a way to align the columns correctly.
+
+
+
+/*********************************************************************************
+
+						Question 3: Faculty Funding Proposals
+						
+*********************************************************************************/
+
+*Faculty members submitted 128 proposals for funding opportunities. Unfortunately, we only have enough funds for 50 grants. Each proposal was assigned to randomly selected students in PPOL 768 where they gave a score between 1 (lowest) and 5 (highest). Each student reviewed 24 proposals and assigned a score. We think it will be better if we normalize the score wrt each reviewer before calculating the average score. Add the following columns 1) stand_r1_score 2) stand_r2_score 3) stand_r3_score 4) average_stand_score 5) rank (highest score =>1, lowest => 128)
+
+use "/Users/marlyn/GitHub/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q3_grant_prop_review_2022.dta", clear
+
+*Fixing the names of variables so they're consistent
+rename Rewiewer1 Reviewer1
+rename Review1Score ReviewScore1
+rename Reviewer2Score ReviewScore2
+rename Reviewer3Score ReviewScore3
+
+*Reshaping data to long format
+reshape long Reviewer ReviewScore, i(proposal_id) j(ReviewerOrder)
+
+*Creating variable for normalized scores
+sort Reviewer
+bysort Reviewer: egen ReviewerMean = mean(ReviewScore)
+bysort Reviewer: egen ReviewerSD = sd(ReviewScore)
+
+gen ReviewScoreNorm = ((ReviewScore - ReviewerMean) / ReviewerSD )
+
+*Reshaping data back to wide format
+reshape wide Reviewer ReviewScore ReviewerMean ReviewerSD ReviewScoreNorm, i(proposal_id) j(ReviewerOrder)
+
+*Fixing the names to align with assignment 
+rename ReviewScoreNorm1 stand_r1_score
+rename ReviewScoreNorm2 stand_r2_score
+rename ReviewScoreNorm3 stand_r3_score
+
+*Generating average standardized scores
+gen average_stand_score = ((stand_r1_score + stand_r2_score + stand_r3_score) / 3)
+
+*Generating variable to rank proposals
+gsort - average_stand_score, generate(rank) mfirst
+
+*I don't like the order of the variables after I reshaped them to wide format so I'm going to reorder them so they make more intuitive sense
+order proposal_id rank PIName Department Reviewer1 ReviewScore1 ReviewerMean1 ReviewerSD1 stand_r1_score Reviewer2 ReviewScore2 ReviewerMean2 ReviewerSD2 stand_r2_score Reviewer3 ReviewScore3 ReviewerMean3 ReviewerSD3 stand_r3_score AverageScore StandardDeviation average_stand_score 
+sort proposal_id
+
+/*********************************************************************************
+
+						 Question 4: Student Data from Tanzania
+						
+*********************************************************************************/
+
+*Q4: This task involves string cleaning and data wrangling. We scrapped student data for a school from Tanzania's government website. Unfortunately, the formatting of the data is a mess. Your task is to create a student level dataset with the following variables: schoolcode, cand_id, gender, prem_number, name, grade variables for: Kiswahili, English, maarifa, hisabati, science, uraia, average.
