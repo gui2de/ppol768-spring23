@@ -12,28 +12,6 @@ Week 4 Assignment*/
 global wd "/Users/marlyn/GitHub/ppol768-spring23/Individual Assignments/Bruno Marlyn/week-04"
 use "/Users/marlyn/GitHub/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q1_village_pixel.dta", clear
 
-
-if c(username)=="ah1152" {
-	global wd "C:/Users/ah1152/Documents/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
-	use "q1_village_pixel.dta", clear
-}
-
-* Ali Hamza 2 (MacOS)
-else if c(username)=="Zambeel" {
-	global wd "/Users/Zambeel/Downloads/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
-	use "q1_village_pixel.dta", clear
-}
-
-* Beatrice Leydier
-else if c(username)=="Pytha" {
-	global wd "C:/Users/Pytha/Box Drive/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
-	use "q1_village_pixel.dta", clear
-}
-
-else {
-	display as error "Please define global wd before running this do file"
-}
-
 *a) Payout variable should be consistent within a pixel, confirm if that is the case. 
 bysort pixel: tab payout //confirming it's the case and it is
 
@@ -68,11 +46,6 @@ replace pixel_village = 1 if pixel_first != pixel_last // =1 if households from 
 
 * Seeing which villages are a boundary case
 tab village if pixel_village == 1
-
-/*bysort village pixel: gen pixel_village = 0
-bysort village pixel: replace pixel_village=1 if pixel[_n] != pixel[_n+1] 
-bysort village pixel: replace pixel_village=1 if pixel[_n] != pixel[_n-1]*/
-
 
 *c) For this experiment, it is only an issue if villages are in different pixels AND have different payout status. For this purpose, divide the households in the following three categories: These 3 categories are mutually exclusive AND exhaustive i.e. every single observation should fall in one of the 3 categories.
 
@@ -135,22 +108,22 @@ foreach var of varlist _all {
  }
  
 *Shifting data to the left
-rename * column* //having data have same string starter
+rename * column* //renaming each of my variables so that they have the same string prefix of "column", which will allow me to run later commands
 
-egen column = concat(column*), p(" ") //literally "smushing" every column together 
-replace column = subinstr(column, ".", "", .) // replacing the empty columns 
-split column, destring //destringing across columns
+egen column = concat(column*), p(" ") //literally "smushing" every column's numbers together into one string
+replace column = subinstr(column, ".", "", .) // replacing the empty values (.) with empty spaces  
+split column, destring //destringing across columns 
 
 *Keep only the "destrung" variables we want for a tidy dataset
 drop columntable21 columnB columnC columnD columnE columnF columnG columnH columnI columnJ columnK columnL columnM columnN columnO columnP columnQ columnR columnS columnT columnU columnV columnW columnX columnY columnZ columnAA columnAB column column1 column 2 column3 column16
 
-*Sort by source sheet table
+*Sort by the Excel sheet number we sourced the observation from
 sort columntable
 
 *Rename columns to match excel sheet
 rename (column*) (sheet total_pop_all cni_no_all cni_yes_all total_pop_m cni_no_m cni_yes_m total_pop_f cni_no_f cni_yes_f total_pop_t cni_no_t cni_yes_t)
 
-*I noticed that the values for all columns related to transgender people were coded as strings. I'm going to change them to numeric values
+*I noticed that the values for all columns related to transgender people were coded as strings. I'm going to change them to numeric values in case I want to run some calculations 
 encode total_pop_t, generate(total_pop_trans)
 encode cni_no_t, generate(cni_no_trans)
 encode cni_yes_t, generate(cni_yes_trans)
@@ -210,10 +183,7 @@ sort proposal_id
 
 use "/Users/marlyn/GitHub/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q4_Tz_student_roster_html.dta", clear
 
-*See where the data table starts 
-gen subject_position = strpos(s, "SUBJECT") //SUBJECT starts at 3852
-
-*Drop everything before the table stars
+*Drop everything before the table starts and it starts at "SUBJECT"
 replace s = substr(s, strpos(s, "SUBJECT"), .)
 
 *Break data after each "row" or observation as seen in website 
@@ -224,180 +194,9 @@ gen serial = _n //label each observation with a number
 drop s
 reshape long s, i(serial) j(j)
 
+*Remove HTML code
+generate str100 text = ustrregexra(s,"<[^\>]*>","")
+replace text = trim(stritrim(text))
 
-SUBJECTS
-</B></FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0001</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348195</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>DANIEL JAMES KAGUO</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - A, Maarifa - C, Hisabati - C, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0002</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20156273910</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>DAVIS ROBERT LUCAS</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - C, Hisabati - B, Science - B, Uraia - B, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0003</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348196</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>ELISANTE GABRIEL NKYA</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - D, Hisabati - B, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0004</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20156555361</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>FESTUS RENASTUS CHIMOLA</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - A, Maarifa - C, Hisabati - B, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0005</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20156272958</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>IAN INNOCENT GEOFREY</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - C, Hisabati - A, Science - C, Uraia - B, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0006</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150316147</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>MESHACK THOMAS NATHANAEL</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - B, Maarifa - C, Hisabati - B, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0007</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348198</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>PHILIPO AYUBU MBWANA</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - B, Maarifa - D, Hisabati - B, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0008</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348199</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">M</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>SALIM IDDY RASHID</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - B, Hisabati - B, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0009</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150377806</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>DORA SALVATORY THADEI</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - A, Maarifa - C, Hisabati - A, Science - B, Uraia - B, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0010</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20152878842</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>EVALYNE PERFECT ELIAS</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - B, Hisabati - B, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0011</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348200</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>FATUMA SALIM SAIDI</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - C, Hisabati - A, Science - B, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0012</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348201</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>HAPPY JULIUS MZIRAI</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - A, Maarifa - C, Hisabati - D, Science - B, Uraia - B, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0013</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348202</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>JOAN MANASE GEOFREY</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - B, Hisabati - A, Science - A, Uraia - B, Average Grade - A</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0014</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348203</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>JOAN WILHARD MWANGA</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - C, Hisabati - A, Science - A, Uraia - B, Average Grade - A</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0015</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348204</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>SOPHIA HAKEEM PALLANGYO</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - A, Maarifa - C, Hisabati - A, Science - A, Uraia - C, Average Grade - B</FONT></TD></TR>
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0016</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348205</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>ZAINAB RASHIDI SALUM</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - B, English - A, Maarifa - D, Hisabati - A, Science - B, Uraia - B, Average Grade - B</FONT></TD></TR>
-</TABLE>
-</BODY>
+*Note from Marlyn: was able to remove HTML code, but I ran out of time so I could not figure out how to split a string by line breaks (which is what I was seeing when i looked at the data). 
 
-
-<TR><TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">PS0101114-0014</FONT></TD>
-<TD WIDTH="10%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">20150348203</FONT></TD>
-<TD WIDTH="5%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="CENTER">F</FONT></TD>
- <TD WIDTH="25%" VALIGN="LEFT">
-<FONT FACE="Arial" SIZE=1><P>JOAN WILHARD MWANGA</FONT></TD>
-<TD WIDTH="55%" VALIGN="MIDDLE">
-<FONT FACE="Arial" SIZE=1><P ALIGN="LEFT">Kiswahili - A, English - A, Maarifa - C, Hisabati - A, Science - A, Uraia - B, Average Grade - A</FONT>
