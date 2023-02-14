@@ -41,7 +41,6 @@ gen hhid_village = hhid if household == 2
 clear
 
 *Question 2
-ssc install missings
 global excel_t21 "$wd/q2_Pakistan_district_table21.xlsx"
 *update the global
 
@@ -61,7 +60,7 @@ forvalues i=1/135 {
 	keep in 1 //there are 3 of them, but we want the first one
 	rename TABLE21PAKISTANICITIZEN1 table21 
     *tried to write loop to discard missing values, after googling, chose the shortcut by installing 'missings' package to remove missing values...but still it showed 29 variable...
-	missings dropvars, force 
+	
 	gen table=`i' //to keep track of the sheet we imported the data from
 	append using `table21' //adding the rows to the tempfile
 	save `table21', replace //saving the tempfile so that we don't lose any data
@@ -99,14 +98,30 @@ egen rank = rank(-average_stand_score)
 use "$q4", clear
 
 replace s = substr(s, strpos(s, "SUBJECT"), .)
-
+*split each line 
 split s, parse("</TD></TR>") 
-
 gen serial = _n
-
 drop s 
-
-reshape long s, i(serial) j(string)
-
-
-*tried my best...
+reshape long s, i(serial) j(observation)
+*break strings 
+split s, parse("><P")
+drop s 
+*substract string to get variable we want 
+gen cand_No = substr(s2,17,14)
+gen prem_No = substr(s3, 17, 11)
+gen gender = substr(s4, 17, 1)
+*remove the tail of name, split again
+split s5, parse("</FONT>")
+drop s52
+gen name = substr(s51,2,.)
+*remove the tail of subject, split again. now I think I should do the spilt///
+*in the parse ("</TD></TR>")but I think this conclusion could only be drawn///
+*after I parse the long string
+split s6, parse("</FONT>")
+gen grade = substr(s61, 15,.)
+*sort table 
+drop s*
+drop observation 
+keep in 2/17
+gen schoolcode = substr(cand_No, 1, 9)
+order schoolcode, first
