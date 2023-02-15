@@ -190,13 +190,27 @@ replace s = substr(s, strpos(s, "SUBJECT"), .)
 split s, parse("</TD></TR>")
 
 *Break into columns
-gen serial = _n //label each observation with a number
+gen observation = _n //label each observation with a number
 drop s
-reshape long s, i(serial) j(j)
+reshape long s, i(observation) j(j)
 
-*Remove HTML code
-generate str100 text = ustrregexra(s,"<[^\>]*>","")
-replace text = trim(stritrim(text))
+*Drop last observation which has no data
+drop if _n == _N | _n == 1 //dropping the first and last observations since they don't contain data we're interested in, they're just HTML text
 
-*Note from Marlyn: was able to remove HTML code, but I ran out of time so I could not figure out how to split a string by line breaks (which is what I was seeing when i looked at the data). 
+*We can now split the data into neat text chunks
+split s, parse(">") //this neatly splits the data and starts each of the columns where we want it (at the start of the word)
+
+*I want to keep only the variables that have the data 
+keep observation j s s5 s10 s15 s20 s25 //this keeps the variables we're interested in, which I saw were organized in increments of 5
+
+*Cleaning up the variable strings
+replace s5 = subinstr(s5,"</FONT","",.)
+replace s10 = subinstr(s10,"</FONT","",.)
+replace s15 = subinstr(s15,"</FONT","",.)
+replace s20 = subinstr(s20,"</FONT","",.)
+replace s25 = subinstr(s25,"</FONT","",.)
+
+*Renaming variables to match their website names
+rename (s5 s10 s15 s20 s25) (cand_number prem_number sex cand_name subjects) 
+
 
