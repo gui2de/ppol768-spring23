@@ -35,7 +35,6 @@ My research interests were shaped back in 2020 when the first wave of the COVID-
 
 Photos
 -------------
-![GustavoPicture](https://drive.google.com/drive/u/1/folders/1LACcXeewqpHF3rxgWqB4XNlF4BY2Z57R
-https://doc-0s-3c-docs.googleusercontent.com/docs/securesc/v8eo6lekb3ntcqa22q42b1mjssoatcl7/7bsgt15s9duk39it6o8h3nrjj39ugenh/1636501875000/11381094476458468456/06149285093527547784/1OonhKwq4PT4nXZ7kLkxNP1TZwFo65ZJy?e=download&authuser=1 "Gustavo")
+![GustavoPicture](img/gustavomurillo.png)
 
-![Sonora,Mexico](https://www.google.com/url?sa=i&url=https%3A%2F%2Fsunrise.maplogs.com%2Fsonora_mexico.1017.html&psig=AOvVaw1BalRn2CbE-5WcAcisLAd0&ust=1675002854444000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCND0roS-6vwCFQAAAAAdAAAAABAD "Hometown")
+![Sonora,Mexico](img/sancarlos.png)
