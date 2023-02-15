@@ -41,6 +41,7 @@ gen hhid_village = hhid if household == 2
 clear
 
 *Question 2
+ssc install missings
 global excel_t21 "$wd/q2_Pakistan_district_table21.xlsx"
 *update the global
 
@@ -52,14 +53,17 @@ save `table21', replace emptyok
 *Run a loop through all the excel sheets (135) this will take 2-10 mins because it has to import all 135 sheets, one by one
 forvalues i=1/135 {
 	import excel "$excel_t21", sheet("Table `i'") firstrow clear allstring //import
-	display as error `i' //display the loop number /// full value is 135
-
+	display as error `i' //display the loop number
 	keep if regex(TABLE21PAKISTANICITIZEN1, "18 AND" )==1 //keep only those rows that have "18 AND"
 	*I'm using regex because the following code won't work if there are any trailing/leading blanks
 	*keep if TABLE21PAKISTANICITIZEN1== "18 AND" 
 	keep in 1 //there are 3 of them, but we want the first one
-	rename TABLE21PAKISTANICITIZEN1 table21 
-    *tried to write loop to discard missing values, after googling, chose the shortcut by installing 'missings' package to remove missing values...but still it showed 29 variable...
+	rename TABLE21PAKISTANICITIZEN1 table21
+ 
+ *I know a loop that check missing value could solve the problem. I tried but I failed. Tried "" and >=. and destring then drop missing. Finally, I took a shortcut by install a package called 'missings'
+    missings dropvars, force
+*compress and align rows that have droped missing values for future append. help rename no.18 change alphabetic variable names into numbers 
+	rename (*) (var#), addnumber 
 	
 	gen table=`i' //to keep track of the sheet we imported the data from
 	append using `table21' //adding the rows to the tempfile
@@ -67,8 +71,24 @@ forvalues i=1/135 {
 }
 *load the tempfile
 use `table21', clear
+format %10s var1-var13 
+rename var1 age 
+rename var2 total_pop 
+rename var3 CNI_obtained 
+rename var4 CNI_NOT_obtained 
+rename var5 total_pop_male 
+rename var6 CNI_obtained_male 
+rename var7 CNI_NOT_obtained_male 
+rename var8 total_pop_female 
+rename var9 CNI_obtained_female 
+rename var10 CNI_NOT_obtained_female 
+rename var11 total_pop_trans 
+rename var12 CNI_obtained_trans 
+rename var13 CNI_NOT_obtained_trans
 
-sort table
+order table, first
+format %10.0g table
+sort table 
 
 
 *Question 3
