@@ -137,8 +137,15 @@ gen name = substr(s51,2,.)
 *remove the tail of subject, split again. now I think I should do the spilt///
 *in the parse ("</TD></TR>")but I think this conclusion could only be drawn///
 *after I parse the long string
-split s6, parse("</FONT>")
-gen grade = substr(s61, 15,.)
+split s6, parse("-" ",")
+rename s62 Kiswahili
+rename s64 English 
+rename s66 Maarifica 
+rename s68 Hisabati 
+rename s610 Science 
+rename s612 Uraia 
+
+gen average =substr(s614, -8, 1)
 *sort table 
 drop s*
 drop observation 
