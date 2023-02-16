@@ -23,8 +23,8 @@ replace category  = 2 if pixel_village == 1 & pixel_consistent == 0
 replace category  = 3 if pixel_village == 1 & pixel_consistent == 1 
  
 //Q2 : National IDs in Pakistan
-global excel_t21 "/Users/liufan/Desktop/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q2_Pakistan_district_table21.xlsx"
 clear
+global excel_t21 "/Users/liufan/Desktop/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q2_Pakistan_district_table21.xlsx"
 tempfile table21
 save `table21', replace emptyok
 forvalues i=1/135 {
@@ -35,17 +35,19 @@ forvalues i=1/135 {
 	*keep if TABLE21PAKISTANICITIZEN1== "18 AND" 
 	keep in 1 //there are 3 of them, but we want the first one
 	rename TABLE21PAKISTANICITIZEN1 table21
+	missings dropvars, force // Dropping any columns with completely missing data.  
+	rename * v#, addnumber // Adding consecutive numbers to variable names. 
 	gen table=`i' //to keep track of the sheet we imported the data from
 	append using `table21' //adding the rows to the tempfile
 	save `table21', replace //saving the tempfile so that we don't lose any data
 }
 *load the tempfile
 use `table21', clear
-*fix column width issue so that it's easy to eyeball the data
-format %40s table21 B C D E F G H I J K L M N O P Q R S T U V W X Y  Z AA AB AC
+rename v# (Age Total_pop CNI_obtained CNI_not_obtained Total_pop_male CNI_obtained_male CNI_not_obtained_male Total_pop_female CNI_obtained_female CNI_not_obtained_female Total_pop_trans  CNI_obtained_trans CNI_not_obtained_trans)
+format %40s Age Total_pop CNI_obtained CNI_not_obtained Total_pop_male CNI_obtained_male CNI_not_obtained_male Total_pop_female CNI_obtained_female CNI_not_obtained_female Total_pop_trans  CNI_obtained_trans CNI_not_obtained_trans 
+sort table
+drop table
 
-*Unfinished here*
-*I'm sure the path is correct, but the file cannot be read and cannot proceed*
 
 //Q3 : Faculty Funding Proposals
 use "q3_grant_prop_review_2022.dta", clear 
