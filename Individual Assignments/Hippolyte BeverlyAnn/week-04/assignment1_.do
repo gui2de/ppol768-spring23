@@ -123,7 +123,7 @@ save,replace
 
 *****Question 4 *****
 
-use q4_Tz_student_roster_html.dta, clear 
+use q4_Tz_student_roster_html.dta, clear // Load dataset 
 
 browse // First thing I do, browse the data to get familiar with it 
 
