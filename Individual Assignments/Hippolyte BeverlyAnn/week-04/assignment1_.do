@@ -4,7 +4,7 @@
 
 *** Define global working directory 
 	if c(username) == "beverlyannhippolyte" {
-	global wd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-04/assignment1_"
+	global wd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-04"
 }
 
 **** Load dataset 
@@ -123,8 +123,34 @@ save,replace
 
 *****Question 4 *****
 
-use q4_Tz_student_roster_html.dta, clear // Load dataset 
+use q4_Tz_student_roster_html.dta , clear 
 
 browse // First thing I do, browse the data to get familiar with it 
+
+	split s, parse(">PS")
+
+	gen serial = _n
+		drop s
+	
+	reshape long ///
+		s , i(serial) j(student)
+
+	split s , parse ("<")
+		keep s1 s6 s11 s16 s21
+		drop in 1
+	
+	rename (s1 s6 s11 s16 s21) (cand prem sex name subjects)
+	
+	compress
+	
+	replace = "PS" + cand 
+	replace prem = subinstr(prem, `"P ALIGN="CENTER">"', "",.)
+	replace sex = subinstr(sex, `"P ALIGN="CENTER">"', "",.)
+	replace name = subinstr(name, `"P>"', "",.)
+	replace subjects = subinstr(subjects, `"P ALIGN="LEFT">"', "",.)
+
+
+	
+* save, replace 
 
 save,replace
