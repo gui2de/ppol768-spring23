@@ -1,7 +1,11 @@
-cd "/Users/liufan/Desktop/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
+global wd "/Users/liufan/Desktop/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
+global q1 "$wd/q1_village_pixel.dta"
+global q2 "$wd/q2_Pakistan_district_table21.xlsx"
+global q3 "$wd/q3_grant_prop_review_2022.dta"
+global q4 "$wd/q4_Tz_student_roster_html.dta"
 
 //Q1 : Crop Insurance in Kenya
-use "q1_village_pixel.dta", clear 
+use "$q1", clear 
 
 //a)
 bysort pixel: egen min_payout = min(payout)
@@ -24,11 +28,10 @@ replace category  = 3 if pixel_village == 1 & pixel_consistent == 1
  
 //Q2 : National IDs in Pakistan
 clear
-global excel_t21 "/Users/liufan/Desktop/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q2_Pakistan_district_table21.xlsx"
 tempfile table21
 save `table21', replace emptyok
 forvalues i=1/135 {
-	import excel "$excel_t21", sheet("Table `i'") firstrow clear allstring //import
+	import excel "$q2", sheet("Table `i'") firstrow clear allstring //import
 	display as error `i' //display the loop number
 	keep if regex(TABLE21PAKISTANICITIZEN1, "18 AND" )==1 //keep only those rows that have "18 AND"
 	*I'm using regex because the following code won't work if there are any trailing/leading blanks
@@ -50,7 +53,7 @@ drop table
 
 
 //Q3 : Faculty Funding Proposals
-use "q3_grant_prop_review_2022.dta", clear 
+use "$q3", clear 
 rename (Rewiewer1 Review1Score Reviewer2Score Reviewer3Score) (Reviewer1 S1 S2 S3) 
 reshape long Reviewer S, i(proposal_id) j(number) 
 bysort Reviewer: egen stand_score = std(S) 
@@ -62,7 +65,7 @@ gsort -average_stand_score
 gen rank = _n 
 
 //Q4 : Student Data from Tanzania
-use "q4_Tz_student_roster_html.dta", clear
+use "$q4", clear
 split s, parse(<TABLE) 
 keep s3
 split s3, parse(<TR>)
