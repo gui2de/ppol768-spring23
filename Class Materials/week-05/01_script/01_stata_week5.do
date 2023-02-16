@@ -11,7 +11,8 @@ set more off
 
 
 *Working Directory
-global wd "C:/Users/ah1152/Desktop/PPOL_768/Week_5/02_data"
+global wd "C:\Users\kevin\Github\ppol768-spring23\Class Materials\week-05\02_data"
+*global wd "C:/Users/ah1152/Desktop/PPOL_768/Week_5/02_data"
 
 *Datasets
 global tz_elec_15_raw "$wd/Tanzania_election_2015_raw.dta"
