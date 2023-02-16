@@ -4,6 +4,7 @@ global q1 "$wd/q1_psle_student_raw.dta"
 global q2 "$wd/q2_CIV_Section_0.dta"
 
 *Q1
+{
 use "$q1", clear
 replace s = substr(s, strpos(s, "SUBJECT"), .)
 *split each line 
@@ -37,8 +38,20 @@ order s*
 drop s1-s614
 
 drop if missing(cand_No)
+}
 
 *Q2
+global pop "/Users/Selina/Desktop/ppol768-spring23/Individual Assignments/Sun Selina/week-05/q2_CIV_populationdensity.xlsx"
+*update the global
+clear
+
+import excel "$density", sheet("Population density") firstrow case(lower) clear
+
+rename nomcirconscription departement 
+keep if strpos(departement, "DEPARTEMENT") == 1 
+
+split departement, parse(" ")
+drop departement departement1 departement2
+
 use "$q2", clear
-
-
+br
