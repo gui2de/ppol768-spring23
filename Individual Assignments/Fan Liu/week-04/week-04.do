@@ -47,7 +47,8 @@ forvalues i=1/135 {
 *load the tempfile
 use `table21', clear
 rename v# (Age Total_pop CNI_obtained CNI_not_obtained Total_pop_male CNI_obtained_male CNI_not_obtained_male Total_pop_female CNI_obtained_female CNI_not_obtained_female Total_pop_trans  CNI_obtained_trans CNI_not_obtained_trans)
-format %40s Age Total_pop CNI_obtained CNI_not_obtained Total_pop_male CNI_obtained_male CNI_not_obtained_male Total_pop_female CNI_obtained_female CNI_not_obtained_female Total_pop_trans  CNI_obtained_trans CNI_not_obtained_trans 
+format %10s Age Total_pop CNI_obtained CNI_not_obtained Total_pop_male CNI_obtained_male CNI_not_obtained_male Total_pop_female CNI_obtained_female CNI_not_obtained_female Total_pop_trans  CNI_obtained_trans CNI_not_obtained_trans 
+order table, first
 sort table
 drop table
 
