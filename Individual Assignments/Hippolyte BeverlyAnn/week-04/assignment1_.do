@@ -143,14 +143,18 @@ browse // First thing I do, browse the data to get familiar with it
 	
 	compress
 	
-	replace = "PS" + cand 
+	replace cand = "PS" + cand 
 	replace prem = subinstr(prem, `"P ALIGN="CENTER">"', "",.)
 	replace sex = subinstr(sex, `"P ALIGN="CENTER">"', "",.)
 	replace name = subinstr(name, `"P>"', "",.)
 	replace subjects = subinstr(subjects, `"P ALIGN="LEFT">"', "",.)
 
-
+	split subject , parse(",")
 	
-* save, replace 
+	foreach var in varlist subject* {
+		replace `'"var " = substr(`'var', -1, .)
+	}
+	
+	compress
 
-save,replace
+	save, replace
