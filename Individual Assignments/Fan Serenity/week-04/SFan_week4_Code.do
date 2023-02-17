@@ -105,12 +105,24 @@ forvalues i=1/10 {
 	*order district, first 
 	*Move 'table' to 1st column
 		
-	destring _all, replace
+	*destring _all, replace
 	*destring B C D E F G H I J K L M N O P Q R S T U V W X Y Z, replace
 	
-	foreach var of varlist _all {
-		if missing(`var') drop `var' 
+	foreach var of varlist * {
+		if missing(`var') {
+			drop `var'
+		}
 	}
+	
+	local i=1 
+	foreach var of varlist * {
+		rename `var' column_`i' 
+		local i = `i' + 1
+}
+	
+	*foreach var of varlist _all {
+*		if missing(`var') drop `var' 
+*	}
 	
 	append using `table21' //adding the rows to the tempfile
 	*drop table21 B D F H J L N P R T V X Z
