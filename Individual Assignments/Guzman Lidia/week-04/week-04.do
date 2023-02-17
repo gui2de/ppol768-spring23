@@ -1,7 +1,7 @@
 ***Lidia Guzman week 04 
 clear
 
-global wd "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-04"
+global wd "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Class Materials/week-04/03_assignment/01_data"
 
 clear
 ***Question 1 -----------------------------------------------------------------
@@ -69,8 +69,7 @@ save "${wd}/q1_village_pixel_results.dta" , replace
 ***Question 2 -----------------------------------------------------------------
 clear
 
-global excel_t21 "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-04/q2_Pakistan_district_table21.xlsx"
-
+global excel_t21 "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Class Materials/week-04/03_assignment/01_data/q2_Pakistan_district_table21.xlsx"
 clear
 
 *setting up an empty tempfile
@@ -93,12 +92,13 @@ forvalues i=1/135 {
     qui count if missing(`var')
     if r(N) > 0 {
         drop `var'
-    }
-}
-	foreach var of varlist * {
-    rename `var' to column_1
+    }	
 }
 
+foreach var of varlist * {
+    rename `var' column_1
+	}
+	
 	gen table=`i' //to keep track of the sheet we imported the data from
 	append using `table21' //adding the rows to the tempfile
 	save `table21', replace //saving the tempfile so that we don't lose any data
@@ -111,7 +111,7 @@ forvalues i=1/135 {
 
 
 ***Question 3 -----------------------------------------------------------------
-
+clear 
 use "${wd}/q3_grant_prop_review_2022.dta" , clear
 
 summarize Review1Score
@@ -137,83 +137,74 @@ gen average_stand_score = (stand_r1_score + stand_r2_score + stand_r3_score)/3
 
 egen rank = rank(-average_stand_score) /// (highest score =>1, lowest => 128)
 
-save "${wd}/q3_grant_prop_review_2022_results.dta" , replace 
-
 
 ***Question 4 -----------------------------------------------------------------
-***recording***
 clear
 use "${wd}/q4_Tz_student_roster_html.dta" , clear 
 
-replace s = substr(s, strpos(s, "SUBJECT"), .)
-split s, parse("</TD></TR>")
+split s, parse (">PS")
 
-generate serial = _n
-
-replace s2 = substr(s, strpos(s, "PS"), .) 
-
-**next line wrong
-replace s2 = substr("PS", 14, .)
-
-
-
-
-split s2, parse("</FONT>")
-
-
-replace s3 = substr(s, strpos(s, "PS"), .) /// cand_id
-split s, parse("</FONT></TD>")
-
-
-
+gen serial = 1 
+/// because we have only one variable 
 
 drop s
-reshape long s, i(serial) j(j)
 
-exit
+reshape long s, i(serial) j(student)
 
+split s, parse ("<")
 
+keep s1 s6 s16 s11 s21 
 
-****---------------------------------------------------------------
+drop in 1
 
-gen str_pos = strpos(s, "SUBJECT")
+ren (s1 s6 s16 s11 s21) (cand prem sex name subjects)
+	compress
+	
+replace cand = "PS" + cand
+replace prem = subinstr(prem, `"P ALING = CENTER">"',"",.)
+replace sex = subinstr(sex, `"P ALING = CENTER">"',"",.)
+replace name = subinstr(name, `"P>"',"",.)
+replace subjects = subinstr(subjects, `"P ALING = CENTER">"',"",.)
 
-replace s = substr(s, 3852, .)
+compress
 
-split s, parse("</TD></TR>")
+split subjects , parse(",")
 
-gen serial = _n
+drop subjects 
 
-reshape long s, i(serial) j(j)
+foreach var of varlist subject* {
+	replace `var' = substr(`var', -1,1)
+}
 
-exit
+compress
 
-substr("abcdef",2,3) = "bcd"
+rename cand cand_id
 
+rename prem schoolcode
 
+replace schoolcode = subinstr(schoolcode,`"P ALIGN="CENTER">"',"",.)
 
+rename name gender 
 
+replace gender = subinstr(gender,`"P ALIGN="CENTER">"',"",.)
+ 
+rename sex name
 
-schoolcode, cand_id, gender, prem_number, name, grade variables for: Kiswahili, English, maarifa, hisabati, science, uraia, average.
+replace name = subinstr(name,`"P>"',"",.)
 
+rename subjects1 Kiswahili 
 
+rename subjects2 English
 
-generate subject_position = strpos(s, "SUBJECT")
-replace s = substr(s, 3852, .)
-split s, parse("</TD></TR>")
-generate serial = _n
-drop s
-reshape long s, i(serial) j(j)
+rename subjects3 maarifa
 
-display 
+rename subjects4 hisabati 
 
-***Question 4
-**reshape 
-**string commands
-***all end with </TD>
-**substring 
+rename subjects5 science 
 
-//////////////////////////////////////////////////////////////////////////////
+rename subjects6 uraia 
+
+rename subjects7 average
 
 
 
