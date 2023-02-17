@@ -88,7 +88,29 @@ You can check the following dta file as a template for your output: Tz_elec_temp
 Your objective is to clean the dataset in such a way that it resembles the format of the template dataset.
 
 */
-	import excel using "q4_Tz_election_2010_raw.xls", firstrow allstring // Importing the xls file 
+*** I'm thinking do i need to set up a tempfile to store the data that i course through after I'm done .
 
-*** So far the data imported appears to have many misaligned and misplaced data 
-	
+log using election10
+
+clear 
+*Set up a tempfile to store the data within the do file 
+tempfile election10
+save `election10', replace emptyok
+
+
+	import excel using "q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) firstrow allstring // Importing the xls file 
+		replace WARD = WARD[_n-1] if WARD == "" // Given the strucutre of the file, all empty cells were filled up 
+			
+			destring TTLVOTES, ignore ("UNOPPOSED") replace // Unopposed is not relevant to the information we want.
+			
+			bysort WARD: egen vote_total = total(TTLVOTES)
+			drop in 1
+			
+			**** I need to figure out how to drop the duplicate values //
+			**** I've tried using the duplicates command but its not working //
+			
+log close, append
+
+*** Data has alot of missing values; Important variables like WARD has embedded and trailing blanks which I am not sure how to deal with yet 
+
+** The data is at candidate/political level but we want a ward level dataset
