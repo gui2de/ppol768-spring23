@@ -1,5 +1,7 @@
 *C:\Users\kevin\Github\ppol768-spring23\Individual Assignments\Fan Serenity\week-05
 
+cd "C:\Users\kevin\Github\ppol768-spring23\Individual Assignments\Fan Serenity\week-05" 
+
 *_________________________________
 
 *Q1 : Tanzania Student Data
@@ -8,7 +10,6 @@
 clear 
 tempfile student_clean 
 save `student_clean', replace emptyok
-
 
 forvalues i=1/10 {
 	
@@ -19,7 +20,6 @@ forvalues i=1/10 {
 	
 	append using `student_clean'
 	save `student_clean', replace 
-	
 	
 }
 
@@ -44,6 +44,15 @@ scatter latitude longitude
 *_________________________________
 *Q5 : Tanzania Election data Merging
 *Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided.
+
+*Use reclink2 !!!  
+
+global wd "C:/Users ... "
+
+global q5_intersection $wd "" 
+global q5_elec_10 $wd "" 
+global q5_elect_15 $wd "" 
+
 
 
 reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score)
