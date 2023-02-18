@@ -11,14 +11,14 @@ clear
 tempfile student_clean 
 save `student_clean', replace emptyok
 
-forvalues i=1/10 {
+forvalues i=1/1 {
 	
-	use "q1_student", clear 	
+	use "q1_psle_student_raw", clear 	
 	keep in `i'  ///  Compresses the data 
 	
-	do "$wk4_q4_cleaning"
+	do "web_scraping_code"
 	
-	append using `student_clean'
+	append using "q1_psle_student_raw"
 	save `student_clean', replace 
 	
 }
