@@ -61,8 +61,8 @@ use "q3_GPS Data", clear
 save "q3_GPS_copy", replace
 
 *Determine if last enumerator will need to have <6 assignments (because total # of locations is not exactly divisible by 6).
-*scalar j = mod(_N,6)
-*scalar k = ceil(_N/6)
+local j = mod(_N,6)
+local k = ceil(_N/6)
 
 clear 
 tempfile clustering
@@ -74,7 +74,7 @@ save `clustering', replace emptyok
 *append using `newGPS' 
 *save `newGPS', replace emptyok
 
-forvalues i=1/19 {
+forvalues i=1/k {
 	*Load dataset 
 	use "q3_GPS_copy", clear 
 	*use `newGPS', clear
@@ -102,7 +102,7 @@ forvalues i=1/19 {
 	*Choose 5 shortest distances and add these to new datasets by ID, and cluster to which they're assigned
 		preserve 
 		
-		if `i'<19  {
+		if `i'<k | j==0 {
 			*All iterations except the last 
 			keep if distID <= 6
 		
@@ -116,11 +116,11 @@ forvalues i=1/19 {
 			save `clustering', replace 
 			}
 		
-		else if `i'==19 {
+		else if `i'==k {
 			*The last iteration, for cases where last enumerator has  	
 			*fewer assignments 
 			
-			keep if distID <= 3
+			keep if distID <= j
 		
 			*generate clusterID = `i' 
 			generate clusterID = `i'
@@ -136,11 +136,11 @@ forvalues i=1/19 {
 		restore
 	
 	*Remove these 6 points from original dataset 
-	if `i'<19 { 
+	if `i'<k { 
 		drop if distID <= 6 
 	}
-	else if `i'==19 {
-		drop if distID <= 3 	
+	else if `i'==k {
+		drop if distID <= j
 	}
 	
 	drop rowID lon0 lat0 dist distID 
@@ -152,7 +152,6 @@ forvalues i=1/19 {
 *Load cluster_groups again
 use `clustering', clear 
 
-sepscatter longitude latitude, separate(clusterID)
 
 
 *_________________________________
