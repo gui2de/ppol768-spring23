@@ -1,5 +1,6 @@
 *PPOL 768 - Week 4, STATA Assignment 
 *Serenity Fan 
+*LAST UPDATED: FEBRUARY 19TH, 2023
 
 *______________________________
 * ## Q1 : Crop Insurance in Kenya
@@ -71,6 +72,7 @@ tab village_status
 list hhid if village_status==2
 *This creates the list of villages (by hhid) that span multiple pixels but have the same payout status. We can see that 50 HH's fall under this classification.  
 
+save Q1_output
 
 *______________________________
 * ## Q2 : National ID's in Pakistan
@@ -91,7 +93,7 @@ tempfile table21
 save `table21', replace emptyok
 
 *Run a loop through all the excel sheets (135) this will take 2-10 mins because it has to import all 135 sheets, one by one
-forvalues i=1/10 {
+forvalues i=1/135 {
 	import excel "$excel_t21", sheet("Table `i'") firstrow clear allstring //import 
 	display as error `i' //display the loop number
 
@@ -124,7 +126,7 @@ forvalues i=1/10 {
 *		if missing(`var') drop `var' 
 *	}
 	
-	append using `table21' //adding the rows to the tempfile
+	append using `table21', force //adding the rows to the tempfile
 	*drop table21 B D F H J L N P R T V X Z
 	save `table21', replace //saving the tempfile so that we don't lose any data
 
@@ -132,20 +134,31 @@ forvalues i=1/10 {
 *load the tempfile
 
 use `table21', clear
+compress
 *sort district
 
-*rename C Total_Pop_A
-*rename E CNI_Card_Obt_A
-*rename G CNI_Card_NotObt_A
-*rename I Total_Pop_M
-*rename K CNI_Card_Obt_M 
-*rename M CNI_Card_NotObt_M 
-*rename O Total_Pop_F
-*rename Q CNI_Card_Obt_F 
-*rename S CNI_Card_NotObt_F
-*rename U Total_Pop_T 
-*rename W CNI_Card_Obt_T
-*rename Y CNI_Card_NotObt_T
+drop column_1
+
+rename column_2 Total_Pop_A
+rename column_3 CNI_Card_Obt_A
+rename column_4 CNI_Card_NotObt_A
+rename column_5 Total_Pop_M
+rename column_6 CNI_Card_Obt_M 
+rename column_7 CNI_Card_NotObt_M 
+rename column_8 Total_Pop_F
+rename column_9 CNI_Card_Obt_F 
+rename column_10 CNI_Card_NotObt_F
+rename column_11 Total_Pop_T 
+rename column_12 CNI_Card_Obt_T
+rename column_13 CNI_Card_NotObt_T
+
+sort column_14
+rename column_14 District 
+order District, first
+*Re-order (as observations were appended in reverse order), and drop sheet #
+
+*Save results 
+save Q2_output, replace
 
 
 
@@ -158,6 +171,8 @@ use `table21', clear
 *_________________________
 * ## Q3 : Faculty Funding Proposals
 
+*I KNOW THIS IS NOT THE RIGHT ANSWER; WE NEED TO DETERMINE STATISTICS FOR STANDARDIZED SCORES ON THE BASIS OF INDIVIDUAL REVIEWERES, RATHER THAN THEIR AGGREGATED SCORES IN GROUPS OF 3. I WILL ATTEMPT A CORRECT SOLUTION IN TIME. 
+
 *Faculty members submitted 128 proposals for funding opportunities. Unfortunately, we only have enough funds for 50 grants. Each proposal was assigned to randomly selected students in PPOL 768 where they gave a score between 1 (lowest) and 5 (highest). Each student reviewed 24 proposals and assigned a score. We think it will be better if we normalize the score wrt each reviewer before calculating the average score. Add the following columns 1) stand_r1_score 2) stand_r2_score 3) stand_r3_score 4) average_stand_score 5) rank (highest score =>1, lowest => 128)
 
 
@@ -169,7 +184,7 @@ egen stand_r3_score = std(Reviewer3Score)
 egen average_stand_score = rowmean(stand_r1_score stand_r2_score stand_r3_score)
 egen rank = rank(-average_stand_score)
 
-
+save Q3_output
 
 
 
@@ -182,24 +197,33 @@ egen rank = rank(-average_stand_score)
 use q4_Tz_student_roster_html, clear
 
 split s, parse(">PS") 
+*Splits up the code in the string 's', 'parsing' (aka) dividing the string by using >PS as the 'divider' between sections
 
 gen serial = _n
 *Serial can be anything, as we only have 1 row, so don't need to worry about it's identifier  
-	drop s
+	drop s 
+	*Don't need this extra HTML bit 
 
 reshape long s ///  
 	, i(serial) j(student)
+	*Reshape so that rows become columns
 
 split s, parse("<")
+	*Split up each student's string further
 	keep s1 s6 s11 s16 s21
+	*We only need a few of these sections, with student/grade info; don't need all the HTML font specifications 
 	drop in 1 
+	*Don't need 1st row 
 	
 	rename (s1 s6 s11 s16 s21) /// 
 		(cand prem sex name subjects)
+		*Rename columns 
 		
 		compress 
 		
+	*Remove/replace miscellanous characters 
 	replace cand = "PS" + cand 
+		*Put "PS" in front of candidate numbers 
 	replace prem = subinstr(prem, `"P ALIGN="CENTER">"' ,"", . )
 	replace sex = subinstr(sex, `"P ALIGN="CENTER">"' ,"", . )
 	replace name = subinstr(name, "P>" ,"", . )
@@ -208,10 +232,11 @@ split s, parse("<")
 
 	split subjects, parse(",")
 	drop subjects
+	*Split subjects up into constituent subjects, divided by "," ; then drop combined subj. string
 	
 	foreach var of varlist subjects* {
 		replace `var' = substr(`var', -1, 1 )  
-		*Get only the last character
+		*Get only the last character, i.e. the grade, using substring, i.e. extract the 'substring' that is only the last character within each subject string 
 	}
 	
 	rename (subjects1 subjects2 subjects3 subjects4 subjects5 subjects6 subjects7) /// 
@@ -220,3 +245,4 @@ split s, parse("<")
 		compress
 
 
+save Q4_output
