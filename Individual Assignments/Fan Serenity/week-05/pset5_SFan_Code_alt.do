@@ -34,7 +34,29 @@ use `student_clean', clear
 *Q2 : Côte d'Ivoire Population Density
 *We have household survey data and population density data of Côte d'Ivoire. Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
-clear 
+*Stra Region Departement SousPref(?) Commune Zone de nombrement Village Neighborhood
+
+*APPROACH: WANT TO MERGE THE DEPARTMENT-LEVEL DENSITY DATA FROM IMPORTED EXCEL SHEET ONTO HOUSEHOLD LEVEL DATA
+*i.e. merge using imported sheet, 1:Many merge 
+
+clear
+import excel q2_CIV_populationdensity, sheet("Population density")
+drop in 1
+
+use q2_CIV_Section_0, clear
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
