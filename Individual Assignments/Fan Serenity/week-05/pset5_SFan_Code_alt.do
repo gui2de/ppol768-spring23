@@ -34,6 +34,10 @@ use `student_clean', clear
 *Q2 : Côte d'Ivoire Population Density
 *We have household survey data and population density data of Côte d'Ivoire. Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
+clear 
+
+
+
 
 
 *_________________________________
@@ -41,8 +45,11 @@ use `student_clean', clear
 *We have the GPS coordinates for 111 households from a particular village. You are a field manager and your job is to assign these households to 19 enumerators (~6 surveys per enumerator per day) in such a way that each enumerator is assigned 6 households that are close to each other. Manually assigning them for each village will take you a lot of time. Your job is to write an algorithm that would auto assign each household (i.e. add a column and assign it a value 1-19 which can be used as enumerator ID). Note: Your code should still work if I run it on data from another village.
 
 *Visualize the data
-*use "q3_GPS Data"
-*scatter latitude longitude
+use "q3_GPS Data"
+scatter latitude longitude
+graph export "surveyors_scatter.png", replace
+graph drop _all 
+clear
 
 *Use geodist to calculate shortest distance on spherical surface 
 *geodist lat1 lon1 lat2 lon2, generate() 
@@ -61,8 +68,8 @@ use "q3_GPS Data", clear
 save "q3_GPS_copy", replace
 
 *Determine if last enumerator will need to have <6 assignments (because total # of locations is not exactly divisible by 6).
-local j = mod(_N,6)
-local k = ceil(_N/6)
+global j = mod(_N,6)
+global k = ceil(_N/6)
 
 clear 
 tempfile clustering
@@ -74,7 +81,7 @@ save `clustering', replace emptyok
 *append using `newGPS' 
 *save `newGPS', replace emptyok
 
-forvalues i=1/k {
+forvalues i=1/$k {
 	*Load dataset 
 	use "q3_GPS_copy", clear 
 	*use `newGPS', clear
@@ -102,7 +109,7 @@ forvalues i=1/k {
 	*Choose 5 shortest distances and add these to new datasets by ID, and cluster to which they're assigned
 		preserve 
 		
-		if `i'<k | j==0 {
+		if `i'<$k | $j==0 {
 			*All iterations except the last 
 			keep if distID <= 6
 		
@@ -116,11 +123,11 @@ forvalues i=1/k {
 			save `clustering', replace 
 			}
 		
-		else if `i'==k {
+		else if `i'==$k {
 			*The last iteration, for cases where last enumerator has  	
 			*fewer assignments 
 			
-			keep if distID <= j
+			keep if distID <= $j
 		
 			*generate clusterID = `i' 
 			generate clusterID = `i'
@@ -136,11 +143,11 @@ forvalues i=1/k {
 		restore
 	
 	*Remove these 6 points from original dataset 
-	if `i'<k { 
+	if `i'<$k { 
 		drop if distID <= 6 
 	}
-	else if `i'==k {
-		drop if distID <= j
+	else if `i'==$k {
+		drop if distID <= $j
 	}
 	
 	drop rowID lon0 lat0 dist distID 
@@ -151,8 +158,9 @@ forvalues i=1/k {
 
 *Load cluster_groups again
 use `clustering', clear 
-
-
+sepscatter latitude longitude, separate(clusterID) legend(pos(3) col(1))
+*graph save cluster_scatter_plot.png, replace
+graph export "surveyors_cluster_scatter.png", replace
 
 *_________________________________
 *Q4 : 2010 Tanzania Election Data cleaning
