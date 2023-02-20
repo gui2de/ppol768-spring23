@@ -94,13 +94,31 @@ global pop "/Users/Selina/Desktop/ppol768-spring23/Individual Assignments/Sun Se
 *update the global
 clear
 
-import excel "$density", sheet("Population density") firstrow case(lower) clear 
-
-rename nomcirconscription departement 
-keep if strpos(departement, "DEPARTEMENT") == 1 
-replace departement = strlower(departement)
-split departement, parse("" "d'")
-
-
+*explore b06_department variable 
 use "$q2", clear
-br
+decode b06*, gen(department)
+keep department
+sort department 
+*why we need duplicates drop?
+
+tempfile `department_level'
+save `department_level'
+
+import excel "$density", sheet("Population density") firstrow case(lower) clear allstring
+
+rename densiteaukm pop_density
+
+keep if strpos(nomcirconscription, "DEPARTEMENT") == 1 
+
+gen department = nomcirconscription
+replace department = subinstr(department, "DEPARTEMENT D'", "", .) 
+replace department = subinstr(department, "DEPARTEMENT DE", "",.)
+replace department = subinstr(department, "DEPARTEMENT DU", "",.)
+replace department = trim(department)
+replace department = strlower(department)
+drop nomcirconscription
+order department pop_density, first
+
+merge 1:1 department using `department_level'
+*remove blanks 
+
