@@ -2,8 +2,11 @@ global wd"/Users/Selina/Desktop/ppol768-spring23/Individual Assignments/Sun Seli
 
 global q1 "$wd/q1_psle_student_raw.dta"
 global q2 "$wd/q2_CIV_Section_0.dta"
+global q3 "$wd/q3_GPS Data.dta"
+global q4 "$wd/q4_Tz_election_2010_raw.xls"
+global q4_template "$wd/q4_Tz_election_template.dta"
 
-*Q1 I have `X' and missing values after extracting student level data 
+*Q1  using loop 
 clear
 tempfile student_cleaned
 save `student_cleaned', replace emptyok
@@ -53,7 +56,7 @@ use `student_cleaned', clear
 
 exit
 
-{
+*solving without loop {
 use "$q1", clear
 replace s = substr(s, strpos(s, "SUBJECT"), .)
 *split each line 
@@ -90,6 +93,7 @@ drop if missing(cand_No)
 }
 
 *Q2
+{
 global pop "/Users/Selina/Desktop/ppol768-spring23/Individual Assignments/Sun Selina/week-05/q2_CIV_populationdensity.xlsx"
 *update the global
 clear
@@ -97,28 +101,135 @@ clear
 *explore b06_department variable 
 use "$q2", clear
 decode b06*, gen(department)
-keep department
-sort department 
+
 *why we need duplicates drop?
 
-tempfile `department_level'
+tempfile department_level
 save `department_level'
 
-import excel "$density", sheet("Population density") firstrow case(lower) clear allstring
+import excel "$pop", sheet("Population density") firstrow case(lower) clear allstring
 
 rename densiteaukm pop_density
 
 keep if strpos(nomcirconscription, "DEPARTEMENT") == 1 
+sort nomcirconscription
 
 gen department = nomcirconscription
 replace department = subinstr(department, "DEPARTEMENT D'", "", .) 
 replace department = subinstr(department, "DEPARTEMENT DE", "",.)
 replace department = subinstr(department, "DEPARTEMENT DU", "",.)
+*remove blanks in the variable
 replace department = trim(department)
 replace department = strlower(department)
-drop nomcirconscription
-order department pop_density, first
+replace department = "arrha" if department=="arrah"
 
-merge 1:1 department using `department_level'
-*remove blanks 
+
+keep department pop_density
+
+
+merge 1:m department using `department_level'
+drop if _merge==1
+order department pop_density, last
+}
+
+*Q3
+{
+ssc install geodist
+
+tempfile q3_GPS 
+ 
+ use "$q3"
+ 
+save `q3_GPS'
+
+*save the q3 file in a tempfile and drop id that have already been enumerated in previous loop
+
+*find 5 nearest points and append to the tempfile 
+tempfile cluster
+	save `cluster', replace emptyok
+    use "$q3", clear
+	keep in 1
+	rename * one_*
+	cross using "$q3"
+	geodist one_latitude one_longitude latitude longitude, gen(distance)
+	sort one_id distance 
+	drop if one_id == id
+	drop if _n>=6
+	gen enumerator = 1
+	gen j = _n
+	keep one_id id enumerator j
+	reshape wide id, i(one_id) j(j)
+	rename one_id id 
+	append using `cluster'
+	save `cluster', replace
+	merge 1:1 id using "$q3"
+	drop id if id == id1 | id == id2 | id == id3| ///
+	id == id4 | id == id5
+	*can't move on because the invalid syntax
+	use
+	
+	use `cluster', clear
+}
+
+*Q4 unfinished 
+use "$q4_template",clear
+
+import excel "$q4", cellrange(A5:J7927) sheet("Sheet1") firstrow case(lower) clear
+
+drop if _n == 1
+
+gen serial = _n
+ 
+drop g sex candidatename 
+
+*fillin region, district constituency and ward
+replace region = region[_n-1] if region == ""
+replace region = strtrim(region)
+replace district = district[_n-1] if district == ""
+replace district = strtrim(district)
+replace costituency = costituency[_n-1] if costituency== ""
+replace costituency = strtrim(costituency)
+replace ward = ward[_n-1] if ward== ""
+replace ward = strtrim(ward)
+replace ttlvotes = "0" if ttlvotes == "UN OPPOSSED"
+destring ttlvotes, replace
+
+gen unique_ward = region + "_" + district + "_" + ward
+
+fillin unique_ward politicalparty 
+sort unique_ward _fillin
+
+replace region = region[_n-1] if region == ""
+replace region = strtrim(region)
+replace district = district[_n-1] if district == ""
+replace district = strtrim(district)
+replace costituency = costituency[_n-1] if costituency== ""
+replace costituency = strtrim(costituency)
+replace ward = ward[_n-1] if ward== ""
+replace ward = strtrim(ward)
+
+keep  unique_ward ttlvotes politicalparty 
+
+sort unique_ward politicalparty
+
+bysort unique_ward: gen j = _n
+
+encode politicalparty, gen (party)
+
+reshape wide ttlvotes, i(unique_ward) j(j)
+
+sort j politicalparty 
+
+bysort ward: egen total_candidate = count(ward)
+
+bysort ward: egen ward_total_votes = sum(ttlvotes)
+
+encode politicalparty, gen(party) 
+
+reshape wide ttlvotes, i(region district costituency unique_ward) j(party) 
+
+bysort ward: egen total_candidate = count(ward)
+
+bysort ward: egen ward_total_votes = sum(ttlvotes)
+
 
