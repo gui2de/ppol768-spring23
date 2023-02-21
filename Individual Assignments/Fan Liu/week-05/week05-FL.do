@@ -106,15 +106,16 @@ replace REGION = REGION[_n-1] if REGION == ""
 replace DISTRICT = DISTRICT[_n-1] if DISTRICT == ""
 replace COSTITUENCY = COSTITUENCY[_n-1] if COSTITUENCY == ""
 replace WARD = WARD[_n-1] if WARD == ""
-gen Gender = SEX + G
-drop SEX G
-rename Gender SEX
 bysort REGION DISTRICT COSTITUENCY WARD: egen total_candidate = count(CANDIDATENAME)
-egen ward_id = group(REGION DISTRICT WARD) 
+egen ward_id = group(REGION DISTRICT COSTITUENCY WARD) 
 destring TTLVOTES, replace force
+bysort ward_id POLITICALPARTY: gen set = _n
+keep if set == 1
 replace POLITICALPARTY = subinstr(POLITICALPARTY, " ", "", .) 
 replace POLITICALPARTY = subinstr(POLITICALPARTY, "-", "_", .) 
+drop SEX G CANDIDATENAME ELECTEDCANDIDATE set
 reshape wide TTLVOTES, i(ward_id) j(POLITICALPARTY) string
+order REGION DISTRICT COSTITUENCY WARD total_candidate, first
 
 //Q5 : Tanzania Election data Merging
 use "$q53", clear 
