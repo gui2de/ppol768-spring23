@@ -67,15 +67,15 @@ reshape wide Reviewer Reviewscore normalizedscore, i(proposal_id) j(Reviewer_num
 bysort Reviewer: egen avergae = std(Reviewscore)
 
 
-**Q4**
-
+**Q4
+**This task involves string cleaning and data wrangling. We scrapped student data for a school from Tanzania's government website. Unfortunately, the formatting of the data is a mess. Your task is to create a student level dataset with the following variables: schoolcode, cand_id, gender, prem_number, name, grade variables for: Kiswahili, English, maarifa, hisabati, science, uraia, average.
 cd "/Users/salonibhatia/Desktop/Semester 2 - Coursework /Research Design and Implementation (PPOL-768)/Week 4/01_data"
 
 use "q4_Tz_student_roster_html.dta", clear
 
 split s, parse(">PS")
 
-gen serial = 1 
+gen serial = _n 
 
 drop s 
 
@@ -91,18 +91,18 @@ ren (s1 s6 s11 s16 s21) (cand prem sex name subjects)
 compress 
 
 replace cand = "PS" + cand 
-replace prem = subinstr(prem,"P ALIGN="CENTER">","",.)
-replace sex = subinstr(sex, "P ALIGN="CENTER">","",.)
-replace name = subinstr(name, "P>","",.)
-replace subjects = subinstr(subjects,"P ALIGN="LEFT">","",.)
+replace prem = subinstr(prem,`"P ALIGN="CENTER">"',"",.)
+replace sex = subinstr(sex, `"P ALIGN="CENTER">"',"",.)
+replace name = subinstr(name, `"P>"',"",.)
+replace subjects = subinstr(subjects,`"P ALIGN="LEFT">"',"",.)
 
 
 split subjects, parse(",")
 compress 
 
-drop subject
-foreach var of varlist subject* {
-	replace 'var' = substr('var',-1,.)
+drop subjects
+foreach var of varlist subjects* {
+	replace `var' = substr(`var',-1,.)
 	}
 
 compress 
