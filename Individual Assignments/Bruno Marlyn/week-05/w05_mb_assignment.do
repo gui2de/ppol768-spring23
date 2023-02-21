@@ -119,6 +119,7 @@ drop _merge
 
 use "$q3_GPS", clear
 
+*I ran out of time, unfortunately, but I will revisit this problem later this week!
 
 /**********************************************************************************
 
@@ -139,13 +140,12 @@ import excel "$q4_excel", cellrange(A5:K7927) firstrow allstring clear
 	*1. Delete the first row and column K
 	drop if _n == 1
 	drop K
+	gen serial = _n //helps me track original order of observations
+
 	
 	*2  M and F overlap?
-	tab SEX G, m // this doesn't show any observations for some reason so next plan
-	gen gender_check = 0
-	replace gender_check = 1 if SEX == "M" & G == "F" //ideally, no observations would change
-	count if gender_check ==1 //count is 0 so now I feel good about combining the columns
-	drop gender_check
+	tab SEX G, m // can see that one that one value has a trailing blank issue. Also see 9 candidates have unknown gender
+	replace SEX = "M" if SEX == "M " //fixing that one value
 	
 	*3. Combine sex columns
 	gen gender = ""
@@ -164,30 +164,85 @@ import excel "$q4_excel", cellrange(A5:K7927) firstrow allstring clear
 	gen ward = WARD 
 	replace ward = ward[_n-1] if ward == ""
 	
-	reshape wide POLITICALPARTY i(WARD) j(DISTRICT)
+	order region district costituency ward, before(CANDIDATENAME)
+	drop REGION DISTRICT COSTITUENCY WARD
 	
-	/*Data check! I'm going to keep track of one observation in the middle of the dataset before and after I do the above fill-ins of empty cells to make sure my code is working
-					240 - DAR ES SALAAM - MANISPAA YA ILALA - ILALA - JANGWANI ... and my code works! I can proceed*/
-
-*Time to sort the data so I can get a better idea of how to transform it
-*sort WARD POLITICALPARTY 
+*Before using the fillin command, I should create a unique ward ID since some wards have the same names though they're in different districts or regions
+gen unique_ward = region + "_" + district + "_" + ward	
 
 *Going to use fillin so that I have a row for every political party in every ward (even if no votes went to that political party)
-fillin DISTRICT WARD POLITICALPARTY
+fillin unique_ward POLITICALPARTY	
 
-*Ok but now we need to repopulate empty cells  for region, district, and costistuency again
-*bysort WARD: egen region = mode(REGION)
-*bysort WARD: replace REGION = region if missing(REGION) 
+*Now, I have to populate the empty cells that were created after using fillin to create a row for every political party for each ward
+sort unique_ward _fillin //sorting so that the original names of the region, district, costistuency, and ward appear first in every unique ward
 
-*bysort WARD: egen district = mode(DISTRICT)
-*bysort WARD: replace DISTRICT = district if missing(DISTRICT) 
+replace region = region[_n-1] if region == "" 
+replace district = district[_n-1] if district == ""
+replace costituency = costituency[_n-1] if costituency == ""
+replace ward = ward[_n-1] if ward == ""
 
-*Now we can reshape our data to the wide format
+*Before reshaping, we have to a generate "j" value, which will be used to keep track of every political party. 
+sort unique_ward POLITICALPARTY
+bysort unique_ward: gen j = _n
 
-reshape wide POLITICALPARTY i(WARD) j(DISTRICT)
+tab j POLITICALPARTY // we can now see that there are ONLY TWO instances where there are two candidates within the same political party. Both cases happen within the LINDI_WILAYA YA LIWALE_NANGANDO unique ward. There are two CCM and two CUF candidates in this ward. 20,578 and 20,577 == 1,812 votes
+
+*Sum votes in instances where there are multiple candidates within the same party
+gen totalvotes = real(TTLVOTES) //to be able to sum up votes, I have to change the vote variable first from string to real numeric
+sort unique_ward POLITICALPARTY //make sure dataset is in right order
+bysort unique_ward POLITICALPARTY: egen votes = total(totalvotes) //summing up values for multi-candidate parties 
+drop totalvotes //dropping the old variable for total votes 
+
+bysort unique_ward j: gen mult_cand = 0
+replace mult_cand = 1 if POLITICALPARTY[_n] == POLITICALPARTY[_n + 1] //flags which observations have two candidtes for a party
+drop if mult_cand == 1 //dropping 2 duplicates now
+
+tab j POLITICALPARTY //checking to see if issue of multiple candidates is resolved and it is
+
+*I have to recreate my j variable now that I've resolved the multiple candidates issue
+drop j
+sort unique_ward POLITICALPARTY
+bysort unique_ward: gen j = _n
+
+*Create my "i" so that I can reshape data
+encode unique_ward, gen(i) //create a unique number identifier for each unique ward so that I can reshape data 
+
+*Reshape data
+encode POLITICALPARTY, gen(party) //need to encode political party variable for reshape to be able to run
+drop CANDIDATENAME TTLVOTES ELECTEDCANDIDATE serial gender _fillin POLITICALPARTY j//have to drop to be able to reshape
+reshape wide votes, i(i) j(party) 
+
+*Clean data even more
+drop mult_cand unique_ward //no longer need this now that they're extraneous 
+order region district costituency ward, before(i)
+
+egen total_ward_votes = rowtotal(votes*) //calculate total votes for each ward
+order total_ward_votes, after(i) //place new total votes variable at start
+
+rename votes1 votes_afp
+rename votes2 votes_appt
+rename votes3 votes_ccm
+rename votes4 votes_chadema
+rename votes5 votes_chausta
+rename votes6 votes_cuf
+rename votes7 votes_dp
+rename votes8 votes_jahazi_asilia
+rename votes9 votes_makin
+rename votes10 votes_nccr_mageuzi
+rename votes11 votes_nld
+rename votes12 votes_nra
+rename votes13 votes_sau
+rename votes14 votes_tadea
+rename votes15 votes_tlp
+rename votes16 votes_tdp
+rename votes17 votes_umd
+rename votes18 votes_updp
+rename i wardID
 	
 /**********************************************************************************
 
 					Question 5: Tanzania Election data Merging
 						
 ***********************************************************************************/
+
+*I ran out of time, unfortunately, but I will revisit this problem later this week! 
