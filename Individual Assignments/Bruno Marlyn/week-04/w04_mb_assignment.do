@@ -210,6 +210,12 @@ replace s15 = subinstr(s15,"</FONT","",.)
 replace s20 = subinstr(s20,"</FONT","",.)
 replace s25 = subinstr(s25,"</FONT","",.)
 
+*Post peer-review Update: I could just run a loop for the above to have more efficient code
+foreach var of varlist *{
+	replace `var' = subinstr(`var', "</FONT","",.)
+}
+
+
 *Renaming variables to match their website names
 rename (s5 s10 s15 s20 s25) (cand_number prem_number sex cand_name subjects) 
 
