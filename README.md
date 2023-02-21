@@ -8,7 +8,9 @@ Welcome to our class repository!
 
 [Announcements and discussions can be found in the Discussions tab of the repository.](https://github.com/gui2de/ppol768-spring23/discussions)
 
-[Asking for help with statistical programming](https://gist.github.com/bbdaniels/246867d78f07db5b2baecd0d8a22ef1a)
+[Asking for help with statistical programming.](https://gist.github.com/bbdaniels/246867d78f07db5b2baecd0d8a22ef1a)
+
+[Introductory guides and cheat sheets for Stata.](https://www.dropbox.com/sh/saq0usa4yhymjmx/AADPQ2ZY-Rs5gQ4d34IBmGNpa?dl=0)
 
 ## Repository Organization
 
