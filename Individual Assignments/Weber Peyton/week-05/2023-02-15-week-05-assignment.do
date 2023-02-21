@@ -1,6 +1,7 @@
 *PPOL 768-01, SS2023 
 *Author: Peyton Weber
-*Week 5 Assignment Do-File 
+*Week 5 Assignment Do File 
+*Revisions made: 2/15, 2/16, 2/17, 2/18, 2/19, 2/20, 2/21
 
 clear all
 set more off
@@ -160,14 +161,14 @@ drop if _merge==1
 *Dropping the one observation that was unable to be merged. No population density data for this observation. 
 
 order department pop_density, last
-*This command allows us to view the population density for each department to the very far right of the browsw window. 
+*This command allows us to view the population density for each department to the very far right of the browse window. 
 
 *Question 3:
 use "$wd/q3_GPS Data.dta", clear
 
 ssc install egenmore
 egen clock = mlabvpos(latitude longitude)
-*Creating a new "clock" variable that assigns a time that corresponds to the households' positions using the latitude and longitude information. 
+*Creating a new "clock" variable that assigns a time that corresponds to the households' positions using the latitude and longitude variables. 
 sort clock 
 br
 scatter longitude latitude, mlab(id) mlabvpos(clock) title("Placeholder")
@@ -212,19 +213,19 @@ replace POLITICALPARTY = subinstr(POLITICALPARTY, "-", "_", .)
 *Not every ward has the same party, which would cause issues if we tried to reshape the data as-is. Need to use the fillin command. 
 
 codebook WARD
-*There are only 3,113 wards, but we know there should be 3,333. It must be the case that some ward names are common and are being reused in districts. 
+*There are only 3,113 wards, but we know there should be 3,333. It must be the case that some ward names are common and are being reused in districts and/or regions. 
 gen unique_ward = REGION + DISTRICT + WARD
+*Created a unique ward variable to address the fact that there are common names in wards across regions and districts. 
 *Could have also used the following command, but it would have created a numeric variable: egen unique_ward = group(REGION DISTRICT WARD) 
-
 codebook unique_ward
 *We now see that there are the expected 3,333 unique ward values, as expected. 
 
-*I need to use fillin comand before reshaping the data, because not every ward has the same parties. 
+*Now I need to use fillin comand before reshaping the data, because not every ward has the same parties. 
 
 fillin unique_ward POLITICALPARTY
 sort unique_ward _fillin
-*Need to fill in missing values again after creating unique ward variable. 
 
+*Need to fill in missing values again after creating unique ward variable. 
 replace REGION = REGION[_n-1] if REGION == "" 
 *Bringing down region since creating unique ward variable generated missing cells. 
 replace DISTRICT = DISTRICT[_n-1] if DISTRICT == "" 
@@ -235,20 +236,54 @@ replace WARD = WARD[_n-1] if WARD == ""
 *Bringing down ward since creating unique ward variable generated missing cells.
 
 keep unique_ward POLITICALPARTY TTLVOTES
-*Dropping extra variables we are not interested in. 
+*Dropping extra variables in preparation for reshape. 
 sort unique_ward POLITICALPARTY
 bysort unique_ward: gen j=_n 
 *Creating a "j" for each unique ward with all 18 parties, even if there was not a candidate represented for that party in a given unique ward. 
 tab j POLITICALPARTY
-*There is an issue to resolve before we reshape. CCM is not always j = 2. This is also an issue for other wards. 
-br if j==4 & POLITICALPARTY == "CCM" 
-br
 *In some wards, there are two or more candidates for one political party! 
-*I got stuck here trying to fix this problem!
+*This is an issue to resolve before we reshape. 
+*For example, CCM is not always j = 2. This is also an issue for other wards. 
+
+*To address the issue, I need to 1) sum up all votes for each party and 2) drop the observations that are duplicative if there are two candidates per political party. 
+gen ttlvotes = real(TTLVOTES)
+*Generating a new variable the same as TTLVOTES, but numeric instead of string. 
+sort unique_ward POLITICALPARTY
+bysort unique_ward POLITICALPARTY: egen votes = total(ttlvotes)
+*Summing up all of the votes, even if there are multiple candidates for one party. 
+drop ttlvotes
+
+bysort unique_ward j: gen manycandidates = 0
+*This command creates a dummy to identify an observation if it has two candidates per party. 
+replace manycandidates = 1 if POLITICALPARTY[_n] == POLITICALPARTY[_n+1]
+*The dummy is equal to one if the observation is duplicative, because it has the same value as the observation above it. 
+drop if manycandidates == 1 
+*Dropping the duplicates. 
+
+tab j POLITICALPARTY
+count if j > 18
+br if j > 18
+*There are still two instances where j is greater than 18!  
+drop j
+*I will recreate the j variable since hopefully I've now fixed the many candidates per party issue. 
+sort unique_ward POLITICALPARTY
+bysort unique_ward: gen j=_n 
+count if j > 18
+*Zero observations exceed 18 - this is encouraging!
 
 encode unique_ward, gen(i) 
 *Preparing the unique_ward variable to reshape the data. 
-reshape wide POLITICALPARTY TTLVOTES, i(i) j(j)
+encode POLITICALPARTY, gen(party)
+*Preparing the party variable to reshape the data. 
+drop TTLVOTES POLITICALPARTY j manycandidates
+*No longer need/want these variables. 
+reshape wide votes, i(i) j(party)
+
+drop unique_ward
+egen ttlwardvotes = rowtotal(votes*)
+*This new variable calculates all the votes across all parties for each unique ward. 
+br
+*I would like to be able to rename all 18 votes columns to their corresponding political party, but I don't know how to do it without manually renaming them. 
 
 *Question 5: 
 clear
