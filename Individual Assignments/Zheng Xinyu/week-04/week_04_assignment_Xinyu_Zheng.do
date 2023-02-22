@@ -100,7 +100,7 @@ rename column_11 trans_pop
 rename column_12 trans_obtained
 rename column_13 trans_not_obtained
 
-/* METHOD 2: I'm able to fix the problem outside of the loop
+/* METHOD 2: I'm able to fix the problem outside of the loop, but it's complicated, so I won't pursue method two here.
 *setting up an empty tempfile
 tempfile table21
 save `table21', replace emptyok
