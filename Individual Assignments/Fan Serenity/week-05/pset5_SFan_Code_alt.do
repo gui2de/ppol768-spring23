@@ -345,3 +345,9 @@ merge m:1 department using "departemen_popDens.dta"
 *global q5_elect_15 $wd "" 
 
 *reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score)
+
+clear 
+use q5_Tz_ArcGIS_intersection 
+
+
+
