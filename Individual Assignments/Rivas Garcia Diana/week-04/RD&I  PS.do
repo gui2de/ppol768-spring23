@@ -35,6 +35,7 @@ replace household_type=3 if pixel_village==1 & pixel_consistent==1
 *Question 2
 
 ********************************************************************************
+clear all 
 tempfile table21
 save `table21', replace emptyok
 
@@ -56,17 +57,41 @@ use `table21'
 *fix column width issue so that it's easy to eyeball the data
 format %40s table21 B C D E F G H I J K L M N O P Q R S T U V W X Y  Z AA AB AC
 
+drop table21
+drop table
 
-destring B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC , replace
-*This left M as a string so upon inspection, one of the values was - so cold not destring
+egen everything = concat(*),p(|)
+replace everything = subinstr(everything," ","",.)
+replace everything = subinstr(everything,"-","",.)
 
-destring M, ignore("-")replace
-destring N O Q U, ignore("-" "...")replace
-destring W, ignore("-")replace
+replace everything = "|" + everything
+
+forvalues i= 1/135{
+	replace everything = subinstr(everything,"||","|",.)
+}
+
+split everything, parse("|")
+
+ren everything2 totalpop
+ren everything3 allcnicard
+ren everything4 allcninocard
+ren everything5 malepop
+ren everything6 cnimalecard
+ren everything7 cnimalenocard
+ren everything8 femalepop
+ren everything9 cnifemalecard
+ren everything10 cnifemalenocard
+ren everything11 transpop
+ren everything12 cnitranscard
+ren everything13 cnitransnocard
+
+forvalues i= 1/135{
+	replace everything = subinstr(everything,"||","|",.)
+}
+
+drop B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC everything everything1
 
 
-----
-local variables B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC
 ********************************************************************************
 
 /*Question 3
