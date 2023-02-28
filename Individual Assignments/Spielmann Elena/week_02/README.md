@@ -32,9 +32,12 @@ ACFT Pass Rate (Active Duty)
 
 #Photos
 
-![spielmann_pic](img/not_distorted_selfie_via_gimp.png) "My portrait" 
+
+![Elena Spielmann](\img\not_distorted_selfie_via_gimp.png "My portrait")
 This is the *required* Selfie
 
-![WSMR_museum_Missile_Park](C:\Users\easpi\OneDrive\Desktop\Georgetown MPP\MPP Spring 2023\Research Design and Implmentation\ppol768-spring23\lab2\ppol768-spring23\Individual Assignments\Spielmann Elena\week_02\img\WSMR_museum_Missile_Park.jpg "Selfie")
+Test change
+
+![WSMR_museum_Missile_Park](jpg "Selfie")
 
 This is where I'll be working when I return to the Army. Las Cruces is a hidden _gem_. 10/10 would recommend.
