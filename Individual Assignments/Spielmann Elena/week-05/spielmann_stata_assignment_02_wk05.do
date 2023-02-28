@@ -77,7 +77,7 @@ We have household survey data and population density data of Côte d'Ivoire. Mer
 use "q2_CIV_Section_0", clear
 
 *First import the excel and convert to string. This can be done via "point click method" and then copying the code below, or just through writing the code. Need to convert to string here.
-
+clear
 import excel "q2_CIV_populationdensity", sheet("Population density") firstrow allstring
 
 *Now we keep and sort by ourvariable of interest and are interested in the observations associated with "DEPARTEMENT"
@@ -94,7 +94,7 @@ replace department = subinstr(department, "DEPARTEMENT DE", "",.)
 replace department = subinstr(department, "DEPARTEMENT DU", "",.)
 replace department = "arraha" if department=="arrah"
 
-rename DENSITEAUKM pop_density_km2//* this is column we want to keep */
+rename DENSITEAUKM pop_density_km2 //* this is column we want to keep */
 keep pop_density_km2 department
 
 codebook department
@@ -159,7 +159,7 @@ use "q3_GPS Data", clear
 
 ssc inst sepscatter
 
-scatter latitude longidtude
+scatter latitude longitude
 
 use "store_location", clear
 
@@ -178,7 +178,7 @@ drop if one_unique_id==unique_id
 gen nb_store_500m = 0
 replace nb_store_500m = 1 if distance
 
-sepscatter latitude longidtude, separate(_clus1) 
+sepscatter latitude longitude, separate(_clus1) 
 
 *create a clustered graph so enumerators know where to go. then number each cluster
 
@@ -195,8 +195,7 @@ Q4 : 2010 Tanzania Election Data cleaning
 
 *First four rows need to be gone.... can import via click and point and choose rows as well as import as string. 
 
-import excel "C:\Users\easpi\OneDrive\Desktop\Georgetown MPP\MPP Spring 2023\Research Design and Implmentation
-> \week-05-materials\q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) allstring
+import excel "q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) allstring, clear
 
 *browse and compare to desired data set set-up. We need to "drag and drop" the respectvie districts, constituencies, wards etc. to fill the blanks below them (but with code). Need a separate column for political party.
 
