@@ -193,8 +193,8 @@ sort unique_ward POLITICALPARTY //make sure dataset is in right order
 bysort unique_ward POLITICALPARTY: egen votes = total(totalvotes) //summing up values for multi-candidate parties 
 drop totalvotes //dropping the old variable for total votes 
 
-bysort unique_ward j: gen mult_cand = 0
-replace mult_cand = 1 if POLITICALPARTY[_n] == POLITICALPARTY[_n + 1] //flags which observations have two candidtes for a party
+bysort unique_ward j: gen mult_cand = 0 //make sure dataset is in right order
+replace mult_cand = 1 if POLITICALPARTY[_n] == POLITICALPARTY[_n + 1] //flags which observations have two candidates for a party
 drop if mult_cand == 1 //dropping 2 duplicates now
 
 tab j POLITICALPARTY //checking to see if issue of multiple candidates is resolved and it is
@@ -245,4 +245,54 @@ rename i wardID
 						
 ***********************************************************************************/
 
-*I ran out of time, unfortunately, but I will revisit this problem later this week! 
+use "$q5_GIS", clear
+
+keep region_gis_2017 district_gis_2017 ward_gis_2017
+duplicates drop
+rename (region_gis_2017 district_gis_2017 ward_gis_2017) (region district ward)
+sort region district ward
+gen dist_id = _n //always good to keep track of original order of rows/observations
+
+tempfile gis_15 //creating a tempfile of this datasets
+save `gis_15'
+
+use "$q5_15", clear
+keep region_15 district_15 ward_15
+duplicates drop
+rename(region_15 district_15 ward_15) (region district ward)
+sort region district ward
+gen idvar = _n 
+
+reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score) //fuzzy matching of strings. I keep getting an error code saying invalid file specification but I don't know why if I saved the tempfile and the ticks and commas are in the right order according to the helpbook 
+tempfile matching //to save the dataset that has matching scores
+save `matching'
+
+*Merge '10 and '15 year datasets
+clear
+use "$q5_10"
+tempfile 2010wards
+sort ward_10
+rename (region_10 district_10 ward_10) (region district ward) //want the dataset to have matching columns 
+save `2010wards'
+
+use "$q5_15", clear
+tempfile 2015wards
+sort ward_15
+rename (region_15 district_15 ward_15) (region district ward)
+save `2015wards'
+
+tempfile mergedwards
+merge m:m region district ward using `2010wards'
+save `mergedwards'
+
+*Save matched wards in a temp file
+tempfile mergedsuccessfully
+keep if _merge==3
+save `mergedsuccessfully'
+
+*then combine the nonmerged wards with the GIS_intersection dataset
+use `mergedwards'
+keep if _merge==2 | _merge==1
+save `mergedwards', replace //this works! it's a dataset of only the "problem" wards, or the ones that appear in one year but not the other
+
+merge m:m region district ward using `gis_15'//I keep getting an error code saying invalid file specification but I don't know why if I saved the tempfile earlier in the process
