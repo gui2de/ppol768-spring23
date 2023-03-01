@@ -35,7 +35,7 @@ forvalues i = 1/138 {
 	use "$q1", clear
 	display as error "This is loop number `i'"
 	keep in `i'
-	do "/Users/marlyn/GitHub/ppol768-spring23/Individual Assignments/Bruno Marlyn/week-05/w04_q4"
+	do "/Users/marlyn/GitHub/ppol768-spring23/Individual Assignments/Bruno Marlyn/week-05/w04_q4" //Reviewer, going to have to edit the part before Github folder
 	
 	append using `student_clean'
 	save `student_clean', replace //overwrite the same dataset
@@ -97,7 +97,7 @@ rename DENSITEAUKM pop_density
 keep pop_density department
 
 *Merge one pop_density stat to many survey responses
-merge 1:m department using `survey' //wth is happening here
+merge 1:m department using `survey' 
 
 *One observation doesn't have survey data
 drop if _merge != 3
@@ -136,18 +136,18 @@ keep if _n <= 5 // want to keep the five households that are closest to first ho
 gen enumerator = 1
 
 *Reshape data so that each row is a list of household IDs
-drop age female distance_km longitude latitude //not constant within ID so have to drop
-gen j = _n
+drop age female distance_km longitude latitude //"not constant within ID" so have to drop in order to reshape
+gen j = _n //generating "j" identifier 
 reshape wide id, i(one_id) j(j)
 
 *Merge back to main dataset
-rename one_id id
+rename one_id id //needs to match name with original id variable name
 merge 1:1 id using "$q3_GPS"
 drop _merge //not needed so dropping
 replace enumerator = 1 if id == id1[1] | id == id2[1] | id == id3[1] | id == id4[1] | id == id5[1] //this is filling in the enumerator column for all the other households that are in the same first enumerator 
-drop one_latitude one_longitude one_age one_female id1 id2 id3 id4 id5 //dropping these variables since we only want a new "enumerator" column
+drop one_latitude one_longitude one_age one_female id1 id2 id3 id4 id5 //dropping these variables since we only want a new "enumerator" column and these have served their purpose
 
-*At this point, I would want to save all the households that have been grouped in  enumerator 1 in a separate tempfile and then delete them from the original dataset. I would then want to repeat the entire process of using the cross command to make all possible combinations of households remaining, and then calculate the geodistance. Then tag the five households closest to the household with the new lowest ID number. Then this time, I'd want to generate the enumerator to equal to 2. I would repeat process again all the way up to saving all the households with enumerator 2 in a separate tempfile. I'd repeat the process over and over again up to enumerator 19. The final step would be to append all the tempfiles together so they have the same information with the new enumerator column. I don't really understand how tempfiles work and struggle a lot with loops though so not sure where to go from here. 
+*At this point, I would want to save all the households that have been grouped in  enumerator 1 in a separate tempfile and then delete them from the original dataset. I would then want to repeat the entire process of using the cross command to make all possible combinations of households remaining, and then calculate the geodistance. Then tag the five households closest to the household with the new lowest ID number. Then this time, I'd want to generate the enumerator to equal to 2. I would repeat process again all the way up to saving all the households with enumerator 2 in a separate tempfile. I'd repeat the process over and over again up to enumerator 19. The final step would be to append all the tempfiles together so they have the same information with the new enumerator column. I don't really understand how tempfiles work and struggle a lot with loops though so not sure where to go from here. When I've tried saving the observations into a tempfile, I get this error message, "invalid file specification," so I know I'm doing something wrong. Ali, please feel free to grade this attempt and after spring break (when you're back in the US), I will ask you for an office hours appointment to dig deeper on tempfiles and loops.
 
 
 /**********************************************************************************
