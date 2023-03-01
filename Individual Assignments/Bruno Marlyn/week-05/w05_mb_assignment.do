@@ -116,10 +116,39 @@ drop _merge
 					Question 3: Enumerator Assignment based on GPS
 						
 ***********************************************************************************/
+ssc install geodist //Installing necessary command
 
 use "$q3_GPS", clear
 
-*I ran out of time, unfortunately, but I will revisit this problem later this week!
+*Create dataset where every household is paired with all other households so that I can calculate the distance in between
+sort latitude
+rename * one_* //renaming so that the column names are unique and I can use cross command
+cross using "$q3_GPS" //going to create every combo possible of each place 
+
+*Calculate geographic distance between each place in km 
+geodist one_latitude one_longitude latitude longitude, gen(distance_km) 
+sort distance_km // order by distance 
+drop if one_id == id //I don't need rows where households are paired with themselves since it's going to be 0 km and it's not needed
+
+*Tag the five closest households to a household
+sort one_id distance_km //going to start the process with the household with the lowest ID number
+keep if _n <= 5 // want to keep the five households that are closest to first household
+gen enumerator = 1
+
+*Reshape data so that each row is a list of household IDs
+drop age female distance_km longitude latitude //not constant within ID so have to drop
+gen j = _n
+reshape wide id, i(one_id) j(j)
+
+*Merge back to main dataset
+rename one_id id
+merge 1:1 id using "$q3_GPS"
+drop _merge //not needed so dropping
+replace enumerator = 1 if id == id1[1] | id == id2[1] | id == id3[1] | id == id4[1] | id == id5[1] //this is filling in the enumerator column for all the other households that are in the same first enumerator 
+drop one_latitude one_longitude one_age one_female id1 id2 id3 id4 id5 //dropping these variables since we only want a new "enumerator" column
+
+*At this point, I would want to save all the households that have been grouped in  enumerator 1 in a separate tempfile and then delete them from the original dataset. I would then want to repeat the entire process of using the cross command to make all possible combinations of households remaining, and then calculate the geodistance. Then tag the five households closest to the household with the new lowest ID number. Then this time, I'd want to generate the enumerator to equal to 2. I would repeat process again all the way up to saving all the households with enumerator 2 in a separate tempfile. I'd repeat the process over and over again up to enumerator 19. The final step would be to append all the tempfiles together so they have the same information with the new enumerator column. I don't really understand how tempfiles work and struggle a lot with loops though so not sure where to go from here. 
+
 
 /**********************************************************************************
 
