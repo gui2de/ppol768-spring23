@@ -4,6 +4,8 @@
 
 cd "C:\Users\kevin\Github\ppol768-spring23\Individual Assignments\Fan Serenity\week-05" 
 
+
+
 *_________________________________
 
 *Q1 : Tanzania Student Data
@@ -14,7 +16,7 @@ clear
 tempfile student_clean 
 save `student_clean', replace emptyok
 
-*CHANGE THIS TO 138 EVENTUALLY 
+*CHANGE THIS TO 138 
 forvalues i=1/138 {
 	
 	use "q1_psle_student_raw", clear 	
@@ -31,6 +33,65 @@ forvalues i=1/138 {
 
 use `student_clean', clear 
 save OUTPUT_Q1, replace
+
+
+
+
+
+*_________________________________
+*Q5 : Tanzania Election data Merging
+*Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided.
+
+
+*Use reclink2 !!!  
+
+*global wd "C:/Users ... "
+
+*global q5_intersection $wd "" 
+*global q5_elec_10 $wd "" 
+*global q5_elect_15 $wd "" 
+
+*reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score)
+
+*clear 
+*use q5_Tz_ArcGIS_intersection 
+*use q5_Tz_elec_10_clean, clear
+*use q5_Tz_elec_15_clean, clear
+
+*reclink 
+
+*reclink region_gis_2012 district_gis_2012 ward_gis_2012 using "q5_tz_ArcGIS_intersection.dta", id master(ward_id_10) idusing(objectid) gen(matchpct) 
+
+*reclink region_gis_2017 district_gis_2017 ward_gis_2017 using "q5_tz_ArcGIS_intersection.dta", id master(ward_id_15) idusing(objectid) gen(matchpct)
+
+*merge 1:m region_gis_2012 district_gis_2012 ward_gis_2012 using "q5_tz_ArcGIS_intersection.dta"
+
+use "q5_Tz_elec_10_clean.dta" , clear
+
+  generate urban = strpos(district_10,"manispaa")
+  replace urban = 1 if strpos(district_10,"jiji")
+
+  replace district_10 = substr(district_10,strpos(district_10," ya ")+4,.) ///
+    if strpos(district_10," ya ")
+  replace district_10 = substr(district_10,strpos(district_10," la ")+4,.) ///
+    if strpos(district_10," la ")
+  replace district_10 = substr(district_10,strpos(district_10," wa ")+4,.) ///
+    if strpos(district_10," wa ")
+  replace district_10 = substr(district_10,strpos(district_10," wara ")+6,.) ///
+    if strpos(district_10," wara ")
+
+  rename (region_10 district_10 ward_10) ///
+      (region_gis_2012 district_gis_2012 ward_gis_2012)
+
+  duplicates tag region_gis_2012 district_gis_2012 ward_gis_2012 , gen(d)
+  replace ward_gis_2012 = ward_gis_2012 + " urban" if urban
+  // replace ward_gis_2012 = ward_gis_2012 + " rural" if !urban
+
+    reclink region_gis_2012 district_gis_2012 ward_gis_2012 ///
+       using "${dir}/q5_Tz_ArcGIS_intersection.dta" ///
+   , idmaster(ward_id_10) idusing(objectid) gen(matchpct) minbigram(0.3)
+
+
 
 
 
@@ -331,23 +392,6 @@ merge m:1 department using "departemen_popDens.dta"
 
 
 
-*_________________________________
-*Q5 : Tanzania Election data Merging
-*Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided.
-
-
-*Use reclink2 !!!  
-
-*global wd "C:/Users ... "
-
-*global q5_intersection $wd "" 
-*global q5_elec_10 $wd "" 
-*global q5_elect_15 $wd "" 
-
-*reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score)
-
-clear 
-use q5_Tz_ArcGIS_intersection 
 
 
 
