@@ -31,30 +31,31 @@ tempfile newschools
 
 **** Question 2 ****
 
-We have household survey data and population density data of Côte d'Ivoire. 
-Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
-into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
+*We have household survey data and population density data of Côte d'Ivoire. ///
+*	Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
+*	into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
 *tempfile popdens 	/// Generated a tempfile to store the data after I changed 
 *save `popdens', replace emptyok
-	
-	import excel using "q2_CIV_populationdensity.xlsx" 
-	
-		gen i = _n
-	
-	** keep if word(DEPARTMENT, 1) I was trying to tell Stata to keep the row if the first word /// is DEPARTMENTE.
+			
 	
 
-	*append using `popdens'
-	
-	*use "popdens"
-	
-*gen popdens
+** Load excel file 
+
+import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring
+
+
+	 gen department = word(NOMCIRCONSCRIPTION, 1)
+	 keep if department == "DEPARTEMENT"
+	 
+	 use "q2_CIV_Section_0.dta", clear 
+	decode b06_departemen , generate (dept)
+
+		tempfile popdens 
+		save `popdens'
 		
-	
-*use "popdens"
-
-*This seems like a one to many merge; Should include a column for population density 
+		merge 1:1 dept using popdens
+ 
 
 ***** Question 3 ********
 
