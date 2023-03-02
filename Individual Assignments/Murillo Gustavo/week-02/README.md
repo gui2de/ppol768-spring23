@@ -35,6 +35,6 @@ My research interests were shaped back in 2020 when the first wave of the COVID-
 
 Photos
 -------------
-![GustavoPicture]("img/gustavomurillo.png")
+![GustavoPicture](img/gustavomurillo.png)
 
-![Sonora,Mexico]("img/sancarlos.png")
+![Sonora,Mexico](img/sancarlos.png)
