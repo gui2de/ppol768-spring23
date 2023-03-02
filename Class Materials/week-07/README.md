@@ -8,11 +8,15 @@ If you have any local work on your machine that you haven't pushed to the remote
 
 Moving forward, we will keep up this cleaning process weekly to avoid cluttering the github repo. Concretely, every Tuesday before class, we will be merging your branches into main (even if the review hasn't been completed) and deleting from the remote repo any branch from closed out assignments. For example, your survey assignment is due on March 13th, and your peer review of someone else's survey is due on March 20th, so on March 21st, we will be merging and deleting all branches related to survey submissions if any are still pending.
 
-## Reminder : process to submit your weekly individual assignments
+We are also making two major changes to the repo structure to streamline the assignments process
+- We will have two major branches for the repo, the `main` one where you will be merging your assignments into, and the `instructions` one where we will be keeping only the class materials information, and where you will be starting your branches from. That should avoid any further confusion or errors where someone pushing an assignment can have an effect on the overall class materials information. There will also be class materials on the main branch, but it may or may not be up to date, and if it is broken somehow, it will not affect your work because your work will be branching off `instructions`, not `main`. 
+- We will be creating a clean final commit on the instructions branch called something like __"Start week-07 assignment here"__ so you know which commit your new branch for this week's assignment should start from.
+
+## Reminder : process to submit your weekly individual assignments (important : slight changes compared to before SB)
 
 Each week, you will do the following steps to submit your assignment in the class repo.
-- Pull the main branch of the class repository to your local repo using GitKraken to make sure you are working off the latest version published on GitHub.
-- Create and check out a branch for this week's asssignments called `w07-netid` (replace "netid" by your netid) using GitKraken. The branch should be pointing to the latest commit.
+- Pull the `instructions` branch of the class repository to your local repo using GitKraken to make sure you are working off the latest version published on GitHub.
+- Create and check out a branch for this week's asssignments called `w07-netid` (replace "netid" by your netid) using GitKraken. The branch should be pointing to the latest commit, which will be named something like __"Start week-07 assignment here"__
 - Navigate in your file browser (ie, Finder or Files Explorer) to the repository, and open the folder with your name inside the "Individual Assignments" directory.
 - Create a `week-07` folder inside your folder in the "Individual Assignments" directory.
 - In your `week-07` folder, create and save all your assignment files (dofiles, markdown files, etc).
@@ -23,6 +27,7 @@ Each week, you will do the following steps to submit your assignment in the clas
 
 A few notes on this process :
 - We are changing the initials to netids to avoid duplication
+- We are creating two major branches for the repo : the `instructions` branch where you will be branching off to do your work, and the `main` branch which remains the main version of the repo where you merge all your work into
 - If you have pushed your branch and opened the pull request and you then make more changes to your work, you can push new commits to the same branch and they will get added to the same pull request. You do not need to create a branch everytime you work on github; only when you start a new feature (ie a new assignment), in order to isolate the changes you make related to that assignment, so they are easy to review on their own.
 - Remember to delete your branch on github AND on your local repo after you have merged your branch into main 
 
