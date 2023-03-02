@@ -83,7 +83,7 @@ For this assignment, you will simply submit a markdown file (.MD) containing the
 
 Feel free to add any other relevant context on your survey in that markdown file if you deem it relevant.
 
-Create a Pull Request to merge this week's assignment into the main branch, and assign for review the next person within your project group as per alphabetical order (the alphabetical list of students per group is under the \_Group Projects folder of the class repo). Example with group 1: Sylvia will review Shaily's, Neel will review Sylvia's, and Shaily will review Neel.
+Create a Pull Request to merge this week's assignment into the main branch, and assign for review someone at random following the usual instructions copied above.
 
 ### Step 5 : Review someone else's survey (due the following week only)
 
