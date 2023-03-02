@@ -105,7 +105,7 @@ drop if _merge==1
 order department pop_density_km2, last
 
 exit
-***INCOMPLETE***Question 3 --------------------------------------------------
+***Question 3 --------------------------------------------------
 clear
 
 use "${wd}/q3_GPS Data.dta", clear
@@ -118,44 +118,47 @@ ssc install sepscatter
 geodist one_latitude one_longitude latitude longitude, generate (distance_km)
 sort distance_km
 
-cluster kmeans distance_km, k(19) [seg]
-***HOW TO READ OPTIONS ON CLUSTER. 
-***I want to make an equal n of frequencies of the k 19 cluster based on the latitude and longitude . Then split the frequencies in 6.
-/*
-cluster kmeans latitude longitude, k(19)
-sort _clus_1
-sepscatter latitude longitude, separate(_clus_1)
-*/
+sort id distance_km
+bys id: gen rank = _n
 
-/*
-tab _clus_1
+gen cluster1 = 1 if id==655 & rank<= 6
 
- Cluster ID |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          1 |        418        3.39        3.39
-          2 |        902        7.32       10.71
-          3 |        452        3.67       14.38
-          4 |        452        3.67       18.05
-          5 |        772        6.27       24.32
-          6 |        780        6.33       30.65
-          7 |        510        4.14       34.79
-          8 |        562        4.56       39.35
-          9 |        568        4.61       43.96
-         10 |        382        3.10       47.06
-         11 |        840        6.82       53.88
-         12 |        680        5.52       59.39
-         13 |        620        5.03       64.43
-         14 |        776        6.30       70.72
-         15 |        688        5.58       76.31
-         16 |        812        6.59       82.90
-         17 |        916        7.43       90.33
-         18 |        746        6.05       96.39
-         19 |        445        3.61      100.00
-------------+-----------------------------------
-      Total |     12,321      100.00
-*/
+keep if cluster1 ==1
 
-exit
+save "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q3_GPS_cluster1.dta" , replace
+
+clear
+use "${wd}/q3_GPS Data.dta", clear
+
+rename * one_*
+  merge 1:1 one_id using "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q3_GPS_cluster1.dta" , keep(1) nogen
+  
+  save "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q3_GPS_cluster1_clean.dta", replace
+  
+scatter latitude longitude
+cross using "${wd}/q3_GPS Data.dta"
+geodist one_latitude one_longitude latitude longitude, generate (distance_km)
+sort distance_km
+
+sort id distance_km
+bys id: gen rank = _n
+
+gen cluster2 = 1 if id==id[1] & rank<= 6
+
+keep if cluster2 ==1
+
+save "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q3_GPS_cluster2.dta" , replace
+
+clear
+use "${wd}/q3_GPS Data.dta", clear
+
+rename * one_*
+
+  merge 1:1 one_id using "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q3_GPS_cluster2.dta" , keep(1) nogen
+  
+  save "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q3_GPS_cluster2_clean.dta", replace
+
+***Here I have created 2 clusters of the 19 I should be creating. Hence I would need to do this process 17 times more, but due to time constraints I wanted to just show these.
 
 ***COMPLETED***Question 4 --------------------------------------------
 ***2010 election data (Tz_election_2010_raw.xlsx) from Tanzania is not usable in its current form. You have to create a dataset in the wide form, where each row is a unique ward and votes received by each party are given in separate columns. You can check the following dta file as a template for your output: Tz_elec_template. Your objective is to clean the dataset in such a way that it resembles the format of the template dataset.
@@ -211,7 +214,6 @@ rename TTLVOTES votes
 cap replace POLITICALPARTY = subinstr(POLITICALPARTY,"-","",.)
 
 reshape wide votes, i(r_d_ward) j(POLITICALPARTY) string
-
 
 ***INCOMPLETE***Question 5 -----------------------------------------------
 ***Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided. 
@@ -312,7 +314,7 @@ duplicates list check percentage
 rename _merge _merge15
 save "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q5_15_saved.dta", replace
 
-***merge into the final database, here is where I am stuck. Trying to cross crushed the program, it is not merging as the observations are not the same 
+***merge into the final database, here is where I am stuck. Trying to cross crushed the program, it is not merging as the observations are not the same. But I do understand the last step is merging. 
 clear
 use  "/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-05/q5_15_saved.dta", clear
 
