@@ -95,7 +95,7 @@ Once someone asks your review on a survey, you should
 
 The third assignment is your midterm self evaluation. The template for it is available [here](https://docs.google.com/document/d/1tWC3z3pbHoNAn_octc_Edj3W4f7DinQd6sLhLbjo-Lw/edit?usp=sharing).
 
-You will submit it using this Box link, following the naming convention : LASTNAME-MIDTERM. (replace "LASTNAME" with your own last name)
+Submit this assignment using the Box submission link: [SUBMIT](https://georgetown.app.box.com/f/e8b46836b7304c81b1461c8756615f8f). Please follow the naming convention LASTNAME-MIDTERM (replace "LASTNAME" with your own last name) for the file name.
 
 Please download the template and fill it out by giving yourself a rating on each dimension, and supporting it with examples/justification. You can be as detailed or as concise as necessary for the argumentation.
 
