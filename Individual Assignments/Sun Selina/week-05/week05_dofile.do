@@ -130,7 +130,6 @@ replace department = "arrha" if department=="arrah"
 
 keep department pop_density
 
-
 merge 1:m department using `department_level'
 drop if _merge==1
 order department pop_density, last
@@ -138,6 +137,8 @@ order department pop_density, last
 
 *Q3
 {
+*save the q3 file in a tempfile, to merge later with the enumerated tempfile so that locations that have been enumerated would be removed.
+*our original dataset would be stay intacted 
 ssc install geodist
 
 tempfile q3_GPS 
@@ -146,46 +147,42 @@ tempfile q3_GPS
  
 save `q3_GPS'
 
-*save the q3 file in a tempfile and drop id that have already been enumerated in previous loop
-
-*find 5 nearest points and append to the tempfile 
-tempfile cluster
-	save `cluster', replace emptyok
-    use "$q3", clear
+*find 5 nearest points, starting from the first location///
+*should append the tempfile after the loop otherwise 
+forvalues i = 1/19 {
+tempfile cluster`i'
 	keep in 1
 	rename * one_*
-	cross using "$q3"
+	cross using `q3_GPS'
 	geodist one_latitude one_longitude latitude longitude, gen(distance)
 	sort one_id distance 
 	drop if one_id == id
 	drop if _n>=6
-	gen enumerator = 1
+	gen enumerator = `i'
 	gen j = _n
 	keep one_id id enumerator j
 	reshape wide id, i(one_id) j(j)
 	rename one_id id 
-	append using `cluster'
-	save `cluster', replace
-	merge 1:1 id using "$q3"
-	drop id if id == id1 | id == id2 | id == id3| ///
-	id == id4 | id == id5
-	*can't move on because the invalid syntax
-	use
+	save `cluster`i'', replace
+	merge 1:1 id using `q3_GPS'
 	
-	use `cluster', clear
+	drop if id == id1[1] | id == id2[1] | id == id3[1] | ///
+	id == id4[1] | id == id5[1]
+	drop if enumerator != .
+	drop _merge id1 id2 id3 id4 id5 enumerator 
+	save `cluster`i'', replace
 }
 
-*Q4 unfinished 
-{
+
+
+*Q4 
 use "$q4_template",clear
 
 import excel "$q4", cellrange(A5:J7927) sheet("Sheet1") firstrow case(lower) clear
 
 drop if _n == 1
-
 gen serial = _n
- 
-drop g sex candidatename 
+drop g sex
 
 *fillin region, district constituency and ward
 replace region = region[_n-1] if region == ""
@@ -200,8 +197,12 @@ replace ttlvotes = "0" if ttlvotes == "UN OPPOSSED"
 destring ttlvotes, replace
 
 gen unique_ward = region + "_" + district + "_" + ward
+*count candidate in each ward
+bysort unique_ward: egen total_candidate = count(unique_ward)
+drop candidatename
 
 fillin unique_ward politicalparty 
+
 sort unique_ward _fillin
 
 replace region = region[_n-1] if region == ""
@@ -210,32 +211,45 @@ replace district = district[_n-1] if district == ""
 replace district = strtrim(district)
 replace costituency = costituency[_n-1] if costituency== ""
 replace costituency = strtrim(costituency)
+rename costituency constituency
 replace ward = ward[_n-1] if ward== ""
 replace ward = strtrim(ward)
+replace total_candidate = total_candidate[_n-1] if total_candidate == .
 
-keep  unique_ward ttlvotes politicalparty 
+keep unique_ward ttlvotes politicalparty total_candidate constituency 
 
 sort unique_ward politicalparty
 
 bysort unique_ward: gen j = _n
 
-encode politicalparty, gen (party)
+tab j politicalparty
+*detect and combine duplicates 
+duplicates list politicalparty unique_ward
+collapse (sum) ttlvotes, by(unique_ward politicalparty ///
+total_candidate constituency)
 
-reshape wide ttlvotes, i(unique_ward) j(j)
+*check again for duplicates
+duplicates list politicalparty unique_ward
 
-sort j politicalparty 
+*split the wards
+split unique_ward, parse("_")
+rename(unique_ward1 unique_ward2 unique_ward3)(region district ward)
+replace region = lower(region)
+replace district = lower(district)
+drop unique_ward
 
-bysort ward: egen total_candidate = count(ward)
+*count total votes in wards
+bysort ward: egen total_votes_wards = sum(ttlvotes)
 
-bysort ward: egen ward_total_votes = sum(ttlvotes)
-
-encode politicalparty, gen(party) 
-
-reshape wide ttlvotes, i(region district costituency unique_ward) j(party) 
-
-bysort ward: egen total_candidate = count(ward)
-
-bysort ward: egen ward_total_votes = sum(ttlvotes)
+*remove spaces in politicalparty
+replace politicalparty = subinstr(politicalparty, " - ", "_", .)
+replace politicalparty = subinstr(politicalparty, "-", "_", .)
+replace politicalparty = subinstr(politicalparty, " ", "_", .)
+*reshape
+reshape wide ttlvotes, i(region district ward constituency) j(politicalparty) string
+*order the table
+order ttlvotes*, last
+order constituency, after(ward)
 }
 
 
