@@ -5,6 +5,9 @@ global q2 "$wd/q2_CIV_Section_0.dta"
 global q3 "$wd/q3_GPS Data.dta"
 global q4 "$wd/q4_Tz_election_2010_raw.xls"
 global q4_template "$wd/q4_Tz_election_template.dta"
+global q5 "$wd/q5_Tz_ArcGIS_intersection.dta"
+global q5_10 "$wd/q5_Tz_elec_10_clean.dta"
+global q5_15 "$wd/q5_Tz_elec_15_clean.dta"
 
 *Q1  using loop 
 clear
@@ -56,7 +59,8 @@ use `student_cleaned', clear
 
 exit
 
-*solving without loop {
+*solving without loop 
+{
 use "$q1", clear
 replace s = substr(s, strpos(s, "SUBJECT"), .)
 *split each line 
@@ -172,6 +176,7 @@ tempfile cluster
 }
 
 *Q4 unfinished 
+{
 use "$q4_template",clear
 
 import excel "$q4", cellrange(A5:J7927) sheet("Sheet1") firstrow case(lower) clear
@@ -231,5 +236,9 @@ reshape wide ttlvotes, i(region district costituency unique_ward) j(party)
 bysort ward: egen total_candidate = count(ward)
 
 bysort ward: egen ward_total_votes = sum(ttlvotes)
+}
 
 
+use "$q5", clear
+clear
+use "$q5_15", clear
