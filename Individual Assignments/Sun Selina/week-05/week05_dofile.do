@@ -252,7 +252,16 @@ order ttlvotes*, last
 order constituency, after(ward)
 }
 
+*Q5
 
-use "$q5", clear
-clear
 use "$q5_15", clear
+use "$q5",clear
+keep region_gis_2017 district_gis_2017 ward_gis_2017
+duplicates drop
+rename(region_gis_2017 district_gis_2017 ward_gis_2017) ///
+(region district ward)
+sort region district ward
+gen dist_id = _n
+
+tempfile gis_15
+save `gis_15'
