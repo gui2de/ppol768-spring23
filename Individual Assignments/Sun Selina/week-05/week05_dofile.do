@@ -9,7 +9,8 @@ global q5 "$wd/q5_Tz_ArcGIS_intersection.dta"
 global q5_10 "$wd/q5_Tz_elec_10_clean.dta"
 global q5_15 "$wd/q5_Tz_elec_15_clean.dta"
 
-*Q1  using loop 
+*Q1  I use two ways to solve this problem. The major difference is whether to use loop. 
+{
 clear
 tempfile student_cleaned
 save `student_cleaned', replace emptyok
@@ -56,10 +57,10 @@ save `student_cleaned', replace
 }
 
 use `student_cleaned', clear
-
 exit
+}
 
-*solving without loop 
+*Q1 solving without loop 
 {
 use "$q1", clear
 replace s = substr(s, strpos(s, "SUBJECT"), .)
@@ -172,10 +173,11 @@ tempfile cluster`i'
 	drop _merge id1 id2 id3 id4 id5 enumerator 
 	save `cluster`i'', replace
 }
+}
 
 
-
-*Q4 
+*Q4 Finished 
+{
 use "$q4_template",clear
 
 import excel "$q4", cellrange(A5:J7927) sheet("Sheet1") firstrow case(lower) clear
@@ -252,9 +254,14 @@ order ttlvotes*, last
 order constituency, after(ward)
 }
 
-*Q5
+*Q5 Stuck in the same place as in Question 3
+{
+*install recklins2
+net from http://www.stata-journal.com/software/sj15-3
+net install dm0082.pkg, replace
+net get dm0082.pkg, replace
 
-use "$q5_15", clear
+*processing data
 use "$q5",clear
 keep region_gis_2017 district_gis_2017 ward_gis_2017
 duplicates drop
@@ -262,6 +269,61 @@ rename(region_gis_2017 district_gis_2017 ward_gis_2017) ///
 (region district ward)
 sort region district ward
 gen dist_id = _n
+tempfile gis
+save `gis'
 
-tempfile gis_15
-save `gis_15'
+*2010
+use "$q5_10", clear
+keep region_10 district_10 ward_10 ward_id_10
+duplicates drop
+rename (region_10 district_10 ward_10) (region district ward)
+sort region district ward	   
+tempfile 2010_clean
+save `2010_clean'
+
+*2015
+use "$q5_15", clear
+keep region_15 district_15 ward_15 ward_id_15
+duplicates drop
+rename (region_15 district_15 ward_15) (region district ward)
+sort region district ward
+tempfile 2015_clean
+save `2015_clean'
+
+*reclink 2010 to 2015 data 
+use `2015_clean', clear
+reclink2 region district ward using `2010_clean', ///
+idmaster(ward_id_15) idusing(ward_id_10) gen(score) 
+
+gsort -score
+
+keep region_10
+*fuzzy matching 
+reclink2 region district ward using `gis_15', ///
+idmaster(idvar) idusing(dist_id) gen(score) 
+
+gsort -score
+
+drop if score < 0.9701 | score == .
+
+rename (region district ward Uregion Udistrict Uward) ///
+(region_15 district_15 ward_15 region_10 district_10 ward_10)
+
+drop score ward_id_10 _merge
+
+*store the matched ward id in new tempfiles 10to15 and remove those wards from 2015 data
+*use the same strategy to fuzzy match the rest of the 2015 wards with 
+*`gis' tempfile, and drop those with low score.
+*append the matched wards ids to 10to15 tempfile
+*sort the 10to15 tempfile and drop duplicates ward ids to get the list
+}
+
+*I got stuck in removing the matched ids from 2015_clean and store the ids in a new tempfile that will also append further match results.
+*I guess this is similar to question 3 where we ought to remove the marked ids from original file and re-mark them. Meanwhile the marked results will be appended and stored in a new file.
+*I tried to creat mulitiple new tempfiles. But I am confused with when to save the new results/ids in the tempfile and when to recall orginial table to remove the ones that have been matched/marked.
+
+
+
+
+
+
