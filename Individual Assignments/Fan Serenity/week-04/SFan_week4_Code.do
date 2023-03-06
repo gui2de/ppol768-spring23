@@ -98,7 +98,7 @@ tempfile table21
 save `table21', replace emptyok
 
 *Run a loop through all the excel sheets (135) this will take 2-10 mins because it has to import all 135 sheets, one by one
-forvalues i=1/1 {
+forvalues i=1/135 {
 	import excel "$excel_t21", sheet("Table `i'") firstrow clear allstring //import 
 	display as error `i' //display the loop number
 
