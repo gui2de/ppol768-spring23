@@ -408,6 +408,6 @@ use "q5_Tz_elec_10_clean.dta" , clear
        using "q5_Tz_ArcGIS_intersection.dta" ///
    , idmaster(ward_id_10) idusing(objectid) gen(matchpct) minbigram(0.3)
 
-  save q5_Tz_elec_10_clean_mod
+  save q5_Tz_elec_10_clean_mod, replace
   
 
