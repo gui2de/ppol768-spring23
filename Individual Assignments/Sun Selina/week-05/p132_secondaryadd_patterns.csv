@@ -1,0 +1,43 @@
+[#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?,STNUM_ST,,
+[#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?,STNUM_ST,,
+([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?)([ -]+)(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),STNUM_ST_APT,4,
+([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?)([ -]+)(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),STNUM_ST_APT,4,
+([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?)([ -]+)(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),STNUM_ST_APT,4,
+([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?)([ -]+)(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),STNUM_ST_APT,4,
+([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?)([ -]+)([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL),STNUM_ST_FL,4,
+([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?)([ -]+)([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL),STNUM_ST_FL,4,
+([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?)([ -]+)(FL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?),STNUM_ST_FL,6,
+([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?)([ -]+)(FL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?),STNUM_ST_FL,6,
+([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?)([ -]+)(BLDG)([ #]+)([-0-9A-Z]+),STNUM_ST_BLDG,6,
+([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?)([ -]+)(BLDG)([ #]+)([-0-9A-Z]+),STNUM_ST_BLDG,6,
+(BLDG)([ #]+)([-0-9A-Z]+)([ -]+)(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),BLDG_APT,3,5
+(BLDG)([ #]+)([-0-9A-Z]+)([ -]+)(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),BLDG_APT,3,5
+(BLDG)([ #]+)([-0-9A-Z]+)([ -]+)([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL),BLDG_FL,3,5
+(BLDG)([ #]+)([-0-9A-Z]+)([ -]+)(FL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?),BLDG_FL,3,7
+([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL)([ -]+)(BLDG)([ #]+)([-0-9A-Z]+),FL_BLDG,1,7
+(FL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?)([ -]+)(BLDG)([ #]+)([-0-9A-Z]+),FL_BLDG,3,7
+(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?)([ -]+)(BLDG)([ #]+)([-0-9A-Z]+),APT_BLDG,1,7
+(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?)([ -]+)(BLDG)([ #]+)([-0-9A-Z]+),APT_BLDG,1,7
+([1-3A-Z& ]+)([ ])(BLDG)([ -]+)([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL),BLDG_FL,1,5
+([1-3A-Z& ]+)([ ])(BLDG)([ -]+)(FL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?),BLDG_FL,1,7
+([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?)([ -]+)([1-3A-Z& ]+)([ ])(BLDG),STNUM_ST_BLDG,4,
+([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?)([ -]+)([1-3A-Z& ]+)([ ])(BLDG),STNUM_ST_BLDG,4,
+(BLDG)([ #]+)([-0-9A-Z]+)([ -]+)([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?),BLDG_STNUM_ST,3,
+(BLDG)([ #]+)([-0-9A-Z]+)([ -]+)([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?),BLDG_STNUM_ST,3,
+([1-3A-Z& ]+)([ ])(BLDG)([ -]+)([#0-9-]+[ ][-A-Z0-9 ]+[ ](AVE|BLVD|CT|CIR|CR|DR|FRWY|HWY|LN|PKE|PKWY|PL|RD|RDG|ST|SQR|TPKE|TRL|WAY)[ ]?[NESW]?[EW]?),BLDG_STNUM_ST,1,
+([1-3A-Z& ]+)([ ])(BLDG)([ -]+)([#0-9-]+[ ](ST RT|RT|HWY|ST HWY|US HWY|OLD HWY)[ #0-9]+[ ]?[NESW]?[EW]?),BLDG_STNUM_ST,1,
+([A-Z& ]+)([ ])(BLDG)([ -]+)(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),BLDG_APT,1,5
+([A-Z& ]+)([ ])(BLDG)([ -]+)(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),BLDG_APT,1,5
+([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL)([ -]+)([1-3A-Z& ]+)([ ])(BLDG),FL_BLDG,1,5
+(FL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?)([ -]+)([1-3A-Z& ]+)([ ])(BLDG),FL_BLDG,3,5
+(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?)([ -]+)([1-3A-Z& ]+)([ ])(BLDG),APT_BLDG,1,5
+(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?)([ -]+)([1-3A-Z& ]+)([ ])(BLDG),APT_BLDG,1,5
+(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),APT,1,
+([1-9][0-9]?[0-9]?)([SNRT][TDH][ ]*)(FL),FL,1,
+(FL|LEVEL)([ ])([A-Z0-9][A-Z0-9]?[A-Z0-9]?[A-Z0-9]?),FL,3,
+(BLDG)([ #]+)([-0-9A-Z]+),BLDG,3,
+([#0-9-]+)([ ])([-A-Z& ]+)([ ])(BLDG),STNUM_BLDG,3,
+([#0-9-]+)([ ])(BLDG)([ #]+)([-0-9A-Z ]+),STNUM_BLDG,5,
+([-A-Z& ]+)([ ])(BLDG),BLDG,1,
+(STE|NO|APT|RM|UNIT)([ #]+)([0-9A-Z][ -0-9A-Z]?[ -0-9A-Z]?[ -0-9A-Z]?[ -0-9A-Z]?[ -0-9A-Z]?[ -0-9A-Z]?[ -0-9A-Z]?[ -0-9A-Z]?),APT,1,
+(#)([ ]*)([0-9A-Z][-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?[-0-9A-Z]?),APT,1,
