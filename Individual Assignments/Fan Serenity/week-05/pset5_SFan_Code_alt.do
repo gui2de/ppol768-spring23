@@ -6,8 +6,8 @@ cd "C:\Users\kevin\Github\ppol768-spring23\Individual Assignments\Fan Serenity\w
 
 
 
-*_________________________________
 
+*_________________________________
 *Q1 : Tanzania Student Data
 *This builds on Q4 of week 4 assignment. We downloaded the PSLE data of students of 138 schools in Arusha District in Tanzania (previously had data of only 1 school) You can build on your code from week 4 assignment to create a student level dataset for these 138 schools.
 
@@ -39,57 +39,57 @@ save OUTPUT_Q1, replace
 
 
 *_________________________________
-*Q5 : Tanzania Election data Merging
-*Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided.
+*Q2 : Côte d'Ivoire Population Density
+*We have household survey data and population density data of Côte d'Ivoire. Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
+
+*Stra Region Departement SousPref(?) Commune Zone de nombrement Village Neighborhood
+
+*APPROACH: WANT TO MERGE THE DEPARTMENT-LEVEL DENSITY DATA FROM IMPORTED EXCEL SHEET ONTO HOUSEHOLD LEVEL DATA
+*i.e. merge using imported sheet, 1:Many merge 
+
+clear
+import excel q2_CIV_populationdensity, sheet("Population density") firstrow clear 
+
+keep if regex(NOMCIRCONSCRIPTION, "DEPARTEMENT")
+sort NOMCIRCONSCRIPTION
+
+gen department = NOMCIRCONSCRIPTION
+replace department = subinstr(department, "DEPARTEMENT D'","",.)
+replace department = subinstr(department, "DEPARTEMENT DE ","",.)
+replace department = subinstr(department, "DEPARTEMENT DU ","",.)
+replace department = strtrim(department)
+replace department = lower(department)
+
+replace department = subinstr(department, "arrah","arrha",.)
+
+keep DENSITEAUKM department
+order department DENSITEAUKM
+rename DENSITEAUKM Pop_Density
+
+*drop A A1 A2
+*order A3, first
+
+*rename A3 department
+*rename D Population_Density
+
+*Convert upper to lower-case, prior to merge 
+*ds, has(type string) 
+*foreach v in `r(varlist)' { 
+*    replace `v' = lower(`v') 
+*} 
+
+save department_Pop_Density, replace
 
 
-*Use reclink2 !!!  
+*MERGE
+use q2_CIV_Section_0, clear
+decode b06_departemen, generate(department)
 
-*global wd "C:/Users ... "
+merge m:1 department using "department_Pop_Density.dta"
 
-*global q5_intersection $wd "" 
-*global q5_elec_10 $wd "" 
-*global q5_elect_15 $wd "" 
+compress 
 
-*reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score)
-
-*clear 
-*use q5_Tz_ArcGIS_intersection 
-*use q5_Tz_elec_10_clean, clear
-*use q5_Tz_elec_15_clean, clear
-
-*reclink 
-
-*reclink region_gis_2012 district_gis_2012 ward_gis_2012 using "q5_tz_ArcGIS_intersection.dta", id master(ward_id_10) idusing(objectid) gen(matchpct) 
-
-*reclink region_gis_2017 district_gis_2017 ward_gis_2017 using "q5_tz_ArcGIS_intersection.dta", id master(ward_id_15) idusing(objectid) gen(matchpct)
-
-*merge 1:m region_gis_2012 district_gis_2012 ward_gis_2012 using "q5_tz_ArcGIS_intersection.dta"
-
-use "q5_Tz_elec_10_clean.dta" , clear
-
-  generate urban = strpos(district_10,"manispaa")
-  replace urban = 1 if strpos(district_10,"jiji")
-
-  replace district_10 = substr(district_10,strpos(district_10," ya ")+4,.) ///
-    if strpos(district_10," ya ")
-  replace district_10 = substr(district_10,strpos(district_10," la ")+4,.) ///
-    if strpos(district_10," la ")
-  replace district_10 = substr(district_10,strpos(district_10," wa ")+4,.) ///
-    if strpos(district_10," wa ")
-  replace district_10 = substr(district_10,strpos(district_10," wara ")+6,.) ///
-    if strpos(district_10," wara ")
-
-  rename (region_10 district_10 ward_10) ///
-      (region_gis_2012 district_gis_2012 ward_gis_2012)
-
-  duplicates tag region_gis_2012 district_gis_2012 ward_gis_2012 , gen(d)
-  replace ward_gis_2012 = ward_gis_2012 + " urban" if urban
-  // replace ward_gis_2012 = ward_gis_2012 + " rural" if !urban
-
-    reclink region_gis_2012 district_gis_2012 ward_gis_2012 ///
-       using "${dir}/q5_Tz_ArcGIS_intersection.dta" ///
-   , idmaster(ward_id_10) idusing(objectid) gen(matchpct) minbigram(0.3)
+save OUTPUT_Q2_MERGED_DATA, replace
 
 
 
@@ -217,6 +217,8 @@ use `clustering', clear
 sepscatter latitude longitude, separate(clusterID) legend(pos(3) col(1))
 *graph save cluster_scatter_plot.png, replace
 graph export "OUTPUT_Q3_surveyors_cluster_scatter.png", replace
+
+
 
 
 
@@ -351,47 +353,61 @@ save OUTPUT_Q4_2010_Leg_Ward_Election_Data_Wide_Cleaned, replace
 
 
 
+
+
 *_________________________________
-*Q2 : Côte d'Ivoire Population Density
-*We have household survey data and population density data of Côte d'Ivoire. Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
-
-*Stra Region Departement SousPref(?) Commune Zone de nombrement Village Neighborhood
-
-*APPROACH: WANT TO MERGE THE DEPARTMENT-LEVEL DENSITY DATA FROM IMPORTED EXCEL SHEET ONTO HOUSEHOLD LEVEL DATA
-*i.e. merge using imported sheet, 1:Many merge 
-
-clear
-import excel q2_CIV_populationdensity, sheet("Population density")
-drop in 1
-
-*don't need superficie km^2 (area) nor population 
-drop B C
-
-keep if strpos(A,"DEPARTEMENT") 
-*Should be 107 departements
-split A, parse(" ")
-
-drop A A1 A2
-order A3, first
-
-rename A3 department
-rename D Population_Density
-
-*Convert upper to lower-case, prior to merge 
-ds, has(type string) 
-foreach v in `r(varlist)' { 
-    replace `v' = lower(`v') 
-} 
-
-save departemen_popDens, replace
-
-*MERGE
-use q2_CIV_Section_0, clear
-decode b06_departemen, generate(department)
-merge m:1 department using "departemen_popDens.dta"
+*Q5 : Tanzania Election data Merging
+*Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided.
 
 
+*Use reclink2 !!!  
 
+*global wd "C:/Users ... "
 
+*global q5_intersection $wd "" 
+*global q5_elec_10 $wd "" 
+*global q5_elect_15 $wd "" 
 
+*reclink2 region district ward using `gis_15', idmaster(idvar) idusing(dist_id) gen(score)
+
+*clear 
+*use q5_Tz_ArcGIS_intersection 
+*use q5_Tz_elec_10_clean, clear
+*use q5_Tz_elec_15_clean, clear
+
+*reclink 
+
+*reclink region_gis_2012 district_gis_2012 ward_gis_2012 using "q5_tz_ArcGIS_intersection.dta", id master(ward_id_10) idusing(objectid) gen(matchpct) 
+
+*reclink region_gis_2017 district_gis_2017 ward_gis_2017 using "q5_tz_ArcGIS_intersection.dta", id master(ward_id_15) idusing(objectid) gen(matchpct)
+
+*merge 1:m region_gis_2012 district_gis_2012 ward_gis_2012 using "q5_tz_ArcGIS_intersection.dta"
+
+use "q5_Tz_elec_10_clean.dta" , clear
+
+  generate urban = strpos(district_10,"manispaa")
+  replace urban = 1 if strpos(district_10,"jiji")
+
+  replace district_10 = substr(district_10, strpos(district_10," ya ")+4, .) ///
+    if strpos(district_10," ya ")
+  replace district_10 = substr(district_10, strpos(district_10," la ")+4, .) ///
+    if strpos(district_10," la ")
+  replace district_10 = substr(district_10, strpos(district_10," wa ")+4, .) ///
+    if strpos(district_10," wa ")
+  replace district_10 = substr(district_10, strpos(district_10," wara ")+6, .) ///
+    if strpos(district_10," wara ")
+
+  rename (region_10 district_10 ward_10) ///
+      (region_gis_2012 district_gis_2012 ward_gis_2012)
+
+  duplicates tag region_gis_2012 district_gis_2012 ward_gis_2012 , gen(d)
+  replace ward_gis_2012 = ward_gis_2012 + " urban" if urban
+  // replace ward_gis_2012 = ward_gis_2012 + " rural" if !urban
+
+    reclink region_gis_2012 district_gis_2012 ward_gis_2012 ///
+       using "q5_Tz_ArcGIS_intersection.dta" ///
+   , idmaster(ward_id_10) idusing(objectid) gen(matchpct) minbigram(0.3)
+
+  save q5_Tz_elec_10_clean_mod
+  
 
