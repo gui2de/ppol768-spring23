@@ -1,4 +1,6 @@
-global excel_t21 "C:/Users/ah1152/Documents/PPOL_768/Week_4/03_assignment/01_data/q2_Pakistan_district_table21.xlsx"
+clear all
+
+global excel_t21 "C:\Genjuro\Georgetown_University\2_Spring_2023\Research_Design_and_Implementation\ppol768-spring23\Class Materials\week-04\03_assignment\01_data\q2_Pakistan_district_table21.xlsx"
 *update the global
 
 clear
@@ -17,6 +19,12 @@ forvalues i=1/135 {
 	keep in 1 //there are 3 of them, but we want the first one
 	rename TABLE21PAKISTANICITIZEN1 table21
 
+	foreach var of varlist * {
+	  if missing(`var') {
+	  	drop `var'
+	  }
+	}
+
 	gen table=`i' //to keep track of the sheet we imported the data from
 	append using `table21' //adding the rows to the tempfile
 	save `table21', replace //saving the tempfile so that we don't lose any data
@@ -24,4 +32,8 @@ forvalues i=1/135 {
 *load the tempfile
 use `table21', clear
 *fix column width issue so that it's easy to eyeball the data
-format %40s table21 B C D E F G H I J K L M N O P Q R S T U V W X Y  Z AA AB AC
+format %15s table21 B C D E F G H I J K L M N O P Q R S T U V W X Y  Z AA AB
+* put table var first
+order table, first
+* drop table21 since we don't need it anymore
+ drop table21
