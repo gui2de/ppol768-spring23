@@ -1,9 +1,9 @@
 clear all
+cd "C:\Users\ecn20.la\Desktop\School\Research_Design_Implementation\ppol768-spring23\Individual Assignments\Nyhof Emma\week-05"
 ********************************************************************************
 *                                  Q1                                          *
 ********************************************************************************
-cd "C:\Users\ecn20.la\Desktop\School\Research_Design_Implementation\ppol768-spring23\Individual Assignments\Nyhof Emma\week-05"
-
+{
 use q1_psle_student_raw.dta
 tempfile raw
 save `raw'
@@ -64,11 +64,11 @@ use `all'
 drop if cand_id == ""
 save week4_q1_data_cleaned.dta, replace
 clear
-
+}
 ********************************************************************************
 *                                    Q2                                        *
 ********************************************************************************
-clear
+{ clear
 * We have household survey data and population density data of Côte d'Ivoire. Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
 import excel "C:\Users\ecn20.la\Desktop\School\Research_Design_Implementation\ppol768-spring23\Individual Assignments\Nyhof Emma\week-05\q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow clear
@@ -102,20 +102,53 @@ replace departement_string = "ARRAH" if departement_string == "ARRHA"
 
 merge m:1 departement_string using `pop_density'
 keep if _merge == 3
-drop _merge
+drop _merge }
 
 
 ********************************************************************************
 *                                    Q3                                        *
 ********************************************************************************
-
+clear
 * We have the GPS coordinates for 111 households from a particular village. You are a field manager and your job is to assign these households to 19 enumerators (~6 surveys per enumerator per day) in such a way that each enumerator is assigned 6 households that are close to each other. Manually assigning them for each village will take you a lot of time. Your job is to write an algorithm that would auto assign each household (i.e. add a column and assign it a value 1-19 which can be used as enumerator ID). Note: Your code should still work if I run it on data from another village.
+tempfile new
+save `new', emptyok
+
+use "q3_GPS Data.dta", clear
+
+
+forvalues i = 1/19 {
+	* cannot for the life of me figure out why this doesn't work past the second loop. Its giving me an error that id doesn't uniquely identify observations, which appears to be true, but I don't understand why IDs are ending up in multiple clusters if I'm dropping those that matched in the merge
+	
+	sort longitude 
+	
+	keep in 1
+	rename * one_*
+	cross using "q3_GPS Data.dta"
+	geodist one_latitude one_longitude latitude longitude, gen(distance)
+	*drop if one_id == id
+	sort distance
+	gen serial = _n
+	keep if _n < 7
+	keep id age female latitude longitude 
+	gen cluster = `i'
+	
+	append using `new'
+	save `new', replace
+	
+	merge 1:1 id using "q3_GPS Data.dta"
+	drop if _merge == 3
+	drop _merge
+	
+
+}
+
+use `new', clear
 
 
 ********************************************************************************
 *                                    Q4                                        *
 ********************************************************************************
-
+{
 *2010 election data (Tz_election_2010_raw.xlsx) from Tanzania is not usable in its current form. You have to create a dataset in the wide form, where each row is a unique ward and votes received by each party are given in separate columns. You can check the following dta file as a template for your output: Tz_elec_template. Your objective is to clean the dataset in such a way that it resembles the format of the template dataset.
 import excel "C:\Users\ecn20.la\Desktop\School\Research_Design_Implementation\ppol768-spring23\Individual Assignments\Nyhof Emma\week-05\q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) firstrow clear
 
@@ -159,11 +192,11 @@ keep REGION DISTRICT COSTITUENCY WARD TTLVOTES_ unique_ward POLITICALPARTY
 *reshape wide REGION DISTRICT COSTITUENCY WARD TTLVOTES, i(unique_ward) j(POLITICALPARTY) string
 
 reshape wide TTLVOTES_, i(REGION DISTRICT COSTITUENCY WARD) j(POLITICALPARTY) string
-
+}
 ********************************************************************************
 *                                    Q5                                        *
 ********************************************************************************
-
+{
 * Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944. This happened by dividing existing ward into 2 (or in some cases more) new wards. You have to create a dataset where each row is a 2015 ward matched with the corresponding parent ward from 2010. It's a trivial task to match wards that weren't divided, but it's impossible to match wards that were divided without additional information. Thankfully, we had access to shapefiles from 2012 and 2017. We used ArcGIS to create a new dataset that tells us the percentage area of 2015 ward that overlaps a 2010 ward. You can use information from this dataset to match wards that were divided.
 
 
@@ -205,3 +238,4 @@ gen gis_2017_id = _n
 
 * Can't seem to figure out how to install this command
 reclink2 region district ward using `gis_2012', idmaster(gis_2017_id) idusing(gis_2012_id) gen(score) 
+}
