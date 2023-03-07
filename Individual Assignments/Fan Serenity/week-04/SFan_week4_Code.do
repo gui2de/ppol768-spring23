@@ -1,6 +1,9 @@
 *PPOL 768 - Week 4, STATA Assignment 
-*Serenity Fan 
-*LAST UPDATED: FEBRUARY 19TH, 2023
+*Serenity Fan
+*RE-SUBMISSION 
+*LAST UPDATED: MARCH 6TH, 2023
+
+
 
 *______________________________
 * ## Q1 : Crop Insurance in Kenya
@@ -72,7 +75,9 @@ tab village_status
 list hhid if village_status==2
 *This creates the list of villages (by hhid) that span multiple pixels but have the same payout status. We can see that 50 HH's fall under this classification.  
 
-save Q1_output
+save Q1_output, replace
+
+
 
 *______________________________
 * ## Q2 : National ID's in Pakistan
@@ -110,12 +115,14 @@ forvalues i=1/135 {
 	*destring _all, replace
 	*destring B C D E F G H I J K L M N O P Q R S T U V W X Y Z, replace
 	
+	*Delete empty cells at each observation 
 	foreach var of varlist * {
 		if missing(`var') {
 			drop `var'
 		}
 	}
 	
+	*Standardize variable names 
 	local i=1 
 	foreach var of varlist * {
 		rename `var' column_`i' 
@@ -139,6 +146,7 @@ compress
 
 drop column_1
 
+*Rename variables to their actual names 
 rename column_2 Total_Pop_A
 rename column_3 CNI_Card_Obt_A
 rename column_4 CNI_Card_NotObt_A
@@ -160,11 +168,8 @@ order District, first
 *Save results 
 save Q2_output, replace
 
-
-
 *fix column width issue so that it's easy to eyeball the data
 *format %10s table21 B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
-
 
 
 
@@ -178,14 +183,33 @@ save Q2_output, replace
 
 use "q3_grant_prop_review_2022", clear
 
-egen stand_r1_score = std(Review1Score)
-egen stand_r2_score = std(Reviewer2Score)
-egen stand_r3_score = std(Reviewer3Score)
+rename Rewiewer1 Reviewer1
+rename Review1Score Reviewscore1 
+rename Reviewer2Score Reviewscore2 
+rename Reviewer3Score Reviewscore3
+
+
+reshape long Reviewer Reviewscore, i(proposal_id) j(Reviewer_number) 
+compress 
+sort Reviewer
+
+bysort Reviewer: egen norm_score = std(Reviewscore)
+
+reshape wide Reviewer Reviewscore norm_score, i(proposal_id) j(Reviewer_number)
+
+*Standardized by trios  
+rename norm_score1 stand_r1_score 
+rename norm_score2 stand_r2_score 
+rename norm_score3 stand_r3_score
+
 egen average_stand_score = rowmean(stand_r1_score stand_r2_score stand_r3_score)
-egen rank = rank(-average_stand_score)
+egen rev_rank = rank(-average_stand_score)
 
-save Q3_output
+sort rev_rank
 
+keep in 1/50
+
+save Q3_output, replace
 
 
 
@@ -245,4 +269,4 @@ split s, parse("<")
 		compress
 
 
-save Q4_output
+save Q4_output, replace
