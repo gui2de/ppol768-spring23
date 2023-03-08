@@ -1,12 +1,13 @@
 global wd "/Users/diana/Desktop/Github/ppol768-spring23/Class Materials/week-05/03_assignment/01_data"
 
+
 *********************************Question 1*************************************
 *This answer is complete
 
 
 use  "$wd/q1_psle_student_raw", clear
 
-replace schoolcode=substr(schoolcode,5,9)
+replace schoolcode = substr(schoolcode,5,9)
  gen serial = _n
 	 split s, parse(">PS")
  drop s 
@@ -21,7 +22,7 @@ replace schoolcode=substr(schoolcode,5,9)
  
  compress
  
- replace candm= "PS" + candm
+ replace candm = "PS" + candm
  
  replace prem = subinstr(prem,`"P ALIGN="CENTER">"',"",.)
  
@@ -36,10 +37,10 @@ replace schoolcode=substr(schoolcode,5,9)
  split subjects , parse (",")
  
 
- drop if prem==""
- drop if candm=="PS﻿"
+ drop if prem == ""
+ drop if candm == "PS﻿"
 
- compress
+compress
 drop subjects
 
 foreach var of varlist subjects* {
@@ -54,68 +55,100 @@ foreach var of varlist subjects* {
  ren subjects6 Uraia
  ren subjects7 Average
 
+ replace candm= substr(candm, 11,.)
+
 
 
 **********************************Question 2************************************
-*incomplete
+*complete
 
-import excel "$wd/q2_civ_density", sheet ("Population density") firstrow 
+global wd "/Users/diana/Desktop/Github/ppol768-spring23/Class Materials/week-05/03_assignment/01_data"
 
+use "$wd/q2_CIV_Section_0.dta", clear
 
-
-clear 
-use "/Users/diana/Desktop/Github/ppol768-spring23/Class Materials/week-05/03_assignment/01_data/q2_CIV_Section_0.dta"
-
-decode b06_departemen, gen(department)
+decode b06_departemen, gen(department) 
 
 tempfile density
-save `density', emptyok
+save `density', replace
 
-import excel "/Users/diana/Desktop/Github/ppol768-spring23/Class Materials/week-05/03_assignment/01_data/q2_CIV_populationdensity.xlsx", sheet(Population density)
+import excel "/Users/diana/Desktop/Github/ppol768-spring23/Class Materials/week-05/03_assignment/01_data/q2_CIV_populationdensity.xlsx", sheet(Population density) clear
 
 keep D A
-rename D density 
+rename D density
 rename A department
 
 generate dep = regexm(department, "^DEP")
 keep if dep==1
+destring density, replace 
 
+replace department = subinstr(department, "DEPARTEMENT DE","",.)
+replace department = subinstr(department, "DEPARTEMENT D'","",.)
+replace department = subinstr(department, "DEPARTEMENT DU","",.)
+replace department = strtrim(department)
+replace department = lower(department)
+replace department = "arrha" if department=="arrah"
 
-merge 1:m density using `"/Users/diana/Desktop/Github/ppol768-spring23/Class Materials/week-05/03_assignment/01_data/q2_CIV_Section_0.dta"'
+replace department= lower(department)
+
+merge 1:m department using `density'
+
+drop _merge
+drop dep
+
 
 
 *********************************Question 3*************************************
-*incomplete
+*complete
 
+clear all
+tempfile enumerator
+save `enumerator', replace emptyok
 
-use  "$wd/q3_GPS Data", clear
-sort latitude   
+use "$wd/q3_GPS Data", clear
+
+tempfile remaining_hh
+save `remaining_hh' , replace
+
+forvalues i=1/19 {
+
+use `remaining_hh', clear //loading dataset with 111 observations
+ *but this one has 111 observations, you need to delete the observations that
+ *have been assignment to enumerator 1
+ *you can do that by merging this dataset with `enumerator' and drop all HH that match
+ 
+*using your code
+sort latitude
 keep in 1
-rename * one_* 
-cross using  "$wd/q3_GPS Data" 
+rename * one_*   //you don't have to call it two, you can just call it what you called it before
+*cross using "$wd/q3_GPS Data"
+cross using `remaining_hh'
+
 geodist one_latitude one_longitude latitude longitude, generate (distance_km)
 sort distance_km
-list one_id id distance_km
 drop if _n>6
-keep id 
-gen enumerator = 1
-merge 1:1 id using  "$wd/q3_GPS Data"
+keep id
+gen enumerator = `i'
 
+*now you can append these 6 observations to the enumerator tempfile
+append using `enumerator'
+save `enumerator', replace //then re-save the dataset
+count
 
-sort latitude  
+keep id
+merge 1:1 id using `remaining_hh'
+count if _merge==3
+
+drop if _merge==3 | _merge==1
 drop _merge
-keep in 1 if enumerator==.
-rename * two_* 
-cross using  "$wd/q3_GPS Data" 
-geodist two_latitude two_longitude latitude longitude, generate (distance_km)
-sort distance_km
-drop if _n>6 
-keep id 
-gen enumerator = 2
-merge 1:1 id using  "$wd/q3_GPS Data"
+count
 
+save `remaining_hh', replace
 
+}
+use `enumerator', clear
+sort enumerator
 
+merge 1:1 id using "$wd/q3_GPS Data"
 
-
-
+keep enumerator id 
+sort enumerator 
