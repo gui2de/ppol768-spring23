@@ -152,3 +152,96 @@ merge 1:1 id using "$wd/q3_GPS Data"
 
 keep enumerator id 
 sort enumerator 
+
+*********************************Question 4*************************************
+*complete
+
+clear all 
+
+tempfile master
+save `master' , replace emptyok
+
+*import excel so that the variable names are appropriate 
+ import excel "$wd/q4_Tz_election_2010_raw", cellrange(A5:J7927) firstrow clear 
+
+*fix the gender variable 
+replace SEX="f" if SEX==""
+replace SEX="m" if SEX=="M"
+
+rename *, lower //making everything lowercase for simplicity
+drop g
+drop if _n<2
+
+*filling information for missing values in region, district, consistuency, ward 
+carryforward region ward district costituency, replace
+ren costituency constituency //constituency was misspelled
+
+*create variable equals to the number of candidates in a ward
+
+save `master', replace
+
+tempfile parties 
+save `parties', replace
+contract ward 
+merge 1:m ward using `master'
+
+drop _merge 
+ren _freq total_candidates_10 
+sort ward 
+
+save `master', replace
+
+
+*make the different political parties their own variables 
+replace ttlvotes="" if ttlvotes=="UN OPPOSSED"
+destring ttlvotes, replace
+
+gen votes_=ttlvotes 
+
+replace politicalparty = subinstr(politicalparty, " ", "_", .)
+replace politicalparty = subinstr(politicalparty, "-", "_", .)
+replace politicalparty = politicalparty+"_10"
+gen id=_n
+reshape wide votes, i(id) j(politicalparty) string
+
+***organizing and renaming variables to see what's left 
+rename region region_10
+rename district district_10
+ren constituency constituency_10
+ren ward ward_10
+ren id ward_id_10
+
+*** create variable to add up the votes for each ward 
+*the total needds to be totallvotes for all observations of wards 
+
+save `master', replace
+
+tempfile wardvotes 
+save `wardvotes', replace
+collapse (sum) ttlvotes, by(ward_10)
+merge 1:m ward_10 using `master'
+
+
+save `master', replace
+
+sort ward_10
+
+
+***drop unnecessary variables and organizing the rest 
+drop sex candidatename electedcandidate _merge
+ren ttlvotes ward_total_votes_10
+
+order region_10 district_10 constituency_10 , before(ward_10)
+order total_candidates_10, after(ward_10)
+
+* make values lower case except constituency 
+replace region_10=lower(region_10)
+replace district_10=lower(district_10)
+replace ward_10=lower(ward_10)
+
+* get rid of ward duplicates and fix ward id
+
+duplicates drop ward_10, force
+replace ward_id_10= _n
+
+*end
