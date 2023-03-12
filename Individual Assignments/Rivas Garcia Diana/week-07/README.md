@@ -1,6 +1,6 @@
 
 
-###### Diana Rivas Garcia Week 7 Assignment 
+# Diana Rivas Garcia Week 7 Assignment 
 
 This survey was created to help with my team project. The survey will help us gather our treatment and control groups. This is so we can understand how providing childcare instead of implementing information campaigns can increase formalization rates among women entrepreneurs in Colombia. 
 
