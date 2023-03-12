@@ -9,19 +9,19 @@ cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignment
 ***** Question 1 *****
 
 clear // Load dataset
-browse // First thing I do, browse the data to get familiar with it 
 
-tempfile newschools
+tempfile newschools // Create a tempfile 
+save `newschools', replace emptyok // Save local file 
 
-	forvalues i=1/3 {
-		use "q1_psle_student_raw.dta", clear
+	use "q1_psle_student_raw.dta", clear
 	
-		do "wk4q4"
+		forvalues i=1/3 {
+	
+		do "wk4q4" // Using the previous dofile from assignment 4 
 		
-		append using `newschools', clear 
-		save, replace 
+		save `newschools' // save local file 
 		
-		use newschools 
+		use newschools // Open local file 
 		
 	
 	}
@@ -31,23 +31,26 @@ tempfile newschools
 *We have household survey data and population density data of Côte d'Ivoire. ///
 *	Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
 *	into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
-	
-tempfile popdens // Generate local file and name it popdens
-save `popdens', repalce emptyok  // Save the local file 
-		
-** Load excel file 
-import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring
 
+
+	use "q2_CIV_Section_0.dta", clear           	// Load dataset containing household data 
+		decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
+		
+	tempfile popdens // Generate local file and name it popdens
+		save `popdens',replace // Save the local file 
+	
+** Load excel file 
+import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear 
 
 	 gen department = word(NOMCIRCONSCRIPTION, 1) 	// Generate new variable department and store the first word in each row of the variable in the syntax
 	 keep if department == "DEPARTEMENT"         	// Keep the row if the first word is DEPARTMENT
 	 
-	 use "q2_CIV_Section_0.dta", clear           	// Load dataset containing household data 
-		decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
-
-		
-	merge 1:1 dept using popdens					// Merge the dataset and save them in the local file 
-		save `popdens'								// Save the local file 
+		drop POPULATION								// Drop POPULATION variable 
+		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 variable 
+		rename DENSITEAUKM density 					// Rename DENSITEAUKM variable 
+	 
+		merge 1:m dept using `popdens'					// Merge the dataset and save the local file 
+		save `popdens', replace								// Save the local file 
  
 
 ***** Question 3 ********
