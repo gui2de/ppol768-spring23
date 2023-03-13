@@ -2,7 +2,7 @@
 
 ## Setup
 
-As usual, create a branch from `instructions` at the indicated commit. Name the new branch `yourNetID-week08`. Create a folder called `week-08` inside your `Individual Assignments` folder. Create a `README.md` file inside that folder, and an `outputs` folder there as well. You will create one or more do-files; have them create outputs corresponding to the assignment below (in the `outputs` folder); then write a summary of your results in the `README.md` folder including figures and tables as you now know how to do.
+As usual, create a branch from `instructions` at the indicated commit. Name the new branch `yourNetID-week08`. Create a folder called `week-08` inside your `Individual Assignments` folder. Create a `README.md` file inside that folder, and an `outputs` folder there as well. You will create one or more do-files; have them create outputs corresponding to the assignment below (in the `outputs` folder); then write a summary of your results in the `README.md` folder including figures and tables as you now know how to do. When you are done, create a pull request targeting the `main` branch and request a reviewer.
 
 ## Part 1: Sampling noise in a fixed population
 
