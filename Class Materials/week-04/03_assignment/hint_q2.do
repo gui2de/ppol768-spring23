@@ -1,4 +1,4 @@
-global excel_t21 "C:/Users/ah1152/Documents/PPOL_768/Week_4/03_assignment/01_data/q2_Pakistan_district_table21.xlsx"
+global excel_t21 "C:/Users/Alexandra/Documents/GitHub/ppol768-spring23/Class Materials/week-04/03_assignment/01_dataq2_Pakistan_district_table21.xlsx"
 *update the global
 
 clear
