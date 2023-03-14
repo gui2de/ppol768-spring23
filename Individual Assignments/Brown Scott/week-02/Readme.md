@@ -3,9 +3,9 @@ I come to this class with research and advocacy experience through internships w
 In addition to taking graduate-level coursework in quantitative research methods, I have used Stata through internships/fellowships to analyze federal data sets, produce descriptive statistics and data visualizations for fact sheets and research publications. I have taken some online coursework in R and GitHub but haven’t had opportunities to regularly practice these skills. I have also used Qualtrics for a survey study during my undergraduate career and hope to gain proficiency in SurveyCTO.
 
 IMAGES
-![pic]("D:\2021-2023, Georgetown University\2023 - Spring\Research Design & Implementation\ScottsRepo\ppol768-spring23\Individual Assignments\Brown Scott\week-02\img\pic.png")
+![pic]("img/pic.png")
 
-![healy]("D:\2021-2023, Georgetown University\2023 - Spring\Research Design & Implementation\ScottsRepo\ppol768-spring23\Individual Assignments\Brown Scott\week-02\img\healy.png")
+![healy]("img/healy.png")
 
 RESEARCH INTERESTS
 I have x,y,z research interests.
@@ -14,6 +14,8 @@ TABLE
 <table>
     <tr>
         <td>Foo</td>
+        <td>Foo2</td>
+        <td>Foo3</td>
     </tr>
 </table>
 
