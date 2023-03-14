@@ -18,6 +18,12 @@ forvalues i=1/135 {
 	keep in 1 //there are 3 of them, but we want the first one
 	rename TABLE21PAKISTANICITIZEN1 table21
 
+	foreach var of varlist * {
+	  if missing(`var') {
+	  	drop `var'
+	  }
+	}
+
 	gen table=`i' //to keep track of the sheet we imported the data from
 	append using `table21' 
 	save `table21', replace //saving the tempfile so that we don't lose any data
