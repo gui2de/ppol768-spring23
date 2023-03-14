@@ -33,7 +33,7 @@ ACFT Pass Rate (Active Duty)
 #Photos
 
 
-![Elena Spielmann](\img\not_distorted_selfie_via_gimp.png "My portrait")
+![spielmann_pic](img/not_distorted_selfie_via_gimp.png) "My portrait" 
 This is the *required* Selfie
 
 Test change
