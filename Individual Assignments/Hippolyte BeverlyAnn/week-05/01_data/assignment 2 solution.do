@@ -6,106 +6,91 @@ clear
 
 cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data"
 
-
-
-
 ***** Question 1 *****
 
 clear // Load dataset
-browse // First thing I do, browse the data to get familiar with it 
 
-tempfile newschools
+tempfile newschools // Create a tempfile 
+save `newschools', replace emptyok // Save local file 
 
-	forvalues i=1/3 {
-		use "q1_psle_student_raw.dta", clear
+	use "q1_psle_student_raw.dta", clear
 	
-		do "wk4q4"
+		forvalues i=1/3 {
+	
+		do "wk4q4" // Using the previous dofile from assignment 4 
 		
-		append using `newschools', clear 
-		save, replace 
+		save `newschools' // save local file 
 		
-		use newschools 
+		use newschools // Open local file 
 		
 	
 	}
 
 **** Question 2 ****
 
-We have household survey data and population density data of Côte d'Ivoire. 
-Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
-into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
+*We have household survey data and population density data of Côte d'Ivoire. ///
+*	Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
+*	into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
-*tempfile popdens 	/// Generated a tempfile to store the data after I changed 
-*save `popdens', replace emptyok
-	
-	import excel using "q2_CIV_populationdensity.xlsx" 
-	
-		gen i = _n
-	
-	** keep if word(DEPARTMENT, 1) I was trying to tell Stata to keep the row if the first word /// is DEPARTMENTE.
-	
 
-	*append using `popdens'
-	
-	*use "popdens"
-	
-*gen popdens
+	use "q2_CIV_Section_0.dta", clear           	// Load dataset containing household data 
+		decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
 		
+	tempfile popdens // Generate local file and name it popdens
+		save `popdens',replace // Save the local file 
 	
-*use "popdens"
+** Load excel file 
+import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear 
 
-*This seems like a one to many merge; Should include a column for population density 
+	 gen department = word(NOMCIRCONSCRIPTION, 1) 	// Generate new variable department and store the first word in each row of the variable in the syntax
+	 keep if department == "DEPARTEMENT"         	// Keep the row if the first word is DEPARTMENT
+	 
+		drop POPULATION								// Drop POPULATION variable 
+		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 variable 
+		rename DENSITEAUKM density 					// Rename DENSITEAUKM variable 
+	 
+		merge 1:m dept using `popdens'					// Merge the dataset and save the local file 
+		save `popdens', replace								// Save the local file 
+ 
 
 ***** Question 3 ********
 
-## Q3 : Enumerator Assignment based on GPS
+/*## Q3 : Enumerator Assignment based on GPS
 We have the GPS coordinates for 111 households from a particular village. 
 You are a field manager and your job is to assign these households to 19 enumerators (~6 surveys per enumerator per day) 
 in such a way that each enumerator is assigned 6 households that are close to each other. Manually assigning them for each village will take you a lot of time. 
 Your job is to write an algorithm that would auto assign each household (i.e. add a column and assign it a value 1-19 which can be used as enumerator ID). 
 Note: Your code should still work if I run it on data from another village.
+*/
 
 clear 
-	
-	
-* Load dataset 
-	use "q3_GPS Data.dta"
 
-	tempfile enum 
-	save `enum', replace emptyok
-
-		keep in 1
-
-rename * one_*
-
-	cross using "q3_GPS Data.dta"
+	tempfile enum 			  	// Generate tempfile to save local file 
+	save `enum', replace emptyok // Save the local file  
 	
-	geodist one_latitude one_longitude latitude longitude, gen(dist)
-	drop if one_numid == numid
+	use "q3_GPS Data.dta" 		// Load the dataset
+
+	keep in 1					//  Keep the first row  
+
+	rename * one_*				// Rename the column variables; This will help distinguish the variables when we match, and makes matching easier 
+
+	cross using "q3_GPS Data.dta" // With this dataset we create a matrix using the command cross. 
 	
-	sort dist 
+	geodist one_latitude one_longitude latitude longitude, gen(dist) // Calculate the distance between the first point and all points in the dataset.
+	drop if one_numid == numid // Drop the first distance because it's matched with itself
+	
+	sort dist // Sort the data in descending order 
+
+     keep dist 1/5 // Keep the first five shortest distances in the variable dist 
 	 
-	 drop if dist == 0
-
-     keep if dist <= 0.17 
+	 save `enum' // Save to the the local file
 	 
-	 append using enum
+	 // Drop the five points from the orginal dataset 
 	 
-	 save enum
+	save, replace	 // Save over the original dataset
 	 
-	drop if numid =  28
-	drop if numid == 94
-	drop if numid == 95
-	drop if numid == 14
-	drop if numid == 15
-	drop if numid == 1
-
-	use enum, clear
-	
-	keep in 2
-	keep if dist <= 0.22
-
-*save, replace
+	 // Repeat for each enumerator
+	 
 
 
 ***** Question 4 *******
@@ -117,43 +102,31 @@ You can check the following dta file as a template for your output: Tz_elec_temp
 Your objective is to clean the dataset in such a way that it resembles the format of the template dataset.
 
 */
-*** I'm thinking do i need to set up a tempfile to store the data that i course through after I'm done .
-
-*log using election10
 
 clear 
-*Set up a tempfile to store the data within the do file 
+*Set up a tempfile to store the data 
 tempfile election10
 save `election10', replace emptyok
 
 
 	import excel using "q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) firstrow allstring // Importing the xls file 
-		replace WARD = WARD[_n-1] if WARD == "" // Given the strucutre of the file, all empty cells were filled up 
-		rename (COSTITUENCY)(constituency) // Rename variable constitutency 
-		rename (REGION DISTRICT CANDIDATENAME SEX G POLITICALPARTY TTLVOTES ELECTEDCANDIDATE) (region district 			candidatename sex gender politicalparty ttlvotes electedcandidate)
+		replace WARD = WARD[_n-1] if WARD == "" // Fill in the name of each ward in the empty cells 
+		rename (COSTITUENCY)(constituency) // Rename variable constituency 
+		rename (REGION DISTRICT CANDIDATENAME SEX G POLITICALPARTY TTLVOTES ELECTEDCANDIDATE) (region district candidatename sex gender politicalparty ttlvotes electedcandidate) 
+					// Rename variables 
 		
-		drop K
+		drop K // Drop the variable K
 		
-		replace constituency = constituency[_n-1] if constituency == "" 
-		replace district = district[_n-1] if district == ""
+		replace constituency = constituency[_n-1] if constituency == "" // Fill in the name of each constituency in the empty cells
+		replace district = district[_n-1] if district == "" // Fill in  the name of each district in the empty cells
 		
-		destring TTLVOTES, ignore ("UNOPPOSED") replace // Unopposed is not relevant to the information we want.
+		destring TTLVOTES, ignore ("UNOPPOSED") replace // Change the TTLVOTES variable from string to numeric
 			
 			*bysort WARD: egen vote_total = total(TTLVOTES)
 			*drop in 1
-			
-			**** I need to figure out how to drop the duplicate values //
-			**** I've tried using the duplicates command but its not working //
-
-			
-*use `election10', clear			
-			
-			
-*log close, append
-
-*** Data has alot of missing values; Important variables like WARD has embedded and trailing blanks which I am not sure how to deal with yet 
-
-** The data is at candidate/political level but we want a ward level dataset
+	
+	
+		 // Save local file 
 
 ***** Question 5 *****
 
@@ -163,3 +136,15 @@ Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944.
 
 
 */
+clear 
+
+	tempfile tanz1015  // Create a local file 
+		save `tanz1015', replace emptyok
+ 
+	use "q5_Tz_elec_10_clean.dta" // Load 2010 dataset
+ 
+	use "q5_Tz_elec_15_clean.dta" // Load 2015 dataset 
+ 
+	
+	
+	
