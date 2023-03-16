@@ -1,2 +1,3 @@
+Survey link!
+https://gui2de.surveycto.com/collect/nyhof_emma_week_07?caseid=
 
-In this individual folder, assignments will be submitted in weekly subfolders created along the way by the student.
