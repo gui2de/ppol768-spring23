@@ -1,6 +1,8 @@
-Note: For both part 1 and 2, y = 30 + 6*x + normally distributed error term
+# Week 08 Assignment Xinyu Zheng
 
-# Part 1
+*Note: For both part 1 and 2, y = 30 + 6x + normally distributed error term*
+
+## Part 1
 
 ![Part1 Histogram](outputs/part1_hist.png)
 
@@ -13,7 +15,7 @@ Note: For both part 1 and 2, y = 30 + 6*x + normally distributed error term
 
 Based on the histogram of the estimates, although the distribution of coefficient estimates for x by each sample size is centered around 6, which is the population parameter (the true relationship between x and y), the distribution is less dispersed as the sample size increases. The table above reports the mean of estimates, estimates' standard errors and the confidence interval width by sample size. Again, the mean of estimates' standard error and confidence interval width is smaller as the sample size enlarges. It is because a large sample contains more possible population values and is less likely to consist of extreme values only. Thus the estimates based on a large sample will be less variated from one sample draw to another. Also, the estimates are less biased when the sample size increases.
 
-# Part 2
+## Part 2
 
 ![Part2 Histogram](outputs/part2_hist.png)
 
@@ -50,7 +52,7 @@ I was able to draw a larger sample in part 2 because I set the number of observa
 
 ![Histogram: compare part1 and part2](outputs/part1_part2_hist.png)
 
-|             |:    Estimates   :||: Stardand Error  :||: The Width of the Confidence Interval :||
+|             |   Estimates      || Stardand Error    || The Width of the Confidence Interval ||
 |:-----------:|:-------:|:-------:|:-------:|:--------:|:-------:|:-------:|     
 | Sample Size | Part1   | Part2   | Part1   | Part2    | Part1   | Part2   |
 | 10 | 6.001 | 6.002 | 0.0698 |  0.0702 | 0.322 | 0.324 |
@@ -64,7 +66,7 @@ If decrease the times of repetition from 500 to 100:
 
 ![Histogram: compare part1 and part2 when repeat 100 times for each sample size](outputs/part1_part2_hist_100.png)
 
-|             |:    Estimates   :||: Stardand Error  :||: The Width of the Confidence Interval :||
+|             |    Estimates     || Stardand Error    || The Width of the Confidence Interval ||
 |:-----------:|:-------:|:-------:|:-------:|:--------:|:-------:|:-------:|     
 | Sample Size | Part1   | Part2   | Part1   | Part2    | Part1   | Part2   |
 | 10 | 6.013 | 6.006 | 0.0669 |  0.0702 | 0.309 | 0.324 |
