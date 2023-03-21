@@ -12,6 +12,9 @@ tempfile tiida
 	
 	save tiida.dta, replace
 	
+
+*	DGP
+	
 * Sampling noise in a fixed population 						
 
 capture program drop wkeight					// Establish program 
@@ -22,24 +25,25 @@ program define wkeight,rclass						// Define the program
 	egen rank = rank(sch_hll)					// Generate another variable to rank the new random sample
 	gen car_barn =0 							// Generate new variable to store condition for regression
 	
-	replace car_barn =1 if rank-1000 <50		 // Set variable equal to one if the random minus one thousand is less than 50 
+	replace car_barn =1 if rank-1000 <50		 // Set variable equal to one if the random number minus one thousand is less than 50 
 	
-	gen y = x + car_barn					// Generate new variable using x's
+	gen y = x + car_barn						// Generate new variable using x's
 	
 	reg y x 						     		// Regression of y on one x observations
 					
-	mat tab = r(table)
-	return scalar N =results[]
-	return scalar beta =results[]  
-	return scalar pval =results[]	
-	return scalar cii =results 
-	return scalar SEM =results[]				 // Return N, beta, SEM, pvalue and confidence intervals into r()
-
-end 
+	
+	reg y treatment
+	mat results =r(table)
+	
+	
+end
+	
+													// Return N, beta, SEM, pvalue and confidence intervals into r()
 
 tempfile ten
-	   foreach value i=1/4{
-		`ten'= 10^`i'							// In the local file ten, for each value in the list, find multiply by the preceding list number 
-	   } n							
+	   forvalue i=1/4{
+		`ten'= 10^`i'							// In the local file ten, for each value in the list, multiply 10 by itself (raise 10 to that power)
+	   }							
+	   
 	   simulate new_var_list , reps(500) : wkeight // Using simulate, run the program wkeight 500 times
 
