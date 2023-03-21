@@ -33,11 +33,13 @@
 
 *Create fixed population of 10,000 observations and generate random X's 
 clear
+
+set seed 1000
+
 set obs 10000
 
 *Move this to inside the program, for PART II
 gen x1 = rnormal() 
-set seed 1000
 
 save Q1_fixed_population, replace
 
@@ -72,34 +74,38 @@ program define normal_reg, rclass
 	return scalar ci_lower = results[5,1]
 	return scalar ci_upper = results[6,1]
 	
-	
 end
 
+*Write simulated subsampled data to tempfiles 
 clear
 tempfile combined
 save `combined', replace emptyok
 
-*clear
-*tempfile sims
-*save `sims', replace emptyok 
-
 *Simulate: Run program 500 times at each sub-sample size 10, 100, 1000, and 10,000 forvalues i=1(2)10
-forvalues i = 1/4 { 
-	clear
+forvalues i = 1/4 {
 	local samplesize = 10^`i' 
-	tempfile sims 
-	simulate beta_coef=r(beta) pvalues=r(pval), reps(100) 	  	seed(2023) saving(`sims'): normal_reg, samplesize(`samplesize')
-		use `combined'
-		append using `sims'
+	tempfile sim_results 
+	simulate beta_coeff=r(beta) N = r(subsample_size) pvalues=r(pval) beta=r(beta) SEM=r(SEM) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(50) seed(2023) saving(`sim_results'): normal_reg, samplesize(`samplesize')
+		
+		use `sim_results', clear 
+		append using `combined'
 		save `combined', replace
 } 
 *sample() 
 *count()
 
 use `combined', clear
-exit
+*exit
 
 *use `sims', clear 
+
+
+
+
+
+
+
+
 
 
 
