@@ -1,16 +1,16 @@
-#Manual Scavenging in India: A Skills Training and Employment Services Approach [2ND DRAFT] 
+# Manual Scavenging in India: A Skills Training and Employment Services Approach [2ND DRAFT] 
 
 PPOL 768: Saloni Bhatia, Alexa Coon, Serenity Fan 
 
-##Introduction
+## Introduction
 
-<br />
+<br/>
 Manual scavenging involves the human collection and disposal of human excreta from dry latrines, railway tracks, septic tanks, sewer/drainage systems, and other sources without access to personal protective equipment, adequate social protection nor government support. The practice of manual scavenging is deeply entrenched in the caste system in India. Negative implications of this practice include social stigma associated with communities forced to perform “dirty work”, health implications of coming in direct contact with human waste, economic implications of earning the bare minimum for survival needs, and the human rights implications of undignified work conditions and societal marginalization. In essence, the problem of manual scavenging in India is a major governance and market failure to improve sanitation in the country, given years of continual failed interventions, promises, and stasis. 
-<br />
+<br/>
 Over the years, many schemes and initiatives have been undertaken that should have improved the situation and made India open defecation free. However, the functioning, utility and behavior change that need to occur alongside proposed government interventions have gone unchecked and unreported. Consequently, generations of manual scavengers continue the forced labor of cleaning excreta in sewers despite several technological and scientific advancements that should have made manual scavenging less labor-intensive.
 
-##Motivation
-<br />
+## Motivation
+<br/>
 During the pandemic, the government imposed nationwide lockdowns and curfews, the private sector implemented social-distancing and remote work policies, and hand-washing techniques took over the media. However, a forgotten section of frontline workers -sanitation workers- with poor access to safe water, decent sanitation and good hygiene (WASH) facilities continued to labor under hazardous working conditions and lack of government support. 
 <br />
 In 1993 and 2013, the practice of manual scavenging was outlawed by the Indian government. Even after a 30-year long ban, the practice continues unabated. As per 2021 estimates by the Ministry of Social Justice and Empowerment, there are 58,098 manual scavengers in India (Ministry of Social Justice and Empowerment, 2021). The numbers may be an underestimation of reality as the majority of them belong to the socially marginalized sections of the Indian caste system known as the Dalits. While it would be imperative to consider the cultural sensitivity of the manual scavenging issue, and might require an assessment of the caste system responsible for marginalization of the community, we limit our study to behavior change at the individual and community level.  
