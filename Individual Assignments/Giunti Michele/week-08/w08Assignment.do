@@ -382,9 +382,22 @@ use sims2
 drop if samplesize != 10 & samplesize != 100 & samplesize != 1000 & samplesize != 10000
 
 gen id = 2
-label define SAMPLE 1 "10" 2 "100" 3 "1000" 4 "10000"
-label values samplesize SAMPLE
-
 append using sims1
-label values samplesize SAMPLE
+
+recode samplesize (10 = 1) (100 = 2) (1000 = 3) (10000 = 4)
+
+tw (histogram beta if id == 1, by(samplesize) color(green%30) freq width(.1) barwidth(.1)) (histogram beta if id == 2, by(samplesize) color(red%30) freq width(.1) barwidth(.1) legend(order(1 "Simulation 1" 2 "Simulation 2")))
+graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/BetaDifference.png" , replace
+
+graph bar (mean) se, over(samplesize) over(id, relabel(1 "Simulation 1" 2 "Simulation 2")) scheme(s1color) stack ytitle("Mean of Standard Error") title("Differences in Variance per Sample Size") subtitle("Reductions in Variance Experienced by Different Sample Sizes")
+graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/VarianceDifference.png" , replace
+
+graph bar (mean) lower upper, over(samplesize) over(id, relabel(1 "Simulation 1" 2 "Simulation 2")) scheme(s1color) ytitle("Mean") title("Differences in Confidence Intervals per Sample Size") subtitle("Changes in CI Experienced by Different Sample Sizes") legend(order(1 "Lower" 2 "Upper"))
+graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/CIDifference.png" , replace
+
+
+
+
+
+
 
