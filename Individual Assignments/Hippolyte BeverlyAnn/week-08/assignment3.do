@@ -10,7 +10,7 @@ tempfile tiida
 	set obs 10000					// Create a dataset that generates 10000 observations 
 	gen x = runiform()				
 	
-	save `tiida', replace emptyok
+	save tiida.dta, replace
 	
 * Sampling noise in a fixed population 						
 
