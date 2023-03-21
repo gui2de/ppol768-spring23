@@ -120,28 +120,28 @@ Key outcomes that will be measured and assessed at midline and endline include:
 ## Anticipated Concerns and Complications  
 
 <ol>
-<li> __Cost__: In terms of feasibility, cost is a primary concern for any RCT. As Cluster RCT’s are generally larger than individual RCT’s (Dron et al., 2021), they require greater financial resources. </li>
+<li> Cost: In terms of feasibility, cost is a primary concern for any RCT. As Cluster RCT’s are generally larger than individual RCT’s (Dron et al., 2021), they require greater financial resources. </li>
 
 
-<li> **Geographic Focus**: According to official statistics, the bulk of manual scavenging in India occurs in urban areas. It would thus be natural to focus our intervention and study in urban areas where manual scavenging is common. However, the CLTS approach has been largely deployed in rural areas of the Global South, and limited evidence exists concerning its suitability and efficacy in urban areas. In particular, one of the pillars/assumptions underlying the CLTS approach -a high level of social capital and interrelationships- may not necessarily be present in dense, relatively anonymous urban neighborhoods. In the absence of such, however, preliminary evidence suggests that increasing returns to scale from neighbors adopting sanitation technology may substitute (Deutschmann et al., 2021). </li>
+<li> Geographic Focus: According to official statistics, the bulk of manual scavenging in India occurs in urban areas. It would thus be natural to focus our intervention and study in urban areas where manual scavenging is common. However, the CLTS approach has been largely deployed in rural areas of the Global South, and limited evidence exists concerning its suitability and efficacy in urban areas. In particular, one of the pillars/assumptions underlying the CLTS approach -a high level of social capital and interrelationships- may not necessarily be present in dense, relatively anonymous urban neighborhoods. In the absence of such, however, preliminary evidence suggests that increasing returns to scale from neighbors adopting sanitation technology may substitute (Deutschmann et al., 2021). </li>
 
 
-<li> **Cultural Considerations regarding Certification**: Our prior is that certification for the (largely) Dalit population of manual scavengers will improve their employment outcomes in non-sanitation sectors. However, the certification, if poorly or inappropriately designed, could have the potential to serve as a negative signal and further ostracize manual scavengers in the employment marketplace. </li>
+<li> Cultural Considerations regarding Certification: Our prior is that certification for the (largely) Dalit population of manual scavengers will improve their employment outcomes in non-sanitation sectors. However, the certification, if poorly or inappropriately designed, could have the potential to serve as a negative signal and further ostracize manual scavengers in the employment marketplace. </li>
 
 
-<li> **Demand vs. Supply**: Our intervention characterizes the issue as a demand-issue; that manual scavengers are motivated to seek better, more humane employment, and merely lack the skills/training (and/or certification) to obtain such. If however, employer discrimination is sufficiently entrenched, then an intervention addressing employer sensitization to such and changing hiring attitudes may be more effective. </li>    
+<li> Demand vs. Supply: Our intervention characterizes the issue as a demand-issue; that manual scavengers are motivated to seek better, more humane employment, and merely lack the skills/training (and/or certification) to obtain such. If however, employer discrimination is sufficiently entrenched, then an intervention addressing employer sensitization to such and changing hiring attitudes may be more effective. </li>    
 
 
-<li> **Survey Participation**: Because manual scavenging is such a sensitive topic, and those who perform it are so severely socially marginalized, it may be very difficult, if not impossible, to obtain a large enough survey sample of scavengers willing to discuss these sensitive questions </li>
+<li> Survey Participation: Because manual scavenging is such a sensitive topic, and those who perform it are so severely socially marginalized, it may be very difficult, if not impossible, to obtain a large enough survey sample of scavengers willing to discuss these sensitive questions </li>
 
 
-<li> **Treatment Arms**: Given random assignment, how do we ensure that the 3 arms (2 treatments and 1 control) are balanced in relevant characteristics? Also, how can we ensure, depending upon the unit of randomization (district vs. village vs. household), that there are no spillovers, e.g. of knowledge from the employment training, or of cash, from the cash transfers. </li>
+<li> Treatment Arms: Given random assignment, how do we ensure that the 3 arms (2 treatments and 1 control) are balanced in relevant characteristics? Also, how can we ensure, depending upon the unit of randomization (district vs. village vs. household), that there are no spillovers, e.g. of knowledge from the employment training, or of cash, from the cash transfers. </li>
 
 
-<li> **Further Research on Intervention Type**: As little as five years ago, Bangladesh had a similar issue with human suffering from manual scavenging in urban centers such as Dhaka. However, the country has made substantial project on the issue recently. Further research on these successes will be informative for designing our intervention and evaluation in the Indian context. </li>
+<li> Further Research on Intervention Type: As little as five years ago, Bangladesh had a similar issue with human suffering from manual scavenging in urban centers such as Dhaka. However, the country has made substantial project on the issue recently. Further research on these successes will be informative for designing our intervention and evaluation in the Indian context. </li>
 
 
-<li> **Ethics**: The topic of manual scavenging in India is culturally sensitive, and intersects with societal and class divides, particularly with respect to caste. Any attempt to change behaviour and norms must contend with these challenges. </li>
+<li> Ethics: The topic of manual scavenging in India is culturally sensitive, and intersects with societal and class divides, particularly with respect to caste. Any attempt to change behaviour and norms must contend with these challenges. </li>
 
 </ol>
 
