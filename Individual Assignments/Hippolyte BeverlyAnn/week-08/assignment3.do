@@ -16,19 +16,19 @@ tempfile tiida
 
 capture program drop wkeight					// Establish program 
 program define wkeight,rclass						// Define the program 
-syntax, samplesize(integer)						// Sample size of the subset is an argument in the program							
 	clear 
-	use `tiida '								// Load dataset with observations
+	use `tiida', clear								// Load dataset with observations
 	gen sch_hll =runiform()						// Generate a new variable to store random sample
 	egen rank = rank(sch_hll)					// Generate another variable to rank the new random sample
 	gen car_barn =0 							// Generate new variable to store condition for regression
 	
 	replace car_barn =1 if rank-1000 <50		 // Set variable equal to one if the random minus one thousand is less than 50 
 	
-	gen y = x + car_barn*					// Generate new variable using x's
+	gen y = x + car_barn					// Generate new variable using x's
 	
 	reg y x 						     		// Regression of y on one x observations
 					
+	mat tab = r(table)
 	return scalar N =results[]
 	return scalar beta =results[]  
 	return scalar pval =results[]	
