@@ -1,4 +1,4 @@
-# Manual Scavenging in India: A Skills Training and Employment Services Approach [2ND DRAFT] 
+# Manual Scavenging in India: A Skills Training and Employment Services Approach  
 
 PPOL 768: Saloni Bhatia, Alexa Coon, Serenity Fan 
 
@@ -34,7 +34,7 @@ If the labor of manual scavengers was valued appropriately, not only could they 
 
 The scope of this study will be limited to the northern state of Uttar Pradesh (UP), which is the fourth largest state in terms of area and the most populous state of India. According to official data published by the Ministry of Social Justice and Empowerment, out of the total 58,098 manual scavengers in the country, Uttar Pradesh accounts for 32,473 people.  
 
-As per the National Survey 2013, 2018 National Safai Karamcharis Finance & Development, 3 districts which have the highest reported numbers of manual scavengers; Budaon (2,866), Shahjahanpur (3,391) and Farrukhabad (1,040) will be taken into account (Goan Connection, 2022). Based upon further exploratory data analysis we will elect to focus on either urban or rural areas.  
+As per the National Survey 2013, 2018 National Safai Karamcharis Finance & Development, 3 districts which have the highest reported numbers of manual scavengers; Budaon (2,866), Shahjahanpur (3,391) and Farrukhabad (1,040) will be taken into account (Gaon Connection, 2022). Based upon further exploratory data analysis we will elect to focus on either urban or rural areas.  
 
 ## Program Description  
 
@@ -120,7 +120,7 @@ Key outcomes that will be measured and assessed at midline and endline include:
 ## Anticipated Concerns and Complications  
 
 <ol>
-<li> **Cost**: In terms of feasibility, cost is a primary concern for any RCT. As Cluster RCT’s are generally larger than individual RCT’s (Dron et al., 2021), they require greater financial resources. </li>
+<li> __Cost__: In terms of feasibility, cost is a primary concern for any RCT. As Cluster RCT’s are generally larger than individual RCT’s (Dron et al., 2021), they require greater financial resources. </li>
 
 
 <li> **Geographic Focus**: According to official statistics, the bulk of manual scavenging in India occurs in urban areas. It would thus be natural to focus our intervention and study in urban areas where manual scavenging is common. However, the CLTS approach has been largely deployed in rural areas of the Global South, and limited evidence exists concerning its suitability and efficacy in urban areas. In particular, one of the pillars/assumptions underlying the CLTS approach -a high level of social capital and interrelationships- may not necessarily be present in dense, relatively anonymous urban neighborhoods. In the absence of such, however, preliminary evidence suggests that increasing returns to scale from neighbors adopting sanitation technology may substitute (Deutschmann et al., 2021). </li>
@@ -145,7 +145,7 @@ Key outcomes that will be measured and assessed at midline and endline include:
 
 </ol>
 
-##References 
+## References 
 
 Deutschmann, J.W., Lipscomb, M. Schechter, L., & Zhu, J. (2021). Spillovers without
 Social Interactions in Urban Sanitation. Unpublished Manuscript.  
