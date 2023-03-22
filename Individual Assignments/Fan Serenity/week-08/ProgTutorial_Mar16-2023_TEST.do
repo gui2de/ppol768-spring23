@@ -53,9 +53,9 @@ tempfile combined
 save `combined', replace emptyok
 
 forvalues i=1/4 { 
-	local samplesize = 10^`i' 
+	local samplesize = 10^`i'
 	tempfile sims
-	simulate beta_coeff=r(beta) N=r(subsample_size) pvalues=r(pval) beta=r(beta) SEM=r(SEM) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(500) seed(2023) 	saving(`sims'): normal_reg, samplesize(`samplesize')
+	simulate beta_coeff=r(beta) N=r(subsample_size) pvalues=r(pval) beta=r(beta) SEM=r(SEM) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(50) seed(2023) 	saving(`sims'): normal_reg, samplesize(`samplesize')
 
 	use `sims', clear 
 	append using `combined'
