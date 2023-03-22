@@ -1,16 +1,20 @@
 # Week 08 - Simulation Assignment 
-# Serenity Fan (kaf121)
+Serenity Fan (kaf121)
 
 ## Part I 
-![Beta_FixedPop_Graph](/outputs/beta_graph_fixed.png)
+![Beta_FixedPop_Graph](beta_graph_fixed.png)
 
 
-<table>
-    <tr>
-        <td>Foo</td>
-    </tr>
-</table>
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+
 
 
 ## Part II 
 
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
