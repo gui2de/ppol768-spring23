@@ -29,11 +29,11 @@ syntax, samplesize(integer)					// Randomly create a dataset; Sample size is an 
 
 	matrix a = r(table)
 
-	return scalar beta = results[1,1]
-	return scalar pval = results[1,4]
-	return scalar stderr = results[1,2]
-	return scalar upl = results[1,5]
-	return scalar lowl = results[1,6]
+	return scalar beta = a[1,1]
+	return scalar pval = a[1,4]
+	*return scalar stderr = a[1,2]
+	*return scalar upl = a[1,5]
+	*return scalar lowl = a[1,6]
 
 end 
 
@@ -45,8 +45,7 @@ save `primary', replace emptyok							// Empty local file
 forvalues i = 1/4 {										// Define loop
 	local sm = 10^`i'									// Establish local file to run simulations N number of times
 	
-	tempfile siims
-	simulate col_beta=r(beta) col_pvalues=r(pval) reps(500) seed(3005) saving(`siims'): nissan, samplesize(`sm')	// Run simulation
+	simulate col_beta=r(beta) col_pvalues=r(pval) reps(500): nissan, samplesize(`sm')	// Run simulation
 	gen samplesize=`sm'									// Generate local file to save N number of simulations
 
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
@@ -54,20 +53,22 @@ forvalues i = 1/4 {										// Define loop
 	}
 	
 	
-forvalues i = 1/20
+forvalues i = 1/20 {
 	local sp = 2^`i'
 
-	simulate col_beta=r(beta) col_pvalues=r(pval) reps(500) seed(3005): nissan, samplesize(`sp')
-
+	simulate col_beta=r(beta) col_pvalues=r(pval) reps(500): nissan, samplesize(`sp')
 	gen samplesize =`sp'
 	
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
 	save `primary', replace								// Save local file
 	
-	}
+}
 
 exit 
 
 
-	
+tempfile sems
+simulate column_beta=r(beta) column_pvalues=r(pval), reps(500) saving(`sims'): wkeight, samplesize(1000)
+
+use `sems', clear
 					
