@@ -69,7 +69,7 @@ use `combined', clear
 
 *Graph 
 histogram beta_coeff, by(N)
-graph export "outputs/beta_graph_fixed.png", replace
+graph export "beta_graph_fixed.png", replace
 
 *Figures for table 
 bysort N: egen mean_beta = mean(beta)
@@ -78,7 +78,7 @@ bysort N: egen mean_pvalues = mean(pvalues)
 bysort N: egen mean_ci_lower = mean(ci_lower)
 bysort N: egen mean_ci_upper = mean(ci_upper)
 
-save "outputs/stats_fixed.dta", replace
+save "stats_fixed.dta", replace
 
 
 
@@ -158,7 +158,7 @@ use `combined', clear
 
 *Graph 
 histogram beta_coeff, by(N)
-graph export "outputs/beta_graph_super.png", replace
+graph export "beta_graph_super.png", replace
 
 *Figures for table 
 bysort N: egen mean_beta = mean(beta)
@@ -167,6 +167,6 @@ bysort N: egen mean_pvalues = mean(pvalues)
 bysort N: egen mean_ci_lower = mean(ci_lower)
 bysort N: egen mean_ci_upper = mean(ci_upper)
 
-save "outputs/stats_super.dta", replace
+save "stats_super.dta", replace
 
 *Input graphs into markdown! Save, then make in markdown folder, then insert preliminary observations, for both parts. 
