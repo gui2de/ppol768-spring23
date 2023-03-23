@@ -43,7 +43,7 @@ Now, we use the same data-generating process, but by varying the population, N (
 | 32,768              | 0.495       | 0.393     | (-0.276, 1.266)  | 
 | 131,072             | 0.538       | 0.393     | (-0.233, 1.309)  | 
 | 1,048,576           | 0.490       | 0.393     | (-0.281, 1.261)  |
-| 
+|                     |             |           |                  |
 | 10                  | 0.543       | 0.677     | (-1.018, 2.104)  | 
 | 100                 | 0.491       | 0.407     | (-0.316, 1.299)  |
 | 1000                | 0.524       | 0.395     | (-0.251, 1.299)  | 
@@ -51,6 +51,6 @@ Now, we use the same data-generating process, but by varying the population, N (
 | 100,000             | 0.497       | 0.393     | (-0.274, 1.268)  |
 | 1,000,000           | 0.490       | 0.393     | (-0.281, 1.261)  | 
 
-Beginning with N=4, all betas (as well as the mean value) are 0, in accordance with the fact that our data generating process only applied the treatment to observations of rank>7. However, with only 4 observations, this means that the treatment was not applied, in that particular simulation. As such, it follows that we should obtain a perfect estimtae of the mean of the standard normal distribution, of 0. At N=8, we see a very scattered distribution of beta estimates, corresponding to a large SEM of 1.028, and a large confidence interval of (-1.982, 3.047). The SEM decreases going up to N=100 (or 128), and the CI also narrows considerably. For values of approximately N>100, until approximately N=1,000,000 the mean SEM stays relatively constant, varying by less than 1%, and the mean CI also deviates correspondingly little. 
+Beginning with N=4, all betas (as well as the mean value) are 0, in accordance with the fact that our data generating process only applied the treatment to observations of rank>7. However, with only 4 observations, this means that the treatment was not applied, in that particular simulation. As such, it follows that we should obtain a perfect estimtae of the mean of the standard normal distribution, of 0. At N=8, we see a very scattered distribution of beta estimates, corresponding to a large SEM of 1.028, and a large confidence interval of (-1.982, 3.047). The SEM decreases going up to N=100 (or 128), and the CI also narrows considerably. For values of approximately N>100, until approximately N=1,000,000 the mean SEM stays relatively constant, varying by less than 1%, and the mean CI also deviates correspondingly little.  
 
-As with Part I, however, even upon looking at very large N values, mean Beta does not appear to converge to the theoretical value of 0.5. 
+As with Part I, however, even upon looking at very large N values, mean Beta does not appear to converge to the theoretical value of 0.5.  
