@@ -9,9 +9,9 @@ clear
 	set seed 3005					// Use set seed to maintain the observations 
 
 	set obs 10000					// Create a dataset that generates 10000 observations 
-	gen x = runiform()				
+	gen x = runiform()				// Generate dataset
 
-	save tiida.dta, replace
+	save tiida.dta, replace 		// Save dataset 
 	
 
 *	DGP
@@ -28,38 +28,36 @@ program define wkeight,rclass						// Define the program
 	
 	gen error=runiform()
 	
-	gen y = 3 + 4*x + 5*error
+	gen y = 3 + 4*x + 5*error						// Generate y variable 
 	
 	
 	reg y x
 	matrix results = r(table)
 	
 	return scalar beta = results[1,1]
-	return scalar pval = results[4,1]
-	return scalar serrorm = results[2,1]
-	return scalar conint = results[5,1]		 // Return N, beta, SEM, pvalue and confidence intervals into r()
-	return scalar confint = results [6,1]								
+	return scalar pval = results[1,4]
 	
 	
 end
 
 
 clear
-tempfile combined
-save `combined', replace emptyok
+tempfile combined										// Establish local file
+save `combined', replace emptyok						// Empty local file
 
-forvalues i = 1/4 {
-	local ss = 10^`i'
+forvalues i = 1/4 {										// Define loop
+	local ss = 10^`i'									// Establish local file to run simulations N number of times
 
-	simulate column_beta=r(beta) column_pvalues=r(pval), reps(500) : wkeight, samplesize(`ss')	
-	gen samplesize=`ss'
+	simulate beta=r(beta) pvalues=r(pval) reps(500) : wkeight, samplesize(`ss')	// Run simulation
+	gen sampleesize=`ss'									// Generate local file to save N number of simulations
 	
-	append using `combined'
-	save `combined', replace
+	append using `combined'								// Append local file everytime the simulation is run N number of times 
+	save `combined', replace							// Save local file
 	
 	}
 
-use `combined', clear
+use `combined', clear									// Run local file
+
 
 exit 
 tempfile sims
@@ -68,5 +66,6 @@ simulate column_beta=r(beta) column_pvalues=r(pval), reps(500) saving(`sims'): w
 use `sims', clear
 
 exit 
+
 	
 													
