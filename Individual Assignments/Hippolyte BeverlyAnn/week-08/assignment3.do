@@ -35,11 +35,11 @@ program define wkeight,rclass						// Define the program
 	matrix results = r(table)
 	
 	return scalar beta = results[1,1]
-	return scalar pval = results[1,4]
-	
-	
+	return scalar pval = results[4,1]
+	return scalar ul = results[6,1]
+	return scalar ll = results[5,1]
+	return scalar std = results[2,1]
 end
-
 
 clear
 tempfile combined										// Establish local file
@@ -48,7 +48,7 @@ save `combined', replace emptyok						// Empty local file
 forvalues i = 1/4 {										// Define loop
 	local ss = 10^`i'									// Establish local file to run simulations N number of times
 
-	simulate beta=r(beta) pvalues=r(pval) reps(500) : wkeight, samplesize(`ss')	// Run simulation
+	simulate beta=r(beta) pvalues=r(pval), reps(50) : wkeight, samplesize(`ss')	// Run simulation
 	gen sampleesize=`ss'									// Generate local file to save N number of simulations
 	
 	append using `combined'								// Append local file everytime the simulation is run N number of times 
@@ -58,12 +58,15 @@ forvalues i = 1/4 {										// Define loop
 
 use `combined', clear									// Run local file
 
-
-exit 
 tempfile sims
-simulate column_beta=r(beta) column_pvalues=r(pval), reps(500) saving(`sims'): wkeight, samplesize(1000)
+simulate column_beta=r(beta) column_pvalues=r(pval), reps(50) saving(`sims'): wkeight, samplesize(100)
 
-use `sims', clear
+use `sims'
+
+hist column_beta 
+*graph export part1sample10.png
+
+display column_beta
 
 exit 
 
