@@ -9,6 +9,8 @@ Using the simulate command, run your program 500 times each at sample sizes N = 
 Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger.
 Fully describe your results in your README.md file, including figures and tables as appropriate.
 
+![Beta_Graph](q1_graph1.png) 
+
 ## Question 2 - Sampling Noise in an Infinite Superpopulation
 Write a do-file defining a program that: (a) randomly creates a data set whose sample size is an argument to the program following your DGP from Part 1 including a true relationship an an error source; (b) performs a regression of Y on one X; and (c) returns the N, beta, SEM, p-value, and confidence intervals into r().
 Using the simulate command, run your program 500 times each at sample sizes corresponding to the first twenty powers of two (ie, 4, 8, 16 ...); as well as at N = 10, 100, 1,000, 10,000, 100,000, and 1,000,000. Load the resulting data set of 13,000 regression results into Stata.
