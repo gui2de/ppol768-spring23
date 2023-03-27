@@ -18,6 +18,7 @@ Figures and table results:
 
 ![Distribution of Betas](img/betahistogram2.png "Distribution of Betas")
 
+
 ![Differences in Means of Standard Errors per Sample Size](img/diffmeans2.png "Differences in Means of Standard Errors per Sample Size")
 
 Raw table  with Means of Standard Errors and Confidence Intervals
