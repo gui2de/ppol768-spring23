@@ -17,7 +17,7 @@ As usual, create a branch from `instructions` at the indicated commit. Name the 
 ## Part 2: Calculating power for DGPs with clustered random errors
 
 1. Develop some data generating process for data X’s and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
-2. Instead of having strata groups contributing to the main effect, create some portion of the random error term at the strata level (now, they are clusters, rather than strata).
+2. Instead of having strata groups contributing to the main effect, create some portion of the random error term at the strata level (now, they are clusters, rather than strata). Use a moderately large number of clusters, and also assign treatment at the cluster level.
 3. Take the means and 95% confidence interval estimates (or, equivalently, their widths) from many regressions at various sample sizes in an unbiased regression.
 4. Calculate "exact" 95% confidence interval estimates using the betas you can use the `collapse` or `mean` command for this, or use something like `lpolyci` to get 95% CIs graphically. Plot the "empirical/exact" CIs against the "analytical" ones (the ones obtained from the regression). Discuss any differences.
 5. Create another DGP in which the random error terms are _only_ determined at the cluster level. Repeat the previous step here. What happens to the convergence of the "exact" CIs?
