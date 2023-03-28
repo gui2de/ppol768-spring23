@@ -34,17 +34,14 @@ program define example, rclass
 syntax, samplesize(integer)
              clear
 		*load data (a)	 
-			 
-			 
-			 
              set obs 100
              generate x = rnormal()
              generate y = 3*x + 1 + rnormal()
              regress y x
 			 gen error = rnormal()
 
-mat results = r(table)
-mat list results 
+matrix results = r(table)
+matrix list results 
 
 *return scalar N = ?
 return scalar beta = results[1,1]
@@ -54,7 +51,7 @@ return scalar pval = results[4,1]
 
 end 
 
-example
+example, samplesize(integer)
 display r(beta)
 display r(pval)
 
@@ -65,14 +62,17 @@ simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_
 
 use `example_temp', clear
 
+*not sure if i am getting the result that i need to see 
+*where do i change my sample size N=10, 100, 1,000 AND 10,000
+
+*Step 4: Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger.
+
 local style "start(-0.5) barwidth(0.09) width(.1) fc(gray) freq"
 tw ///
 (histogram beta, `style' lc(red) ) ///
 (histogram beta if pval < 0.05 , `style' lc(blue) fc(none) ) ///
 , xtit("") legend(on ring(0) pos(1) order(2 "p < 0.05") region(lc(none)) )
 
-
-*Step 4: Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger.
 
 **Part 2: Sampling noise in an infinite superpopulation.
 
@@ -84,6 +84,52 @@ tw ///
 *6. Do these results change if you increase or decrease the number of repetitions (from 500)?
 
 *2^21
+
+*1. Write a do-file defining a `program` that: (a) randomly creates a data set whose sample size is an argument to the program following your DGP from Part 1 including a true relationship an an error source; (b) performs a regression of Y on one X; and (c) returns the N, beta, SEM, p-value, and confidence intervals into `r()`.
+clear
+set seed 1 
+capture program drop week08_p2
+program define week08_p2, rclass 
+syntax, samplesize(100)
+
+*clear 
+set obs `samplesize'
+*create x variable 
+gen x= rnormal()
+*DGP
+gen y= 5 + 1.5*x + 3*rnormal()
+*run regression 
+reg y x 
+*store results 
+*count - overwrites all results, therefore, should be done in the end 
+return scalar N = `R(N)'
+matrix results = r(table)
+matrix list results 
+
+return scalar beta = results[1,1]
+return pvalues = results[4,1]
+
+end 
+
+*this gives me results for b, se, t, pvalue, ll, ul, etc
+matrix list results 
+
+*display my results - not working - why is it not giving me any results? this does not give me any results even after i set seed?
+week08_p2, samplesize(100) //invalid syntax
+display `r(N)'
+display `r(beta)'
+display `r(pvalue)'
+display `r(ll)' // can i use upper limit and lower limit for confidence interval? 
+display `r(ul)'
+*what is SEM?
+
+*2. Using the `simulate` command, run your program 500 times each at sample sizes corresponding to the first twenty powers of two (ie, 4, 8, 16 ...); as well as at N = 10, 100, 1,000, 10,000, 100,000, and 1,000,000. Load the resulting data set of 13,000 regression results into Stata.
+
+simulate beta=r(beta) N=r(N) pval=r(pvalues), reps(500); week08_pt, samplesize(10) //do i need to run simulate command for differnt sample sizes? why do we use 2^21
+
+exit
+
+
 
 
 
