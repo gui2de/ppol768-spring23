@@ -3,37 +3,36 @@ Part 1 Figures and table results(completed once answered this):
 
 ![Distribution of Betas](img/betahistogram.png "Distribution of Betas")
 
- We find a normal distribution on sample size 100.
- As the sample size gets larger 
+The beta distribution represents the likelihood of probabilities. It captures the uncertainty surrounding the probability of a random event being successful. We find a normal distribution on sample size 100. As the sample size gets larger, the distribution of betas is more concentrated around 0, hence the probability distribution of the probability of being successful gets smaller. We are more certain about the probability of success. On the other hand, as the sample size gets smaller, the distribution of betas is larger, hence, the probability distribution of the probability of being successful gets larger. There are more possible different probabilities,i.e. scenarios of success (or not sucess), meaning more uncertainty. 
 
 ![Differences in Means of Standard Errors per Sample Size](img/diffmeans.png "Differences in Means of Standard Errors per Sample Size")
 
-We find 
+We find the difference in means of standard errors to quantify how far the sample mean is from the true population mean. As we see, the smaller the sample size, the higher the mean of SE, hence the further the sample mean is likely to be from the true population mean.Instead, the larger the sample size, the closer is likely to be. 
 
 ![Table with Means of Standard Errors and Confidence Intervals](img/part1graph.png "[Table with Means of Standard Errors, Confidence Intervals")
 
+The standard deviation at 10,000 must be zero as the sample size is already 10,000. 
+As precision is measured by finding the average deviation, as the sample size grows, the SD is smaller, and the estimates become more precise. The bounds of CI also become smaller, hence our report of the accuracy of the model can actually be more accurate. More chances that the true estimate is within the CI bounds. 
+
 Part 2:
 
-Figures and table results: 
+Figures and table results and their differences with part 1: 
 
 ![Distribution of Betas](img/betahistogram2.png "Distribution of Betas")
 
+The normal distribution in this case is in the scenarios 4 to 16. After 1024, the beta distribution practically becomes zero and it grows in density. Meaning we are more certain about the probability of success.This certainty in part 2 with the required adaptation, happens at a smaller sample size than in part 1. This is because we are adding the first twenty powers of two, and it is giving more accuracy to the sample even at a smaller sample size given in part 1.
 
 ![Differences in Means of Standard Errors per Sample Size](img/diffmeans2.png "Differences in Means of Standard Errors per Sample Size")
 
-Raw table  with Means of Standard Errors and Confidence Intervals
-
-Question 5, differences between Part 1 and Part 2: 
+Here the analysis remains as in part 1. The smaller the sample size, the higher the mean of SE, hence the further the sample mean is likely to be from the true population mean.THe difference here is we have more numbers of different sample sizes. And again as in the figure above, just after approx 1,000, the standard errors means become really close to 0. 
  
 
 Question 6, do these results change if you increase to 700 repetitions or decrease to 200? 
 
-500 repetitions (clean table shown in Part1): 
+A. 500 repetitions (table shown in Part1 titled "Table with Means of Standard Errors and Confidence Intervals") 
 
 
-
-
-700 repetitions: 
+B. 700 repetitions: 
 
 
   samplesize |   e(Mean)      e(SD) 
@@ -165,7 +164,7 @@ Total        |
          uci |  .5982588   1.851714 
 
 
-200 repetitions: 
+C. 200 repetitions: 
 
  samplesize |   e(Mean)      e(SD) 
 -------------+----------------------
@@ -294,6 +293,12 @@ Total        |
          sem |  .2007776   .4384652 
          lci | -.5788895   1.828684 
          uci |  .5832003   1.847965 
+
+Performing more repetitions of a regression analysis in Stata is done to to evaluate the stability of the regression outputs. Running the regression multiple times helps identify any inconsistencies  in the data. Once the results surpass the 10,000 the SD becomes zero as we have seen on the tables above, the sample size at 10,000 is largely accurate, and Since the limitation imposed for this exercise required 13,000 regression results, after that number there are no changes to the statistics. Meaning continuing doing those repetitions it is no longer useful.
+
+Once again, as the sample size grows and more the repetitions performed, the SD is smaller, and the estimates become more precise. The bounds of CI also become smaller, hence our report of the accuracy of the model can actually be more accurate. More chances that the true estimate is within the CI bounds. 
+
+We can also see the more repetitions, the smaller the SEM, making the results of the regression outputs not only more accurate but also more stable.
 
 
 
