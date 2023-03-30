@@ -93,28 +93,33 @@ clear
 	tempfile enum 			  	// Generate tempfile to save local file 
 	
 	use "q3_GPS Data.dta" 		// Load the dataset
-
-	keep in 1					//  Keep the first row  
-
-	rename * one_*				// Rename the column variables; This will help distinguish the variables when we match, and makes matching easier 
-
-	cross using "q3_GPS Data.dta" // With this dataset we create a matrix using the command cross. 
 	
-	geodist one_latitude one_longitude latitude longitude, gen(dist) // Calculate the distance between the first point and all points in the dataset.
-	drop if one_numid == numid // Drop the first distance because it's matched with itself
+	gen i =_n
+	order i
+	drop if i == 1
 	
-	sort dist // Sort the data in descending order 
+		*forvalue i=2/111{	
 
-     keep dist 1/5 // Keep the first five shortest distances in the variable dist 
+			keep in 1/5						//  Keep the first row  
+
+			rename * one_*				// Rename the column variables; This will help distinguish the variables when we match, and makes matching easier 
+
+			cross using "q3_GPS Data.dta" // With this dataset we create a matrix using the command cross. 
+	
+			geodist one_latitude one_longitude latitude longitude, gen(dist) // Calculate the distance between the first point and all points in the dataset.
+			drop if one_id == id // Drop the first distance because it's matched with itself
+	
+			sort dist  // Sort the data in descending order 
+
+			keep in 1/5 // Keep the first five shortest distances in the variable dist 
 	 
-	 save `enum' // Save to the the local file
+			append using enum // Save to the the local file
 	 
-	 // Drop the five points from the orginal dataset 
+			save, replace  // Drop the five points from the orginal dataset
+	
+		*}
 	 
-	 // Save over the original dataset
-	 
-	 // Repeat for each enumerator
-	 
+*** I was able to do the first one but I can't seem to figure out how to do the others.
 
 
 ***** Question 4 *******
@@ -128,10 +133,7 @@ Your objective is to clean the dataset in such a way that it resembles the forma
 */
 
 clear 
-*Set up a tempfile to store the data 
 tempfile election10
-save `election10', replace emptyok
-
 
 	import excel using "q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) firstrow allstring // Importing the xls file 
 		replace WARD = WARD[_n-1] if WARD == "" // Fill in the name of each ward in the empty cells 
@@ -141,11 +143,18 @@ save `election10', replace emptyok
 		
 		drop K // Drop the variable K
 		
+		drop sex gender electedcandidate candidatename // Drop variables 
+		
+		gen i = _n // generating i variable
+		
 		replace constituency = constituency[_n-1] if constituency == "" // Fill in the name of each constituency in the empty cells
 		replace district = district[_n-1] if district == "" // Fill in  the name of each district in the empty cells
-		
+		replace region  = region[_n-1] if region == "" // Fill in  the name of each district in the empty cells
 		destring TTLVOTES, ignore ("UNOPPOSED") replace // Change the TTLVOTES variable from string to numeric
+			rename WARD ward 
+			order i ward politicalparty ttlvotes 
 			
+			 reshape wide ward, i(i) j(politicalparty), string 
 			*bysort WARD: egen vote_total = total(TTLVOTES)
 			*drop in 1
 	
