@@ -2,8 +2,6 @@
 ****** PPOL 768 : Research & Design Implementation ******
 ****** Due Date : February 20th, 2023 *******
 
-clear
-
 cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data"
 
 ***** Question 1 *****
@@ -11,20 +9,27 @@ cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignment
 clear // Load dataset
 
 tempfile newschools // Create a tempfile 
-save `newschools', replace emptyok // Save local file 
 
 	use "q1_psle_student_raw.dta", clear
-	
-		forvalues i=1/3 {
-	
-		do "wk4q4" // Using the previous dofile from assignment 4 
+
+		do "week4" // Using the previous dofile from assignment 4 
 		
-		save `newschools' // save local file 
+	save newschools, replace
+
+	use newschools // Open local file 
 		
-		use newschools // Open local file 
-		
+	drop if cand == "PS"
 	
-	}
+	rename (subjects1 subjects2 subjects3 subjects4 subjects5 subjects6 subjects7) (Kiswahili English Maarifa Hisabiti Science Uraia AverageGrade)
+  
+		replace prem = subinstr(prem, `"BODY TEXT="#000080" LINK="#0000ff" VLINK="#800080" BGCOLOR= "LIGHTBLUE">"', "",.) // This and the next few lines of code substitute the original variable with nothing and returns nothing
+
+		replace sex = subinstr(sex, `"P ALIGN="LEFT"  > PSLE 2021 EXAMINATION RESULTS"', "",.)
+	
+		replace name = subinstr(name, `"/"', "",.)
+		
+		save newschools, replace 
+	
 
 **** Question 2 ****
 
@@ -32,26 +37,46 @@ save `newschools', replace emptyok // Save local file
 *	Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
 *	into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
+clear 
+
+tempfile popdens // Generate local file and name it popdens
 
 	use "q2_CIV_Section_0.dta", clear           	// Load dataset containing household data 
-		decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
+		*decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
 		
-	tempfile popdens // Generate local file and name it popdens
-		save `popdens',replace // Save the local file 
 	
-** Load excel file 
+		save popdens,replace // Save the local file 
+		
+		 use popdens // Open local file
+			
+* Load excel file 
+
+clear
+
+tempfile density 
 import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear 
 
 	 gen department = word(NOMCIRCONSCRIPTION, 1) 	// Generate new variable department and store the first word in each row of the variable in the syntax
-	 keep if department == "DEPARTEMENT"         	// Keep the row if the first word is DEPARTMENT
+	 keep if department == "DEPARTEMENT"        	// Keep the row if the first word is DEPARTMENT
+	 
+		replace NOMCIRCONSCRIPTION = lower(NOMCIRCONSCRIPTION)
+		replace NOMCIRCONSCRIPTION = subinstr(NOMCIRCONSCRIPTION, `"DEPARTEMENT DE"', "",.)
+		replace NOMCIRCONSCRIPTION = subinstr(NOMCIRCONSCRIPTION, `"DEPARTEMENT D"', "",.)
+		replace NOMCIRCONSCRIPTION = subinstr(NOMCIRCONSCRIPTION, `" ' "', "",.)
+
+	
+	 save density
 	 
 		drop POPULATION								// Drop POPULATION variable 
 		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 variable 
 		rename DENSITEAUKM density 					// Rename DENSITEAUKM variable 
-	 
-		merge 1:m dept using `popdens'					// Merge the dataset and save the local file 
-		save `popdens', replace								// Save the local file 
+		
+		merge 1:m NOMCIRCONSCRIPTION using density	// Merge the dataset and save the local file 
+		save popdens							// Save the local file 
  
+* Created two datasets where I have two separate sets of data and I want to merge them 
+* But I keep getting an error that the varibale I am trying to use to do the merge does not exist.
+* I think I'm supposed to use a variable list and not a variable name.
 
 ***** Question 3 ********
 
@@ -66,7 +91,6 @@ Note: Your code should still work if I run it on data from another village.
 clear 
 
 	tempfile enum 			  	// Generate tempfile to save local file 
-	save `enum', replace emptyok // Save the local file  
 	
 	use "q3_GPS Data.dta" 		// Load the dataset
 
@@ -87,7 +111,7 @@ clear
 	 
 	 // Drop the five points from the orginal dataset 
 	 
-	save, replace	 // Save over the original dataset
+	 // Save over the original dataset
 	 
 	 // Repeat for each enumerator
 	 
