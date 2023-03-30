@@ -151,10 +151,12 @@ tempfile election10
 		replace district = district[_n-1] if district == "" // Fill in  the name of each district in the empty cells
 		replace region  = region[_n-1] if region == "" // Fill in  the name of each district in the empty cells
 		destring TTLVOTES, ignore ("UNOPPOSED") replace // Change the TTLVOTES variable from string to numeric
-			rename WARD ward 
-			order i ward politicalparty ttlvotes 
 			
-			 reshape wide ward, i(i) j(politicalparty), string 
+			rename WARD ward  // Change the name of the WAARD variable 
+			
+			order i ward politicalparty ttlvotes  // Changed the order of the variables in the dataset 
+			
+			reshape wide ward, i(i) j(politicalparty), string // Trying to reshape 
 			*bysort WARD: egen vote_total = total(TTLVOTES)
 			*drop in 1
 	
@@ -169,15 +171,5 @@ Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944.
 
 
 */
-clear 
-
-	tempfile tanz1015  // Create a local file 
-		save `tanz1015', replace emptyok
- 
-	use "q5_Tz_elec_10_clean.dta" // Load 2010 dataset
- 
-	use "q5_Tz_elec_15_clean.dta" // Load 2015 dataset 
- 
-	
 	
 	
