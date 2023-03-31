@@ -36,7 +36,7 @@ save `primary', replace emptyok							// Empty local file
 forvalues i = 1/6 {										// Define loop
 	local sm = 10^`i'									// Establish local file to run simulations N number of times
 	
-	simulate col_beta=r(beta) col_pvalues=r(pval), reps(500): nissan, samplesize(`sm')	// Run simulation
+	simulate col_beta=r(beta) col_pvalues=r(pval), reps(5): nissan, samplesize(`sm')	// Run simulation
 	gen samplesize=`sm'									// Generate local file to save N number of simulations
 
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
@@ -47,7 +47,7 @@ forvalues i = 1/6 {										// Define loop
 forvalues i = 2/21 {
 	local sp = 2^`i'
 
-	simulate col_beta=r(beta)  col_st= r(stderr), reps(500): nissan, samplesize(`sp')
+	simulate col_beta=r(beta)  col_st= r(stderr), reps(5): nissan, samplesize(`sp')
 	gen samplesize =`sp'
 	
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
@@ -59,13 +59,13 @@ use `primary', clear
 	
 
 tempfile sems
-simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr) column_upl=r(upl) column_lowl=r(lowl), reps(500) saving(`sems'): nissan, samplesize(10)
+simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr) column_upl=r(upl) column_lowl=r(lowl), reps(5) saving(`sems'): nissan, samplesize(1000000)
 
 use `sems', clear
 
 hist column_beta 
 display column_beta, column_pvalues, column_st, column_upl, column_lowl
-graph export sameplesize.png, replace
+graph export sample1000000rep5.png, replace
 
 exit
 
