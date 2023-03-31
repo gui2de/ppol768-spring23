@@ -5,7 +5,7 @@
 cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-08" // Change working directory
 
 capture program drop nissan					// Establish program 
-program define nissan 	, rclass					// Define the program 
+program define nissan, rclass					// Define the program 
 syntax, samplesize(integer)					// Randomly create a dataset; Sample size is an argument in the program
 	clear
 	set obs `samplesize'
@@ -47,7 +47,7 @@ forvalues i = 1/6 {										// Define loop
 forvalues i = 2/21 {
 	local sp = 2^`i'
 
-	simulate col_beta=r(beta) col_pvalues=r(pval) col_st= r(stderr), reps(500): nissan, samplesize(`sp')
+	simulate col_beta=r(beta)  col_st= r(stderr), reps(500): nissan, samplesize(`sp')
 	gen samplesize =`sp'
 	
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
@@ -58,14 +58,16 @@ forvalues i = 2/21 {
 use `primary', clear 
 	
 
-exit 
-
 tempfile sems
-simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr), reps(500) saving(`sems'): wkeight, samplesize(1000000)
-
-hist column_beta 
-graph export samplesize7.png
+simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr) column_upl=r(upl) column_lowl=r(lowl), reps(500) saving(`sems'): nissan, samplesize(10)
 
 use `sems', clear
+
+hist column_beta 
+display column_beta, column_pvalues, column_st, column_upl, column_lowl
+graph export sameplesize.png, replace
+
+exit
+
 
 
