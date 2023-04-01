@@ -13,8 +13,7 @@ To study the effect of a multi-sector Cap-and-Trade program on the emission size
 - covariate affecting y only: production size
 - outcome: emission size
 
-True relationship: 
-$$ emission = {50 - 30*mul_cat - 10*liberal + 40*production + error term} $$
+True relationship: $$emission = 50 - 30*mul_cat - 10*liberal + 40*production + error term$$
 
 1. Regression: reg emission mul_cat liberal production 
 
@@ -78,7 +77,7 @@ Similar to part 1, I constructed facility-level data and incorporated the follow
 - outcome: emission size
 
 True relationship: 
-$$ emission = {50 + 40*production + error term} $$
+$$emission = 50 + 40*production + error term$$
 
 1. Regression: reg emission production
 
