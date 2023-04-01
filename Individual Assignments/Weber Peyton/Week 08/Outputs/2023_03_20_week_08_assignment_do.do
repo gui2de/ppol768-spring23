@@ -190,8 +190,7 @@ use `combined2', clear
 *Third task : "Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger."
 
 histogram beta_coef, by(samplesize) 
-collapse (iqr) beta_coef se lowerbound upperbound, by(samplesize) 
-exit 
+collapse (iqr) beta_coef se lowerbound upperbound, by(samplesize)  
 
 *Fourth task : "Do these results change if you increase or decrease the number of repetitions (from 500)?" 
 
@@ -199,10 +198,13 @@ clear
 tempfile final_q
 save `final_q', replace emptyok
 
+
 forvalues i=2/21{
 	local samplesize= 2^`i'
 	tempfile sims4
-	simulate beta_coef=r(beta) pval=r(pval) se = r(sem) lowerbound = r(lower)upperbound = r(upper) n = r(n) , reps(200) seed(31723) saving(`sims4') : dgp2, 	samplesize(`samplesize') 
+	simulate beta_coef=r(beta) pval=r(pval)  se = r(sem) lowerbound = r(lower) upperbound = r(upper) n = r(n) ///
+	  , reps(50) seed(31723) saving(`sims4') ///
+	  : dgp2, samplesize(`samplesize') 
 
 	use `sims4' , clear
 	gen samplesize=`samplesize'
@@ -210,24 +212,25 @@ forvalues i=2/21{
 	save `final_q', replace
 	display as error "iteration = `i'"
 }
-		 
+ 
 forvalues i=1/4{
 	local samplesize= 10^`i'
 	tempfile sims5
-	simulate beta_coef=r(beta) pval=r(pval) se = r(sem) lowerbound = r(lower) upperbound = r(upper) n = r(n) , reps(200) seed(31723) saving(`sims5') : dgp2, samplesize(`samplesize') 
-	
+	simulate beta_coef=r(beta) pval=r(pval)  se = r(sem) lowerbound = r(lower) upperbound = r(upper) n = r(n) ///
+	  , reps(50) seed(31723) saving(`sims5') ///
+	  : dgp2, samplesize(`samplesize') 
+
 	use `sims5' , clear
 	gen samplesize=`samplesize'
 	append using `final_q'
 	save `final_q', replace
 	display as error "iteration = `i'"
 }
-		 
+ 
+
 use `final_q', clear
 
 *Fifth task : "Create histogram of beta distribution by sample size..." 
-
-*Wasn't able to complete these last two commands because for some reason my simulate commands above won't work anymore? 
 
 histogram beta, by(samplesize)
 collapse (iqr) beta_coef se lowerbound upperbound, by(samplesize) 
