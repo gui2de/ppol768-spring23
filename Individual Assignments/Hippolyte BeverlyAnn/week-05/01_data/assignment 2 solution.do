@@ -6,11 +6,15 @@ cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignment
 
 ***** Question 1 *****
 
-clear // Load dataset
-
 tempfile newschools // Create a tempfile 
 
+
+clear // Load dataset
+
+
 	use "q1_psle_student_raw.dta", clear
+	
+	keep in 138
 
 		do "week4" // Using the previous dofile from assignment 4 
 		
