@@ -12,7 +12,7 @@ generate school = _n
 generate u_i = rnormal(0,2) // school effects 
 
 *School level effects (i)
-generate urban = run iform()<0.50 //randomly assign urban/rural status
+generate urban = runiform()<0.50 //randomly assign urban/rural status
 
 *Classroom level effects (j) 
 expand 10 // Create 10 classrooms per school 

@@ -23,6 +23,8 @@ gen covar3 = rnormal()
 
 reg y treat 
 
+* 	gen y = x1 + treatment*runiform() + 2*rnormal() 
+
 
 
 *This DGP should include strata groups and continuous covariates, as well as random noise. Make sure that the strata groups affect the outcome Y and are of different sizes, and make the probability that an individual unit receives treatment vary across strata groups. You will want to create the strata groups first, then use a command like expand or merge to add them to an individual-level data set.
