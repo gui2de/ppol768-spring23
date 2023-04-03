@@ -3,7 +3,7 @@
 *Week 9 Assignment Code 
 
 *_________________________________________________
-* NOTE: My code breaks, but I am unable to locate the error, as the code is somewhat abstract at this point. I know at the least that my DGP worked, as, before I put the DGP code 'inside' the program, I looked at the 'Y' I generated, and it looked reasonable (there was variation on the order I had expected). However, upon putting the DGP inside the program, then making the simulation loops, something went wrong. I will need additional time (and attending office hours) to debug. 
+* NOTE: My code breaks, but after several hours of impasse, I am unable to locate the error, as the code is somewhat abstract at this point. I know at the least that my DGP worked, as, before I put the DGP code 'inside' the program, I looked at the 'Y' I generated, and it looked reasonable (there was variation on the order I had expected). However, upon putting the DGP inside the program, then making the simulation loops, something went wrong. I will need additional time (and attending office hours) to debug. 
 
 
 
