@@ -23,46 +23,43 @@ save "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments
 
 *Step 2: Write a do-file defining a `program` that: (a) loads this data; (b) randomly samples a subset whose sample size is an argument to the program; (c) create the Y's from the X's with a true relationship an an error source; (d) performs a regression of Y on one X; and (e) returns the N, beta, SEM, p-value, and confidence intervals into `r()`.
 
-capture program drop example 
-
-use "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments/Bhatia Saloni/week08/outputs/w08-dataset.dta", replace
-
-*how and where to sample data? 
-*how to run a program with different sample sizes? 
-
+capture program drop example
 program define example, rclass
-syntax, samplesize(integer)
-             clear
-		*load data (a)	 
-             set obs 100
-             generate x = rnormal()
-             generate y = 3*x + 1 + rnormal()
-             regress y x
-			 gen error = rnormal()
+syntax, samplesize(integer) 
 
+*(a) loads this data
+ use "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments/Bhatia Saloni/week08/outputs/w08-dataset.dta", replace
+
+*(b) randomly samples a subset whose sample size is an argument to the program;
+sample `samplesize', count
+
+*(c) create the Y's from the X's with a true relationship as an error source;
+  generate y = 3*x + 1 + rnormal()
+  
+     reg y x
+	 
 matrix results = r(table)
 matrix list results 
 
-*return scalar N = ?
+return scalar N = `e(N)'
 return scalar beta = results[1,1]
-*return scalar SEM = r() = ?
+return scalar SEM = results[2,1]
 return scalar pval = results[4,1]
-*return scalar ci = r() = ?
+end
 
-end 
-
-example, samplesize(integer)
+example, samplesize(1234)
 display r(beta)
 display r(pval)
+
+exit
 
 *Step 3: Using the `simulate` command, run your program 500 times each at sample sizes N = 10, 100, 1,000, and 10,000. Load the resulting data set of 2,000 regression results into Stata.
 
 tempfile example_temp
-simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_temp'): example
+simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_temp'): example `samplesize'
 
 use `example_temp', clear
 
-*not sure if i am getting the result that i need to see 
 *where do i change my sample size N=10, 100, 1,000 AND 10,000
 
 *Step 4: Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger.
@@ -73,6 +70,20 @@ tw ///
 (histogram beta if pval < 0.05 , `style' lc(blue) fc(none) ) ///
 , xtit("") legend(on ring(0) pos(1) order(2 "p < 0.05") region(lc(none)) )
 
+
+*NOTES:
+*how and where to sample data? 
+*how to run a program with different sample sizes? 
+*example, samplesize(1000)
+*clear
+*load data (a)	 
+*set obs `samplesize'
+*generate x = rnormal()
+*generate y = 3*x + 1 + rnormal()
+*regress y x
+*gen error = rnormal()
+
+*__________________________________________________________________________________________*
 
 **Part 2: Sampling noise in an infinite superpopulation.
 
@@ -90,7 +101,7 @@ clear
 set seed 1 
 capture program drop week08_p2
 program define week08_p2, rclass 
-syntax, samplesize(100)
+syntax, samplesize(integer)
 
 *clear 
 set obs `samplesize'
