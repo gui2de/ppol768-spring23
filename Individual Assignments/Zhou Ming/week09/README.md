@@ -1,9 +1,3 @@
----
-title: "Week9 Assignment"
-author: "Ming Zhou"
-output: html_document
----
-
 # Part One
 
 In part one, we have four independent variables, including treatment, state, activity, and industrial. The treatment variable (a binary variable) is determined by activity, industrial, and include a random effects. Half of observations are in the treatment group. The dependent variable is greenhouse emission. $$ Emission_i= 100 + (-50)*Treatment_i + 3*industrial_i + 3*activity_i + e_s + e_c $$
