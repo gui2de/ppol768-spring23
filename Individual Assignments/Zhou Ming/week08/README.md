@@ -1,9 +1,3 @@
----
-title: "Week8 Assignment"
-author: "Ming Zhou"
-output: html_document
----
-
 # Part One
 
 A larger sample size will result in a tighter confidence interval with a smaller margin of error. A smaller sample size will result in a wider confidence interval with a larger margin of error. As N gets larger, the size of SEM will decrease and confidence intervals will become tighter. Table below indicates the change in se and confidence intervals by sample size.
