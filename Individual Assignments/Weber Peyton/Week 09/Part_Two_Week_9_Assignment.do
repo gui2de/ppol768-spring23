@@ -10,14 +10,12 @@ clear all
 *Part 2: 
 
 *Using capture program drop so that re-running the .do file is feasible. 
-capture program drop RID
+capture program drop RDI
 *Define the program.
-program define RID, rclass
+program define RDI, rclass
 *Sample size will be the argument in the defined program. 
 syntax, samplesize(integer) 
 clear
-*Set seed for replicability. 
-set seed 04182023
 *Create empty observations. 
 set obs `samplesize'
 *Create school observations, like in in-class exercise. 
@@ -26,9 +24,9 @@ gen school = _n
 gen u_i = rnormal(0,2)
 *Create new variables that randomly assign the observations to either be rural or ubran.
 gen urban = runiform()<0.50
-*Create ten classrooms in each school, because we did it in class. 
+*Create ten classrooms in each school. 
 expand 10
-*Generate classroom IDs by sorting the school variable and then using the subsequent order of observations. 
+*Generate classroom IDs by sorting the school variable and then using the subsequent order of observations, _n. 
 bysort school: generate classroom = _n 
 *Classroom effects (? don't know what this means) 
 gen u_ij = rnormal(0,3)
@@ -98,16 +96,13 @@ forvalues i=1/8 {
 	tempfile sims
 	simulate beta1 = r(Beta1) beta2 = r(Beta2) beta3 = r(Beta3) beta4 = r(Beta4) beta5 = r(Beta5) ///
 	, reps(50) seed(4454) saving(`sims') ///
-	: RID, samplesize(`samplesize') 
+	: RDI, samplesize(`samplesize') 
 	 
 	use `sims', clear
 	gen samplesize = `samplesize'
 	append using `combinedtwo'
-	save `combinedtwo'
+	save `combinedtwo', replace 
 }
-
-
-*My code keeps breaking here, and I don't understand why!!! I receive the error message, "file /var/folders/59/d5nx34g51c7ch04dtlqh4mh00000gn/T//S_37872.000001 already exists."
 
 tabstat beta1 beta2 beta3 beta4 beta5, by(samplesize)
 twoway (line beta1 samplesize, color(orange)) ///
@@ -118,5 +113,3 @@ twoway (line beta1 samplesize, color(orange)) ///
        , ytitle("Beta values") xtitle("Sample size") ///
        legend(order(1 "Beta1" 2 "Beta2" 3 "Beta3" 4 "Beta4" 5 "Beta5")) ///
        title("Line Graph of Beta Values")
-	   
-*graph save "Graph2" "/Users/peytonweber/Desktop/GitHub/ppol768-spring23/Individual Assignments/Weber Peyton/Week 09/2023.03.27.line.graph.gph", replace
