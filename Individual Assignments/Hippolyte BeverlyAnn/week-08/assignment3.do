@@ -48,7 +48,7 @@ save `combined', replace emptyok						// Empty local file
 forvalues i = 1/4 {										// Define loop
 	local ss = 10^`i'									// Establish local file to run simulations N number of times
 
-	simulate beta=r(beta) pvalues=r(pval), reps(50) : wkeight, samplesize(`ss')	// Run simulation
+	simulate beta=r(beta) pvalues=r(pval), reps(500) : wkeight, samplesize(`ss')	// Run simulation
 	gen sampleesize=`ss'									// Generate local file to save N number of simulations
 	
 	append using `combined'								// Append local file everytime the simulation is run N number of times 
@@ -59,14 +59,13 @@ forvalues i = 1/4 {										// Define loop
 use `combined', clear									// Run local file
 
 tempfile sims
-simulate column_beta=r(beta) column_pvalues=r(pval), reps(50) saving(`sims'): wkeight, samplesize(100)
+simulate column_beta=r(beta) column_pvalues=r(pval) column_std=r(std) column_ll=r(ll) column_ul=r(ul), reps(500) saving(`sims'): wkeight, samplesize(10000)
 
 use `sims'
 
 hist column_beta 
-*graph export part1sample10.png
-
-display column_beta
+display column_beta, column_std, column_ll, column_ul
+graph export part1sample10000.png, replace 
 
 exit 
 
