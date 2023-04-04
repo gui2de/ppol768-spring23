@@ -5,6 +5,13 @@
 *_________________________________________________
 * NOTE: My code breaks, but after several hours of impasse, I am unable to locate the error, as the code is somewhat abstract at this point. I know at the least that my DGP worked, as, before I put the DGP code 'inside' the program, I looked at the 'Y' I generated, and it looked reasonable (there was variation on the order I had expected). However, upon putting the DGP inside the program, then making the simulation loops, something went wrong. I will need additional time (and attending office hours) to debug. 
 
+*APR 4 NOTES (follow-up Friday)
+
+*Don't need 'if' statements; just run the regressions, and save the betas! 
+*That prevents the other problem here, that each regression will be simulating using different data, 'cause we didn't set the seed. This way, each reg will be using the same data. 
+*Set seed? 
+*Think about what's biasing the estimate 
+
 
 
 *_________________________________________________
@@ -41,12 +48,13 @@
 
 	
 *Create program: load the data from above into the program  
-capture program drop normal_reg_superpop
-program define normal_reg_superpop, rclass 
+capture program drop normal_reg_sanitation
+program define normal_reg_sanitation, rclass 
 	syntax, num_districts(integer) r(integer)
 	
 	*District-level effects (i) 
 		*Treatment happens at this level (assuming government implements mechanized de-sludging by randomizing at the district level)
+	clear
 	set obs `num_districts'
 	* Let's assume for simplicity this is the # of districts within Uttar Pradesh (UP)  (actual number 75)
 	gen district = _n // Assign district ID 
@@ -79,32 +87,31 @@ program define normal_reg_superpop, rclass
 
 	*Generate Treatment: Apply treatment to the 1st 5 districts (assuming that the district numbers have already been randomized), to female manual scavengers with less than 10 years of experience in the field
 	generate treatment = 0 
-	replace treatment = rnormal(10000, 1000) if district<=5 & scav_years<=10 & female==1 
+	replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
 
 	*DGP (DATA GENERATING PROCESS) 
-	gen income_future = income_pres ///
-		+ treatment ///
-		+ 50*(30-scav_years) ///
-		+ 40*(60-transit_time) ///
+	gen income_future = 10000  ///
+		+ rnormal(10000, 1000)  *  treatment ///
+		- 30*scav_years ///
+		- 40*transit_time ///
 		+ 300*educ ///
 		+ u_i /// 
 		+ u_ij /// 
-		+ e_ijk /// 
-		+ 1000*rnormal() // Add noise 
+		+ e_ijk 
 
-	if `r'==1 { 
+	if `r'==1 { 				// Reg model 1: (base) Y and treatment 
 		reg income_future treatment 
 	}
-	else if `r'==2 { 
+	else if `r'==2 { 			// Reg model 2: Add district indicators
 		reg income_future treatment i.district 
 	}
-	else if `r'==3 { 
+	else if `r'==3 { 			// Reg model 3: Add present income 
 		reg income_future treatment i.district income_pres 
 	}
-	else if `r'==4 { 
+	else if `r'==4 { 			// Reg model 4: Add confounder, years worked in scavenging 
 		reg income_future treatment i.district income_pres scav_years
 	} 
-	else `r'==5 { 
+	else if `r'==5 { 			    // Reg model 5: Add covariates 
 		reg income_future treatment i.district income_pres scav_years transit_time educ 
 	}
 
@@ -137,9 +144,9 @@ forvalues r = 1/5 {
 
 	*N = 2, 4, 8, 16, ..., 1,048,576
 	forvalues i=1/6 { 
-		local num_districts = 2^`i'
+		local num_districts = `i'
 		tempfile sims
-		simulate N=r(subsample_size) beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(100) 	saving(`sims', replace): normal_reg_superpop, num_districts(`num_districts') r(`r')
+		simulate N=r(subsample_size) beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(100) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') r(`r')
 		gen regressionID = `r'
 		gen population_size = `num_districts'
 		
@@ -156,13 +163,15 @@ use `combined', clear
 
 
 
+
+
 *Make graphs 
 forvalues r = 1/5 { 
 	
 *Graph 
 sum beta if regressionID==`r' 
 histogram beta_coeff if regressionID==`r', by(population_size)
-graph export "beta_graph_super_`r'.png", replace
+graph export "beta_graph_sanitation_`r'.png", replace
 
 *Figures for table 
 bysort population_size: egen mean_beta = mean(beta)
@@ -171,7 +180,7 @@ bysort population_size: egen mean_pvalues = mean(pvalues)
 bysort population_size: egen mean_ci_lower = mean(ci_lower)
 bysort population_size: egen mean_ci_upper = mean(ci_upper)
 
-save "stats_super.dta", replace
+save "stats_sanitation.dta", replace
 
 *Input graphs into markdown! Save, then make in markdown folder, then insert preliminary observations, for both parts. 
 
