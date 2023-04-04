@@ -21,17 +21,17 @@ return scalar CI_DGP1 = a[6,1] - a[5,1]
 bootstrap, reps(1000) seed(1234): reg score1 treat urban
 mat a = r(table)
 return scalar CI_exact1 = a[6,1] - a[5,1]
-reg score1 treat urban, vce(cluster cluster_id)
+reg score1 treat urban, vce(robust)
 mat a = r(table)
 return scalar CI_vce1 = a[6,1] - a[5,1]
 reg score2 treat urban
 mat a = r(table)
 return scalar Beta_DGP2 = a[1,1]
 return scalar CI_DGP2 = a[6,1] - a[5,1]
-bootstrap, reps(1000) seed(1234): reg score2 treat urban i.cluster_id
+bootstrap, reps(1000) seed(1234): reg score2 treat urban
 mat a = r(table)
 return scalar CI_exact2 = a[6,1] - a[5,1]
-reg score2 treat urban, vce(cluster cluster_id)
+reg score2 treat urban, vce(robust)
 mat a = r(table)
 return scalar CI_vce2 = a[6,1] - a[5,1]
 end
@@ -51,4 +51,18 @@ forvalues i=1/8 {
 	append using `combined3'
 	save `combined3', replace
 }
+tabstat Beta1 CI_len_estimate1 CI_len_exact1 CI_vce1 Beta2 CI_len_estimate2 CI_len_exact2 CI_vce2, by(samplesize)
 
+twoway (line CI_len_exact1 samplesize, color(red)) ///
+       (line CI_len_estimate1 samplesize, color(blue)) ///
+       (line CI_vce1 samplesize, color(green)) ///
+       , ytitle("CI length") xtitle("Sample size") ///
+       legend(order(1 "Exact CI Length" 2 "Estimate CI Length" 3 "Robust Ci length")) ///
+       title("Line Graph of CI length")
+
+twoway (line CI_len_exact2 samplesize, color(red)) ///
+       (line CI_len_estimate2 samplesize, color(blue)) ///
+       (line CI_vce2 samplesize, color(green)) ///
+       , ytitle("CI length") xtitle("Sample size") ///
+       legend(order(1 "Exact CI Length" 2 "Estimate CI Length" 3 "Robust Ci length")) ///
+       title("Line Graph of CI length")
