@@ -55,8 +55,12 @@ exit
 
 *Step 3: Using the `simulate` command, run your program 500 times each at sample sizes N = 10, 100, 1,000, and 10,000. Load the resulting data set of 2,000 regression results into Stata.
 
+
+forvalues i=1/4{
+	local samplesize= 10^`i'
 tempfile example_temp
-simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_temp'): example `samplesize'
+simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_temp'): example, samplesize(`samplesize')
+}
 
 use `example_temp', clear
 
@@ -70,18 +74,9 @@ tw ///
 (histogram beta if pval < 0.05 , `style' lc(blue) fc(none) ) ///
 , xtit("") legend(on ring(0) pos(1) order(2 "p < 0.05") region(lc(none)) )
 
-
-*NOTES:
-*how and where to sample data? 
-*how to run a program with different sample sizes? 
-*example, samplesize(1000)
-*clear
-*load data (a)	 
-*set obs `samplesize'
-*generate x = rnormal()
-*generate y = 3*x + 1 + rnormal()
-*regress y x
-*gen error = rnormal()
+*Doubts:
+*1. The histogram is centered around 3, I am not sure why 
+*2. I am not sure how to generate multiple tables and figures becuase of which I have not yet uploaded a README file. 
 
 *__________________________________________________________________________________________*
 
