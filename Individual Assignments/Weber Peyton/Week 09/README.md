@@ -16,7 +16,7 @@
 
 ## Histogram
 
-![Part One Histogram](Outputs/images/part_one_histogram.png) 
+![Part One Histogram](office_hours_graph.png) 
 
 The story for part onee is that the missing regressors greatly distort the coeficient estimates for the "treat" variable; however, as the sample size increases in magnitude, the coeficient estimates trend toward the "true" value. 
 
