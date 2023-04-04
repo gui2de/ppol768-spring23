@@ -2,7 +2,6 @@ capture program drop regressions
 program define regressions, rclass
 syntax, samplesize(integer)
 clear
-set seed 1234
 set obs `samplesize'
 gen school = _n
 generate u_i = rnormal(0,2)  // SCHOOL EFFECTS
@@ -63,7 +62,6 @@ capture program drop treatment
 program define treatment, rclass
 syntax, treat_effect(real)
 clear
-set seed 1234
 set obs 1
 gen school = _n
 generate u_i = rnormal(0,2)  // SCHOOL EFFECTS
@@ -111,3 +109,8 @@ forvalues i=1/10 {
 	append using `combined2'
 	save `combined2', replace
 }
+gen sig_bias = 0
+gen sig_unbias = 0
+replace sig_bias =1 if pvalue_bias < 0.05
+replace sig_unbias =1 if pvalue_unbias < 0.05
+tabstat beta_bias beta_unbias pvalue_bias pvalue_unbias sig_bias sig_unbias, by(treat_effect)

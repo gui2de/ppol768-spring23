@@ -10,3 +10,6 @@ From the table above, the "minimum sample size" required to achieve 80% power fo
 ![Graph2](Part1b.png)
 
 As can be seen from the figure above, when the number of fixed samples is 2, the "minimum detectable effect size" we found is 4.5 (its value should be between 4 and 4.5), that is, at this size, no matter whether the unbiased control is used or not , the regression model can obtain 80% power
+
+
+# Part two
