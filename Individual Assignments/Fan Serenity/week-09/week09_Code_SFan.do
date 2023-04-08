@@ -52,10 +52,13 @@ capture program drop normal_reg_sanitation
 program define normal_reg_sanitation, rclass 
 	syntax, num_districts(integer) r(integer)
 	
+	set seed 20143 // Ensure we generate the same distributions for each simulation of the same sample size (i.e. for each set of 5 regressions)
+	
 	*District-level effects (i) 
 		*Treatment happens at this level (assuming government implements mechanized de-sludging by randomizing at the district level)
 	clear
 	set obs `num_districts'
+	
 	* Let's assume for simplicity this is the # of districts within Uttar Pradesh (UP)  (actual number 75)
 	gen district = _n // Assign district ID 
 	generate u_i = rnormal(500,100) // District effects 
@@ -85,7 +88,7 @@ program define normal_reg_sanitation, rclass
 	*Affects treatment but not outcome 
 	gen female = round(runiform(0,1), 1)
 
-	*Generate Treatment: Apply treatment to the 1st 5 districts (assuming that the district numbers have already been randomized), to female manual scavengers with less than 10 years of experience in the field
+	*Generate Treatment: Apply treatment to the 1st 5 districts (this assumes that the district numbers have already been randomized in our dataset), to female manual scavengers with at most 10 years of experience in the field
 	generate treatment = 0 
 	replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
 
@@ -95,9 +98,9 @@ program define normal_reg_sanitation, rclass
 		- 30*scav_years ///
 		- 40*transit_time ///
 		+ 300*educ ///
-		+ u_i /// 
-		+ u_ij /// 
-		+ e_ijk 
+		+ u_i /// Add district-level noise 
+		+ u_ij /// Add municipality-level noise 
+		+ e_ijk /// Add household-level noise 
 
 	if `r'==1 { 				// Reg model 1: (base) Y and treatment 
 		reg income_future treatment 
@@ -135,18 +138,17 @@ end
 
 *Simulate_____________
 
-
-forvalues r = 1/5 {
-
-	clear
-	tempfile combined 
-	save `combined', replace emptyok
+clear
+tempfile combined 
+save `combined', replace emptyok
+	
+forvalues i = 1/5 {
 
 	*N = 2, 4, 8, 16, ..., 1,048,576
-	forvalues i=1/6 { 
+	forvalues r = 1/5 { 
 		local num_districts = `i'
 		tempfile sims
-		simulate N=r(subsample_size) beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(100) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') r(`r')
+		simulate N=r(subsample_size) r=`r' beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(10) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') r(`r')
 		gen regressionID = `r'
 		gen population_size = `num_districts'
 		
@@ -158,27 +160,25 @@ forvalues r = 1/5 {
 }
 
 
+
 *Load back in all the simulation regression data 
 use `combined', clear
-
-
-
-
+sort N r
 
 *Make graphs 
 forvalues r = 1/5 { 
 	
 *Graph 
-sum beta if regressionID==`r' 
-histogram beta_coeff if regressionID==`r', by(population_size)
+sum beta if r==`r' 
+histogram beta_coeff if r==`r', by(N)
 graph export "beta_graph_sanitation_`r'.png", replace
 
 *Figures for table 
-bysort population_size: egen mean_beta = mean(beta)
-bysort population_size: egen mean_SEM = mean(SEM)
-bysort population_size: egen mean_pvalues = mean(pvalues)
-bysort population_size: egen mean_ci_lower = mean(ci_lower)
-bysort population_size: egen mean_ci_upper = mean(ci_upper)
+bysort N: egen mean_beta = mean(beta)
+bysort N: egen mean_SEM = mean(SEM)
+bysort N: egen mean_pvalues = mean(pvalues)
+bysort N: egen mean_ci_lower = mean(ci_lower)
+bysort N: egen mean_ci_upper = mean(ci_upper)
 
 save "stats_sanitation.dta", replace
 
