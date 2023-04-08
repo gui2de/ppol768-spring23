@@ -49,11 +49,10 @@ x = r(normal)
 * generate five regression models 
 
 		reg y treatment 
-		covar_1 covar_2 strata_1
-		reg y covar_2 covar_3 strata_2
-		reg y covar_3 covar_1 strata_3
-		reg y covar_1 covar_2 strata_2
-		reg y covar_2 covar_3 strata_3
+		reg y treatment covar_1 
+		reg y treatment covar_2 
+		reg y treatment covar_3
+		reg y treatment covar_1 covar_2 covar_3 
 
 Strata group creates variation 	
 
