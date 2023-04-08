@@ -1,18 +1,8 @@
 *Serenity Fan (kaf121)
-*Last Updated: April 2nd, 2023 
+*Last Updated: April 8th, 2023 
 *Week 9 Assignment Code 
 
-*_________________________________________________
-* NOTE: My code breaks, but after several hours of impasse, I am unable to locate the error, as the code is somewhat abstract at this point. I know at the least that my DGP worked, as, before I put the DGP code 'inside' the program, I looked at the 'Y' I generated, and it looked reasonable (there was variation on the order I had expected). However, upon putting the DGP inside the program, then making the simulation loops, something went wrong. I will need additional time (and attending office hours) to debug. 
-
-*APR 4 NOTES (follow-up Friday)
-
-*Don't need 'if' statements; just run the regressions, and save the betas! 
-*That prevents the other problem here, that each regression will be simulating using different data, 'cause we didn't set the seed. This way, each reg will be using the same data. 
-*Set seed? 
-*Think about what's biasing the estimate 
-
-
+*RE-SUBMISSION
 
 *_________________________________________________
 *MULTI-LEVEL SIMULATION: MANUAL SCAVENGING INTERVENTION (TRAINING & MENTORSHIP IN THE FACE OF SANITATION AUTOMATION)
@@ -93,14 +83,7 @@ program define normal_reg_sanitation, rclass
 	replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
 
 	*DGP (DATA GENERATING PROCESS) 
-	gen income_future = 10000  ///
-		+ rnormal(10000, 1000)  *  treatment ///
-		- 30*scav_years ///
-		- 40*transit_time ///
-		+ 300*educ ///
-		+ u_i /// Add district-level noise 
-		+ u_ij /// Add municipality-level noise 
-		+ e_ijk /// Add household-level noise 
+	gen income_future = 10000 + rnormal(10000, 1000) * treatment - 30*scav_years - 40*transit_time + 300*educ + u_i + u_ij + e_ijk  
 
 	if `r'==1 { 				// Reg model 1: (base) Y and treatment 
 		reg income_future treatment 
@@ -119,6 +102,7 @@ program define normal_reg_sanitation, rclass
 	}
 
 	*Store matrix results 
+		*Note: Verified that, as this is a multivariate regression, the scalars below will be extracted from the 'treatment' regression table (as opposed to the table for one of the other independent variables)
 	mat results = r(table) 
 	
 	return scalar subsample_size = e(N)
@@ -148,7 +132,7 @@ forvalues i = 1/5 {
 	forvalues r = 1/5 { 
 		local num_districts = `i'
 		tempfile sims
-		simulate N=r(subsample_size) r=`r' beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(10) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') r(`r')
+		simulate N=r(subsample_size) r=`r' beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(500) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') r(`r')
 		gen regressionID = `r'
 		gen population_size = `num_districts'
 		
@@ -165,12 +149,20 @@ forvalues i = 1/5 {
 use `combined', clear
 sort N r
 
+save "stats_sanitation.dta", replace
+
+
+
+
+
+
 *Make graphs 
 forvalues r = 1/5 { 
 	
 *Graph 
 sum beta if r==`r' 
-histogram beta_coeff if r==`r', by(N)
+*histogram beta_coeff if r==`r', by(N)
+histogram beta_coeff, by(N)
 graph export "beta_graph_sanitation_`r'.png", replace
 
 *Figures for table 
