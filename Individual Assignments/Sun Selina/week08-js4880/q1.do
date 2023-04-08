@@ -49,4 +49,14 @@ forvalues i=1/4{
 
 use `sim_results', clear
 
-gen confidence_interval=ul-ll
+*table beta, sem, confidence interval
+tabstat beta pval SEM ul ll, by(samplesize)
+*export beta estimates 
+twoway (histogram beta, frequency by(samplesize)), ///
+xtitle("Beta Estimates")
+graph export q1_beta.png, replace
+*change of sem, different sample size
+graph hbox SEM, over(samplesize)
+graph export q1_SEM.png, replace 
+
+
