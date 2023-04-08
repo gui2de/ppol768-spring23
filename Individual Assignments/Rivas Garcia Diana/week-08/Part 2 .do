@@ -6,43 +6,62 @@
 
 clear all
 
-capture program drop trial2
-program define trial2, rclass
-syntax, samplesize(integer)
+capture program drop week8_p2
+program define week8_p2, rclass 
+syntax, samplesize(integer) 
 
-forvalues i=1/4{
 
-local samplesize= 10^`i'clear
+clear 
 set obs `samplesize'
-gen x= runiform(0,10)
 
 
-*(b) randomly samples a subset whose sample size is an argument to the program
-sample `samplesize', count 
 
-*(c) create the Y's from the X's with a true relationship an an error source;
+gen x =rnormal() 
+gen y= 2 + 1.5*x + 2*rnormal() 
+reg y x 
 
-gen y=  x + x*runiform()
+matrix a=r(table) 
+matrix list a
 
-*(d) performs a regression of Y on one X;
-*egen rank= rank(x)
-*gen rank1= rank if rank==1
-*reg y rank1 
-reg x y
-*(e) returns the N, beta, SEM, p-value, and confidence intervals into r().*/
-
-mat a = r(table)
-*mat list results //cannot figure out how to return N? 
-
- return scalar samp = _N
+return scalar samp = _N
  return scalar beta = a[1,1]
  return scalar sem = a[2,1]
- return scalar pval = a[2,1]
+ return scalar pval = a[4,1]
  return scalar ci_l= a[5,1] 
  return scalar ci_u= a[6,1] 
 
-
-}
 end
 
-*I generated this loop and there is no error but I end up without a dataset.
+
+
+clear
+tempfile combined2
+save `combined2', replace emptyok
+
+forvalues i=1/6{
+	 local samplesize= 10^`i'
+	tempfile sims
+	simulate beta=r(beta) pval=r(pval) se=r(sem) lower=r(ci_l) upper=r(ci_u) ///
+	  , reps(500) seed(5678) saving(`sims') ///
+	  : week8_p2, samplesize(`samplesize') 
+	  
+	use `sims', clear
+	gen samplesize=`samplesize'
+	append using `combined2'
+	save `combined2', replace
+
+}
+use `combined2', clear 
+
+*Betas by samplesize histogram
+histogram beta, by(samplesize)
+
+
+*Betas against real value
+ tw (lpolyci beta samplesize,fc(gray%30)) , xscale(log) xlab(10 100 1000 10000) yline(1.5) 
+
+*Creating table
+ collapse (mean) beta se , by(samplesize)
+ 
+
+ 
