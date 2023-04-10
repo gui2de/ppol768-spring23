@@ -8,7 +8,7 @@ The three random errors represent the random errors of the three strata levels o
 ![Graph1](Part1a.png)
 
 From the table above, the "minimum sample size" required to achieve 80% power for the regression model with and without the unbiased control is 2.
-Note: Since strata is added to the model, the obs (sample size) in the actual regression is equal to 2*10*[16, 25] = [320, 500]. Therefore, we can think that the minimum sample size to achieve the target power is 320 to 500, which can be approximated as 320.
+Note: Since strata is added to the model, the obs (sample size) in the actual regression is equal to 2 * 10 * [16, 25] = [320, 500]. Therefore, we can think that the minimum sample size to achieve the target power is 320 to 500, which can be approximated as 320.
 
 ![Graph2](Part1b.png)
 
