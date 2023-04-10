@@ -160,6 +160,10 @@ graph save "Graph" "$wd/output/bias3.gph", replace
 *Combine the five models' graphs
 graph combine "$wd/output/bivariate.gph" "$wd/output/unbias.gph" "$wd/output/bias1.gph" "$wd/output/bias2.gph" "$wd/output/bias3.gph", altshrink 
 
+*Table of summary stats
+estpost tabstat bivar unbias bias1 bias2 bias3, col(stat) stat(mean sd semean min max) 
+
+
 /*****************************************************
 Part 2: Biasing a parameter estimate using controls
 ******************************************************/
