@@ -1,123 +1,276 @@
 /*Marlyn Bruno
-Assignment 09 */
+Assignment 08
 
-/*****************************************************
+*****************************************************
 Part 1: De-biasing a parameter estimate using controls 
 ******************************************************/
 
-*1. Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
+*Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
 global wd "/Users/marlyn/GitHub/ppol768-spring23/Individual Assignments/Bruno Marlyn/week-09"
 
 clear
-set seed 893553
 set obs 50 //50 US states
 
-*2 create STRATA and entity effects
+*Create strata and entity effects
 gen state = _n //setting a state ID
 gen state_effects = rnormal(0, 5) //State effects
-expand 3+int((159-3+1) *runiform()) //generate county-leveldataset. Range of 3 to 159 counties based on actual data of US states (Delaware has least no. of counties with 3 and Georgia has most with 159)
+expand 1+int((968-1+1) *runiform()) //generate individual-level dataset. Range of 1,000 to 968,000 individuals in each state with approved DACA cases. 
 sort state
-bysort state: generate county = _n
-gen county_effects = rnormal(0, 2) //county effects
+bysort state: generate individual = _n
+gen individual_effects = rnormal(0, 2) //individual effects
 
-*generate X = DACA approvals
-gen daca = 1 + int((5-1+1)*runiform()) //create a variable that measures DACA approvals (in thousands). For purposes of this simulation, counties have between 1,000 to 5,000 approvals in a uniform distribution
+*Create continuous variates
+gen conf_school = rnormal() //affects treatment and outcome
+gen corr_y_healthcare = rnormal() //affects only outcome
+gen corr_x_noenglish = rnormal() //affects only treatment
 
-*3. gen different covariates 
-gen randomcutoff = runiform()
-gen bluecounty = 0 //dummy confounder
-replace bluecounty = 1 if randomcutoff > 0.5
-gen mean_years_school = rnormal(14, 2) //mean years of schooling at county level. Confounder.
-gen healthspend_per_capita = runiform(8, 13) //in thousands of dollars. Covariate affects unemployment but not the treatment 
-gen non_english_household = runiform(15, 25) //% of population that speaks another language that is not English at home. covariate affects daca approvals but not unemployment 
-
-*generate Y = unemployment
-gen unemployment = 60 + (-0.5)*daca + (-1)*bluecounty + (-2)*mean_years_school + (-1)*healthspend_per_capita + (0)*non_english_household + state_effects + county_effects 
-
-/*gen unemployment = 60
-+ (-0.5)*daca //unemployment rate will go down 0.5 points for additional 1000 daca approvals
-+ (-1)*bluestate //blue states will be related to smaller unemployment rates
-+ (-2)*mean_years_school //states with higher means of school years will have less unemployment
-+ (-1)*healthspend_per_capita //unemployment and healthcare spendings are negatively correlated
-+ (0)*non_english_household //doesn't affect unemployment */
+*Generate treatment (DACA)
+gen daca = (state/10) ///make the probability that an individual unit receives treatment vary across strata groups
+	+ conf_school ///confounder
+	+ corr_x_noenglish ///variable affecting treatment but not outcome
+	+ rnormal() > 0
 	
-*4. Construct at least five different regression models with combinations of these covariates and strata fixed effects.
-reg unemployment daca
-reg unemployment daca bluecounty
-reg unemployment daca bluecounty mean_years_school 
-reg unemployment daca bluecounty mean_years_school healthspend_per_capita 
-reg unemployment daca bluecounty mean_years_school healthspend_per_capita non_english_household
-reg unemployment daca bluecounty mean_years_school healthspend_per_capita non_english_household i.state //state fixed effects added - CHECK: DO WE WANT COUNTY-LEVEL?
+*Generate outcome Y (labor variable)
+gen salary = 13 + (0.25)*state ///make sure that the strata groups affect the outcome 
+	+ conf_school ///counfounder
+	+ corr_y_healthcare ///variable affecting outcome but not treatment
+	+ (2)*daca ///treatment effect 
+	+ state_effects + individual_effects ///entity effects
+	+ 0.5*rnormal() //random noise
 
-save "$wd/output/part1.dta", replace
+*Construct at least five regression models
+reg salary daca //simple bivariate model
+reg salary daca conf_school i.state //unbiased model
+reg salary daca conf_school i.state corr_x_noenglish //biased
+reg salary daca conf_school i.state corr_y_healthcare //biased
+reg salary daca conf_school i.state corr_x_noenglish corr_y_healthcare //biased
 
 *Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each
 
 capture program drop regressionruns //Before defining program, drop it
 program define regressionruns, rclass //define program that will allow us to return values to memory
 syntax, samplesize(integer) ////sample size is an argument to the program
-
-	clear
-	use "$wd/output/part1.dta"
-	set obs `samplesize' //CHECK: ARE WE SUPPOSED TO DO THIS FOR THE FIXED DATASET WE CREATED?
-
-	reg unemployment daca bluesetate mean_years_school non_english_household i.state //confounders only
-	mat results1 = r(table) //save matrix of results as "results"
-    return scalar n1 = `samplesize' 
-	return scalar beta1 = results1[1,1]
-	return scalar sem1 = results1[2,1] 
-    return scalar pval1 = results1[4,1]
-	return scalar lowerCI1 = results1[5,1]
-	return scalar upperCI1 = results1[6,1]
 	
-	*CHECK: then do for each of the other four regressions??
+	*Setting parameters
+	clear
+	set obs 50
+	
+	*DGP
+		*Create STRATA and entity effects
+		gen state = _n //setting a state ID
+		gen state_effects = rnormal(0, 5) //State effects
+		expand 1+int((`samplesize'-1+1) *runiform()) //generate individual-level dataset. Range of 1,000 to "infinite" individuals in each state with approved DACA cases
+		sort state
+		bysort state: generate individual = _n
+		gen individual_effects = rnormal(0, 2) //individual effects
+
+		*Create continuous variates
+		gen conf_school = rnormal() //affects treatment and outcome
+		gen corr_y_healthcare = rnormal() //affects only outcome
+		gen corr_x_noenglish = rnormal() //affects only treatment
+
+		*Generate treatment (DACA)
+		gen daca = (state/10) ///make the probability that an individual unit receives treatment vary across strata groups
+			+ conf_school ///confounder
+			+ corr_x_noenglish ///variable affecting treatment but not outcome
+			+ rnormal() > 0
+			
+		*Generate outcome Y (employment variable)
+		gen salary = 13 + (0.25)*state ///make sure that the strata groups affect the outcome 
+			+ conf_school ///counfounder
+			+ corr_y_healthcare ///variable affecting outcome but not treatment
+			+ (2)*daca ///true treatment effect is 2
+			+ state_effects + individual_effects ///entity effects
+			+ 0.5*rnormal() //random noise
+	
+	*Running regressions and saving Betas 
+	reg salary daca //simple bivariate model
+	return scalar bivar_B = _b[daca]
+	
+	reg salary daca conf_school i.state //unbiased model
+	return scalar unbiased_B = _b[daca]
+	
+	reg salary daca conf_school i.state corr_x_noenglish //biased
+	return scalar biased1_B = _b[daca]
+	
+	reg salary daca conf_school i.state corr_y_healthcare //biased
+	return scalar biased2_B = _b[daca]
+
+	reg salary daca conf_school i.state corr_x_noenglish corr_y_healthcare //biased
+	return scalar biased3_B = _b[daca]
 	
 end
 
 *Run simulations
 
-*Produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N? Can you visually compare these to the "true" parameter value? GRAPH WITH N AT X-AXIS AND MEAN AND VARIANCE ON Y. IMPOSE LINE FOR TRUE PARAMETER VALUE
+clear
+tempfile combined_sims
+save `combined_sims', replace emptyok
 
-histogram beta_coef, by(samplesize)
+forvalues i=50(200)850 {
+	local samplesize=`i'
+	tempfile sims
+	simulate bivar=r(bivar_B) unbias=r(unbiased_B) bias1=r(biased1_B) bias2=r(biased2_B) bias3 =r(biased3_B), reps(150) seed(178239) saving(`sims'): regressionruns, samplesize(`samplesize') 
+
+	use `sims' , clear
+	gen samplesize=`samplesize'
+	append using `combined_sims'
+	save `combined_sims', replace
+	
+	display as error "This is sample size `i'"
+}
+
+use `combined_sims', clear
+save "$wd/output/part1.dta", replace
+
+exit 
+
+*Produce figures and tables comparing the biasedness and convergence of the models as N grows.
+egen min_bivar = min(bivar), by(samplesize)
+egen max_bivar = max(bivar), by(samplesize)
+
+egen min_unbias = min(unbias), by(samplesize)
+egen max_unbias = max(unbias), by(samplesize)
+
+egen min_bias1 = min(bias1), by(samplesize)
+egen max_bias1 = max(bias1), by(samplesize)
+
+egen min_bias2 = min(bias2), by(samplesize)
+egen max_bias2 = max(bias2), by(samplesize)
+
+egen min_bias3 = min(bias3), by(samplesize)
+egen max_bias3 = max(bias3), by(samplesize)
+
+*Make twoway area graphs
+twoway rarea min_bivar max_bivar samplesize, title("Bivariate") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bivariate.gph", replace
+
+twoway rarea min_unbias max_unbias samplesize, title("State + Confounder") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/unbias.gph", replace
+
+twoway rarea min_bias1 max_bias1 samplesize, title("Biased Model 1") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bias1.gph", replace
+
+twoway rarea min_bias2 max_bias2 samplesize, title("Biased Model 2") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bias2.gph", replace
+
+twoway rarea min_bias3 max_bias3 samplesize, title("Biased Model 3") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bias3.gph", replace
+
+*Combine the five models' graphs
+graph combine "$wd/output/bivariate.gph" "$wd/output/unbias.gph" "$wd/output/bias1.gph" "$wd/output/bias2.gph" "$wd/output/bias3.gph", altshrink 
 
 /*****************************************************
 Part 2: Biasing a parameter estimate using controls
 ******************************************************/
 
-*for questions 1 and 2, I'm using the same data from the data generating process I created in Part 1
+capture program drop regressionruns2 //Before defining program, drop it
+program define regressionruns2, rclass //define program that will allow us to return values to memory
+syntax, samplesize(integer) ////sample size is an argument to the program
+	
+*Setting parameters
+clear
+set obs 50
+	
+*DGP
+*Create strata and entity effects
+gen state = _n //setting a state ID
+gen state_effects = rnormal(0, 5) //State effects
+expand 1+int((`samplesize'-1+1) *runiform()) //generate individual-level dataset. Range of 1,000 to "infinite" individuals in each state with approved DACA cases
+sort state
+bysort state: generate individual = _n
+gen individual_effects = rnormal(0, 2) //individual effects
 
-*3. When creating the outcome, make sure there is an intermediate variable that is a function of treatment. Have this variable determine Y in the true DGP, not the treatment variable itself. (This is a "channel".)
-gen economic_opportunity = runiform(1, 10) //daca -> economic_opportunity -> unemployment. This is a hypothetical channel for the sake of this assignment. Higher values translate as more economic or job opportunities 
+*Create continuous variates
+gen conf_school = rnormal() //affects treatment and outcome
+gen corr_y_healthcare = rnormal() //affects only outcome
+gen corr_x_noenglish = rnormal() //affects only treatment
 
-*4. Create a second independent variable that is a function of both Y and the treatment variable. (This is a "collider".) unemployment -> median_income AND daca -> median_income
-gen median_income = rnormal(73, 30) //in thousands of dollars
+*Generate treatment (DACA)
+gen daca = (state/10) + conf_school + corr_x_noenglish + rnormal() > 0
+		
+*Generate channel
+gen channel_jobchange = 2*daca
+			
+*Generate outcome Y (labor variable)
+gen salary = 13 + ((0.25)*state) + conf_school + corr_y_healthcare + channel_jobchange + ((2)*daca) + state_effects + individual_effects + 0.5*rnormal()	
 
-*save dataset for later program
-*save "simulations", replace
+*Generate collider
+gen collider_luck = 2*daca + 1.5*salary
+	
+*Running regressions and saving Betas
+reg salary daca //simple bivariate model
+return scalar bivar_B = _b[daca]
+	
+reg salary daca conf_school i.state //unbiased model
+return scalar unbiased_B = _b[daca]
+	
+reg salary daca conf_school i.state channel_jobchange //biased
+return scalar biased1_B = _b[daca]
+	
+reg salary daca conf_school i.state collider_luck //biased
+return scalar biased2_B = _b[daca]
 
-*5. Construct at least five different regression models with combinations of these covariates and strata fixed effects
-reg unemployment daca bluesetate mean_years_school non_english_household i.state //confounders only
-reg unemployment daca bluesetate mean_years_school non_english_household economic_opportunity i.state //with channel
-reg unemployment daca bluesetate mean_years_school non_english_household  median_income i.state //with collider
-reg unemployment daca bluesetate mean_years_school non_english_household economic_opportunity median_income i.state  //with both channel and collider
-reg unemployment daca bluesetate mean_years_school non_english_household economic_opportunity median_income  //with both channel and collider and no state fixed effects
-
-*Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each
-
+reg salary daca conf_school i.state channel_jobchange collider_luck //biased
+return scalar biased3_B = _b[daca]
+	
+end
 
 *Run simulations
 
-*Produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N? Can you visually compare these to the "true" parameter value?
+clear
+tempfile combined_sims_2
+save `combined_sims_2', replace emptyok
 
+forvalues i=50(200)850 {
+	local samplesize=`i'
+	tempfile sims
+	simulate bivar=r(bivar_B) unbias=r(unbiased_B) bias1=r(biased1_B) bias2=r(biased2_B) bias3 =r(biased3_B), reps(150) seed(782092) saving(`sims'): regressionruns2, samplesize(`samplesize') 
 
+	use `sims' , clear
+	gen samplesize=`samplesize'
+	append using `combined_sims_2'
+	save `combined_sims_2', replace
+	
+	display as error "This is sample size `i'"
+}
 
+use `combined_sims_2', clear
+save "$wd/output/part2.dta"
 
-****************Notes from Lab*******************
-*regress
-reg Y treatmentreg Y treatment i.district
-reg Y treatment i.district confounder
-reg Y treatment i.district confounder covar_1
-reg Y treatment i.district confounder covar_1 covar_2
-reg Y treatment i.district confounder covar_1 covar_2 covar_3
+exit 
 
-*Should be able to figure out which regression gives us the right treatment effect because we're already establishing the treatment effect through the data generating process
+*Produce figures and tables comparing the biasedness and convergence of the models as N grows.
+egen min_bivar = min(bivar), by(samplesize)
+egen max_bivar = max(bivar), by(samplesize)
+
+egen min_unbias = min(unbias), by(samplesize)
+egen max_unbias = max(unbias), by(samplesize)
+
+egen min_bias1 = min(bias1), by(samplesize)
+egen max_bias1 = max(bias1), by(samplesize)
+
+egen min_bias2 = min(bias2), by(samplesize)
+egen max_bias2 = max(bias2), by(samplesize)
+
+egen min_bias3 = min(bias3), by(samplesize)
+egen max_bias3 = max(bias3), by(samplesize)
+
+*Make twoway area graphs
+twoway rarea min_bivar max_bivar samplesize, title("Bivariate") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bivariate.gph", replace
+
+twoway rarea min_unbias max_unbias samplesize, title("State + Confounder") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2unbias.gph", replace
+
+twoway rarea min_bias1 max_bias1 samplesize, title("Biased Model 1") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bias1.gph", replace
+
+twoway rarea min_bias2 max_bias2 samplesize, title("Biased Model 2") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bias2.gph", replace
+
+twoway rarea min_bias3 max_bias3 samplesize, title("Biased Model 3") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bias3.gph", replace
+
+*Combine the five models' graphs
+graph combine "$wd/output/p2bivariate.gph" "$wd/output/p2unbias.gph" "$wd/output/p2bias1.gph" "$wd/output/p2bias2.gph" "$wd/output/p2bias3.gph", altshrink 
