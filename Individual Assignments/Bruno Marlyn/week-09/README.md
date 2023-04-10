@@ -32,6 +32,10 @@ _conf_school_: years of schooling. Related to both DACA status and salary.
 
 Controlling for state fixed effects and a confounder really reduced the range of Beta estimates from my simple bivariate model. Once I controlled for those, the estimates increasingly narrowed as sample size grew around the true DACA effect of 2 (indicated by the green line). The biased models also narrowed around the true DACA effect as sample size increased, but they were less precise.
 
+![statatable1](output/Table1.jpg)
+
+Somewhat surprisingly, the mean of the Beta estimates did hover around 2 across sample sizes. The standard error of the mean is approximately the same for all models except the bivariate one, but it's smallest for Biased Model 2. 
+
 ## Part 2: Biasing a parameter estimate using controls
 
 ### Data Dictionary
