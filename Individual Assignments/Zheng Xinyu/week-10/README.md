@@ -54,8 +54,8 @@ Based on the table above, the minimum sample sizes in each stratum with a power 
 
 Applying the minimum sample sizes in each stratum to corresponding models and enabling the treatment effect to change, I yield:
 
-| Treatment Effect | Model | Power |
-|:----------------:|:-----:|:-----:|
+| Model | Treatment Effect | Power |
+|:-----:|:----------------:|:-----:|
 | 1 | 25 | .718 |
 | 1 | 26	| .782 |
 | 1 | 27	| .784 |
@@ -83,8 +83,6 @@ For this part, the regression is： reg mul_cap production
 
 ![Compare exact CI with analytical CI: Sample size = 1980](outputs/part2_ci1_1980.png)
 
-![Compare exact CI with analytical CI: Sample size = 3960](outputs/part2_ci1_3960.png)
-
 ![Compare exact CI with analytical CI: Sample size = 5940](outputs/part2_ci1_5940.png)
 
 ![Compare exact CI with analytical CI: Sample size = 7920](outputs/part2_ci1_7920.png)
@@ -96,8 +94,6 @@ As the sample size increases, the width of CI increases. However, no matter how 
 #### Include random errors in clustering (state and sector) levels only 
 
 ![Compare exact CI with analytical CI: Sample size = 1980](outputs/part2_ci2_1980.png)
-
-![Compare exact CI with analytical CI: Sample size = 3960](outputs/part2_ci2_3960.png)
 
 ![Compare exact CI with analytical CI: Sample size = 5940](outputs/part2_ci2_5940.png)
 
