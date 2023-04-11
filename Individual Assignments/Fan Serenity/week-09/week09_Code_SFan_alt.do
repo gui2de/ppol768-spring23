@@ -1,5 +1,5 @@
 *Serenity Fan (kaf121)
-*Last Updated: April 8th, 2023 
+*Last Updated: April 11th, 2023 
 *Week 9 Assignment Code 
 
 *RE-SUBMISSION
@@ -41,7 +41,7 @@
 *Create program: load the data from above into the program  
 capture program drop normal_reg_sanitation
 program define normal_reg_sanitation, rclass 
-	syntax, num_districts(integer) r(integer)
+	syntax, num_districts(integer) 
 	
 	*District-level effects (i) 
 		*Treatment happens at this level (assuming government implements mechanized de-sludging by randomizing at the district level)
@@ -84,22 +84,58 @@ program define normal_reg_sanitation, rclass
 	*DGP (DATA GENERATING PROCESS) 
 	gen income_future = 10000 + rnormal(10000, 1000) * treatment - 30*scav_years - 40*transit_time + 300*educ + u_i + u_ij + e_ijk  
 
-	if `r'==1 { 				// Reg model 1: (base) Y and treatment 
-		reg income_future treatment 
-	}
-	else if `r'==2 { 			// Reg model 2: Add district indicators
-		reg income_future treatment i.district 
-	}
-	else if `r'==3 { 			// Reg model 3: Add present income 
-		reg income_future treatment i.district income_pres 
-	}
-	else if `r'==4 { 			// Reg model 4: Add confounder, years worked in scavenging 
-		reg income_future treatment i.district income_pres scav_years
-	} 
-	else if `r'==5 { 			    // Reg model 5: Add covariates 
-		reg income_future treatment i.district income_pres scav_years transit_time educ 
-	}
-
+*Reg model 1: (base) Y and treatment 
+	reg income_future treatment 		
+	mat results1 = r(table) 
+	return scalar subsample_size1 = e(N)
+	return scalar beta1 = results1[1,1] 
+	return scalar SEM1 = results1[2,1] 
+	return scalar pval1 = results1[4,1]
+	return scalar ci_lower1 = results1[5,1]
+	return scalar ci_upper1 = results1[6,1]		
+		
+*Reg model 2: Add district indicators
+	reg income_future treatment i.district 
+	mat results2 = r(table) 
+	return scalar subsample_size2 = e(N)
+	return scalar beta2 = results2[1,1] 
+	return scalar SEM2 = results2[2,1] 
+	return scalar pval2 = results2[4,1]
+	return scalar ci_lower2 = results2[5,1]
+	return scalar ci_upper2 = results2[6,1]
+	
+*Reg model 3: Add present income 
+	reg income_future treatment i.district income_pres 
+	mat results3 = r(table) 
+	return scalar subsample_size3 = e(N)
+	return scalar beta3 = results3[1,1] 
+	return scalar SEM3 = results3[2,1] 
+	return scalar pval3 = results3[4,1]
+	return scalar ci_lower3 = results3[5,1]
+	return scalar ci_upper3 = results3[6,1]
+	
+*Reg model 4: Add confounder, years worked in scavenging 
+	reg income_future treatment i.district income_pres scav_years
+	mat results4 = r(table) 
+	return scalar subsample_size4 = e(N)
+	return scalar beta4 = results4[1,1] 
+	return scalar SEM4 = results4[2,1] 
+	return scalar pval4 = results4[4,1]
+	return scalar ci_lower4 = results4[5,1]
+	return scalar ci_upper4 = results4[6,1]
+	
+*Reg model 5: Add covariates 
+	reg income_future treatment i.district income_pres scav_years transit_time educ 
+	mat results5 = r(table) 
+	return scalar subsample_size5 = e(N)
+	return scalar beta5 = results5[1,1] 
+	return scalar SEM5 = results5[2,1] 
+	return scalar pval5 = results5[4,1]
+	return scalar ci_lower5 = results5[5,1]
+	return scalar ci_upper5 = results5[6,1]
+	
+	
+/* 
 	*Store matrix results 
 		*Note: Verified that, as this is a multivariate regression, the scalars below will be extracted from the 'treatment' regression table (as opposed to the table for one of the other independent variables)
 	mat results = r(table) 
@@ -110,6 +146,8 @@ program define normal_reg_sanitation, rclass
 	return scalar pval = results[4,1]
 	return scalar ci_lower = results[5,1]
 	return scalar ci_upper = results[6,1]
+*/ 
+
 
 end
 
@@ -126,19 +164,18 @@ tempfile combined
 save `combined', replace emptyok
 	
 forvalues i = 1/5 {
-
 	*N = 2, 4, 8, 16, ..., 1,048,576
-	forvalues r = 1/5 { 
+
 		local num_districts = 2^`i'
 		tempfile sims
-		simulate N=r(subsample_size) r=`r' beta_coeff=r(beta) SEM=r(SEM) pvalues=r(pval) ci_lower=r(ci_lower) ci_upper=r(ci_upper), reps(500) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') r(`r')
-		gen regressionID = `r'
+		simulate N=r(subsample_size) beta_coeff1=r(beta1) SEM1=r(SEM1) pvalues1=r(pval1) ci_lower1=r(ci_lower1) ci_upper1=r(ci_upper1) beta_coeff2=r(beta2) SEM2=r(SEM2) pvalues2=r(pval2) ci_lower2=r(ci_lower2) ci_upper2=r(ci_upper2) beta_coeff3=r(beta3) SEM3=r(SEM3) pvalues3=r(pval3) ci_lower3=r(ci_lower3) ci_upper3=r(ci_upper3) beta_coeff4=r(beta4) SEM4=r(SEM4) pvalues4=r(pval4) ci_lower4=r(ci_lower4) ci_upper4=r(ci_upper4) beta_coeff5=r(beta5) SEM5=r(SEM5) pvalues5=r(pval5) ci_lower5=r(ci_lower5) ci_upper5=r(ci_upper5), reps(10) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
+		
 		gen population_size = `num_districts'
 		
 		use `sims', clear 
 		append using `combined'
 		save `combined', replace
-	}
+		
 
 }
 
@@ -146,7 +183,7 @@ forvalues i = 1/5 {
 
 *Load back in all the simulation regression data 
 use `combined', clear
-sort N r
+sort N
 
 save "stats_sanitation_alt_v1.dta", replace
 
