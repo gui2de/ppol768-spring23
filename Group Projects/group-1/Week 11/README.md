@@ -28,3 +28,12 @@ The data for this study is structured as a panel dataset, where each row represe
 | Distance to Station (miles) | 1,962 | 1.0 | .5 | .004 | 2.64 |
 | Salary ($) | 1,962 | 59887.27 | 10522.51 | 25487.51 | 94599.96 |
 | Education | 1,962 | 2.0 | .8 | 1 | 3 |
+
+
+### Education by Race
+| Education Level | Black | Other | White | Total|
+|--------|------|-----| -----| -----|
+| High School | 241 | 51 | 326 | 6218 |
+| College | 319 | 73 | 413 | 805 |
+| Adv. Degree | 218 | 59 | 262 | 539 |
+| **Total** | **778** | **183** | **1001** | **1962** |
