@@ -3,9 +3,11 @@
 *Brown, Hill, Weber 
 *Last edited: April 11, 2023 at 1:03PM EDT
 
+cd "D:\2021-2023, Georgetown University\2023 - Spring\Research Design & Implementation\ScottsRepo\ppol768-spring23\Group Projects\group-1\Week 11"
+
 // Generate simulated data for job openings and job applications
 clear
-set seed 20230410
+set seed 20230411
 set obs 2000
 gen jobseeker_id = _n
 gen distance_to_station = rnormal(1, 0.5)
@@ -43,10 +45,14 @@ keep jobseeker_id age education_level race income
 save jobseekers_data, replace 
 
 // Merge job openings and job applications data
-merge 1:1 jobseeker_id using "/Users/peytonweber/Downloads/jobs_data.dta"
-keep if distance_to_station < 1
+merge 1:1 jobseeker_id using jobs_data.dta
+drop if distance_to_station <= 0
+*keep if distance_to_station < 1
 drop _merge
-merge 1:1 jobseeker_id using "/Users/peytonweber/Downloads/applications_data.dta" 
+merge 1:1 jobseeker_id using applications_data.dta
+
+save jobseeker_application_job_merged, replace
+
 
 // Generate simulated data for commuting behavior
 clear
@@ -56,6 +62,10 @@ gen distance_to_station_home = rnormal(1, 0.5)
 gen distance_to_station_work = rnormal(1, 0.5)
 gen commute_time = distance_to_station_home + distance_to_station_work + rnormal(30, 10)
 gen commute_method = cond(distance_to_station_home < 0.5, "Walking", cond(distance_to_station_home < 1, "Biking", cond(distance_to_station_work < 1, "Transit", "Driving")))
+
+drop if distance_to_station_home <0
+drop if distance_to_station_work < 0
+drop if commute_time < 0
 
 // Simulate commuting behavior data
 keep jobseeker_id distance_to_station_home distance_to_station_work commute_time commute_method
@@ -67,12 +77,65 @@ drop _merge
 keep if distance_to_station_home < 1 | distance_to_station_work < 1
 merge m:1 jobseeker_id using jobs_data
 
-// Creating a numeric variable for race
-gen nonwhite = 0 
-replace nonwhite = 1 if race != "White"
-
+// Creating a dummy variable for white
 gen white = 0
 replace white = 1 if race == "White" 
+
+
+// Scatterplot of distance to station by race
+twoway (scatter distance_to_station white, msymbol(circle) msize(tiny)) ///
+    (lfit distance_to_station white if white == 1, lpattern(dash)) ///
+	(lfit distance_to_station white if white == 0, lpattern(dash)) ///
+    ytitle(Distance to Station) xtitle(Race) legend(off)
+graph export distance_by_race.png, replace
+
+// Create a histogram of jobseeker age
+histogram age, bin(10) ///
+    xtitle("Age") ytitle("Count") title("Distribution of Jobseeker Age")
+graph export age_histogram.png, replace
+
+// Create a bar chart of jobseeker education level
+graph bar (count) education_level, ///
+    over(race) blabel(bar) stack asyvars ytitle("Count") xtitle("Education Level") ///
+    legend(off) title("Distribution of Jobseeker Education Level by Race")
+graph export education_by_race.png, replace
+
+// Create a scatterplot of commute time by distance to station
+twoway (scatter commute_time distance_to_station, msymbol(circle) msize(tiny)) ///
+    (lfit commute_time distance_to_station, lpattern(dash)) ///
+    ytitle("Commute Time") xtitle("Distance to Station") title("Relationship Between Commute Time and Distance to Station")
+graph export commute_by_distance.png, replace
+
+// Create a histogram of commute time by commute method
+histogram commute_time, ///
+    by(commute_method) ///
+    ytitle("Frequency") xtitle("Commute Time") ///
+    name(commute_hist, replace)
+graph export commute_by_means.png, replace
+
+
+**********
+// Create a bar chart of education level by race
+graph bar (count) education_level, over(race) ///
+    ytitle("Count") xtitle("Race") ///
+    legend(off) name(edu_race, replace)
+
+// Create a scatterplot of distance to station by race
+twoway (scatter distance_to_station white, msymbol(circle) msize(tiny)) ///
+    (lfit distance_to_station white if white == 1, lpattern(dash)) ///
+    (lfit distance_to_station white if white == 0, lpattern(dash)) ///
+    ytitle(Distance to Station) xtitle(Race) legend(off) name(dist_race, replace)
+
+// Create a scatterplot of salary by age with regression line
+graph twoway (scatter salary age, msymbol(circle) msize(tiny)) ///
+    (lfit salary age) ///
+    ytitle("Salary") xtitle("Age") legend(off) name(salary_age, replace)
+
+
+
+
+
+
 
 *Our group still needs to create figures and tables, and we need to put them into a README.md file. 
 
