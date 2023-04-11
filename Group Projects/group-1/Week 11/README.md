@@ -19,3 +19,12 @@ The data for this study is structured as a panel dataset, where each row represe
 | 90% | 1.619707 | 2.624369 |
 | 95% | 1.812213 | 2.625915 |
 | 99% | 2.170256 | 2.637214 |
+
+
+### Descriptive Statistics
+| Variable | Observations | Mean | Std. Dev. | Min | Max |
+|----------|--------------|------|-----------|----|-----|
+| Age | 1,962 | 36.9 | 11.3 | 18 | 57 |
+| Distance to Station (miles) | 1,962 | 1.0 | .5 | .004 | 2.64 |
+| Salary ($) | 1,962 | 59887.27 | 10522.51 | 25487.51 | 94599.96 |
+| Education | 1,962 | 2.0 | .8 | 1 | 3 |
