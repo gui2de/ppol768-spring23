@@ -37,3 +37,9 @@ The data for this study is structured as a panel dataset, where each row represe
 | College | 319 | 73 | 413 | 805 |
 | Adv. Degree | 218 | 59 | 262 | 539 |
 | **Total** | **778** | **183** | **1001** | **1962** |
+
+
+### Graphs
+[![Scatterplot Salaries Age](https://github.com/gui2de/ppol768-spring23/blob/0072d6920d1ee4f237d5a289c1b8d9c1ac60e068/Group%20Projects/group-1/Week%2011/salaries_age_scatter.png)](https://github.com/gui2de/ppol768-spring23/blob/week11-group1/Group%20Projects/group-1/Week%2011/salaries_age_scatter.png)
+
+[![Scatterplot Age Race Distance](https://github.com/gui2de/ppol768-spring23/blob/0072d6920d1ee4f237d5a289c1b8d9c1ac60e068/Group%20Projects/group-1/Week%2011/scatter_age_race_distance.png)](https://github.com/gui2de/ppol768-spring23/blob/week11-group1/Group%20Projects/group-1/Week%2011/scatter_age_race_distance.png)
