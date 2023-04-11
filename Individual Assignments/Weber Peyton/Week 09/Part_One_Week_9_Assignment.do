@@ -16,8 +16,6 @@ program define PPOL768, rclass
 *Sample size will be the argument in the defined program. 
 syntax, samplesize(integer) 
 clear
-*Set seed for replicability. 
-set seed 27138870
 *Create empty observations. 
 set obs `samplesize'
 *Create school observations, following in in-class exercise. 
@@ -35,7 +33,7 @@ gen u_ij = rnormal(0,3)
 *Creating a variable for years of teaching experience. 
 bysort school: generate teach_exp = 5+int((20-5+1)*runiform())
 *Generate student-level dataset where each school-class will have 16-25 students.
-expand 16+int((25-16+1)*runiform())
+expand 16+int(10*runiform())
 *Create student IDs
 bysort school classroom: generate child = _n 
 *Create student-level effects
@@ -58,6 +56,7 @@ generate score = 70 ///
         + 0* mother_educ ///
         + u_i + u_ij + e_ijk
 		
+ 
 *First regression: 
 reg score treat 
 mat a = r(table)
@@ -83,8 +82,11 @@ reg score treat urban teach_exp mother_educ i.(school classroom)
 mat a = r(table)
 return scalar Beta5 = a[1,1]
 
+return scalar N=`c(N)'
+
 end 
 
+ 
 clear
 *Defining a temporary space Stata to store data created in loop to follow:
 tempfile combined
@@ -92,26 +94,26 @@ tempfile combined
 save `combined', replace emptyok
 *Defining the loop:
 forvalues i=1/8 {
-	local samplesize= 2^`i'
+	local samplesize= `i'
 	display as error "iteration = `i'" 
 	tempfile sims
-	simulate beta1 = r(Beta1) beta2 = r(Beta2) beta3 = r(Beta3) beta4 = r(Beta4) beta5 = r(Beta5) ///
+	simulate n=r(N) beta1 = r(Beta1) beta2 = r(Beta2) beta3 = r(Beta3) beta4 = r(Beta4) beta5 = r(Beta5) ///
 	, reps(50) seed(8870) saving(`sims') ///
 	: PPOL768, samplesize(`samplesize') 
 	
 	use `sims' , clear
-	gen samplesize=`samplesize'
 	append using `combined'
 	save `combined', replace
 }
-tabstat beta1 beta2 beta3 beta4 beta5, by(samplesize)
-twoway (line beta1 samplesize, color(orange)) ///
-       (line beta2 samplesize, color(green)) ///
-       (line beta3 samplesize, color(purple)) ///
-       (line beta4 samplesize, color(blue)) ///
-       (line beta5 samplesize, color(red)) ///
+
+tabstat beta1 beta2 beta3 beta4 beta5, by(n)
+twoway (lpolyci beta1 n, color(orange) fc(gray%15)) ///
+       (lpolyci beta2 n, color(green) fc(gray%15)) ///
+       (lpolyci beta3 n, color(purple) fc(gray%15)) ///
+       (lpolyci beta4 n, color(blue) fc(gray%15)) ///
+       (lpolyci beta5 n, color(red) fc(gray%15)) ///
        , ytitle("Beta values") xtitle("Sample size") ///
-       legend(order(1 "Beta1" 2 "Beta2" 3 "Beta3" 4 "Beta4" 5 "Beta5")) ///
+       legend(order(2 "Beta1" 4 "Beta2" 6 "Beta3" 8 "Beta4" 10 "Beta5")) ///
        title("Line Graph of Beta Coefficients")
 	   
 *graph save "Graph1" "/Users/peytonweber/Desktop/GitHub/ppol768-spring23/Individual Assignments/Weber Peyton/Week 09/2023.03.27.line.graph.gph", replace
