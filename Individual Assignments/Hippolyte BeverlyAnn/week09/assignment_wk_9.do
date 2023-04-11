@@ -53,7 +53,7 @@ syntax, samplesize(integer)
 		
 * generate outcome Y 
 
-	generate Y = localitie + num_child + num_hrs *rnormal()
+	generate y = localitie + num_child + num_hrs *rnormal()
 
 * generate treatment variable
 
