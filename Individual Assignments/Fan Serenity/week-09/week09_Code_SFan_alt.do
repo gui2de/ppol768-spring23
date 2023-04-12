@@ -222,7 +222,8 @@ save "stats_sanitation_alt_v2.dta", replace
 *Input graphs into markdown! Save, then make in markdown folder, then insert preliminary observations, for both parts. 
 
 } 
-histo
+
+*histo
 
 
 
