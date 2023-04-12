@@ -87,52 +87,54 @@ program define normal_reg_sanitation, rclass
 *Reg model 1: (base) Y and treatment 
 	reg income_future treatment 		
 	mat results1 = r(table) 
-	return scalar subsample_size1 = e(N)
 	return scalar beta1 = results1[1,1] 
 	return scalar SEM1 = results1[2,1] 
-	return scalar pval1 = results1[4,1]
-	return scalar ci_lower1 = results1[5,1]
-	return scalar ci_upper1 = results1[6,1]		
+	*return scalar pval1 = results1[4,1]
+	*return scalar ci_lower1 = results1[5,1]
+	*return scalar ci_upper1 = results1[6,1]		
+	
+	*This is the same for all of the regressions 
+	return scalar subsample_size = e(N)	
 		
 *Reg model 2: Add district indicators
 	reg income_future treatment i.district 
 	mat results2 = r(table) 
-	return scalar subsample_size2 = e(N)
+	*return scalar subsample_size2 = e(N)
 	return scalar beta2 = results2[1,1] 
 	return scalar SEM2 = results2[2,1] 
-	return scalar pval2 = results2[4,1]
-	return scalar ci_lower2 = results2[5,1]
-	return scalar ci_upper2 = results2[6,1]
+	*return scalar pval2 = results2[4,1]
+	*return scalar ci_lower2 = results2[5,1]
+	*return scalar ci_upper2 = results2[6,1]
 	
 *Reg model 3: Add present income 
 	reg income_future treatment i.district income_pres 
 	mat results3 = r(table) 
-	return scalar subsample_size3 = e(N)
+	*return scalar subsample_size3 = e(N)
 	return scalar beta3 = results3[1,1] 
 	return scalar SEM3 = results3[2,1] 
-	return scalar pval3 = results3[4,1]
-	return scalar ci_lower3 = results3[5,1]
-	return scalar ci_upper3 = results3[6,1]
+	*return scalar pval3 = results3[4,1]
+	*return scalar ci_lower3 = results3[5,1]
+	*return scalar ci_upper3 = results3[6,1]
 	
 *Reg model 4: Add confounder, years worked in scavenging 
 	reg income_future treatment i.district income_pres scav_years
 	mat results4 = r(table) 
-	return scalar subsample_size4 = e(N)
+	*return scalar subsample_size4 = e(N)
 	return scalar beta4 = results4[1,1] 
 	return scalar SEM4 = results4[2,1] 
-	return scalar pval4 = results4[4,1]
-	return scalar ci_lower4 = results4[5,1]
-	return scalar ci_upper4 = results4[6,1]
+	*return scalar pval4 = results4[4,1]
+	*return scalar ci_lower4 = results4[5,1]
+	*return scalar ci_upper4 = results4[6,1]
 	
 *Reg model 5: Add covariates 
 	reg income_future treatment i.district income_pres scav_years transit_time educ 
 	mat results5 = r(table) 
-	return scalar subsample_size5 = e(N)
+	*return scalar subsample_size5 = e(N)
 	return scalar beta5 = results5[1,1] 
 	return scalar SEM5 = results5[2,1] 
-	return scalar pval5 = results5[4,1]
-	return scalar ci_lower5 = results5[5,1]
-	return scalar ci_upper5 = results5[6,1]
+	*return scalar pval5 = results5[4,1]
+	*return scalar ci_lower5 = results5[5,1]
+	*return scalar ci_upper5 = results5[6,1]
 	
 	
 /* 
@@ -168,15 +170,18 @@ forvalues i = 1/5 {
 
 		local num_districts = 2^`i'
 		tempfile sims
-		simulate N=r(subsample_size) beta_coeff1=r(beta1) SEM1=r(SEM1) pvalues1=r(pval1) ci_lower1=r(ci_lower1) ci_upper1=r(ci_upper1) beta_coeff2=r(beta2) SEM2=r(SEM2) pvalues2=r(pval2) ci_lower2=r(ci_lower2) ci_upper2=r(ci_upper2) beta_coeff3=r(beta3) SEM3=r(SEM3) pvalues3=r(pval3) ci_lower3=r(ci_lower3) ci_upper3=r(ci_upper3) beta_coeff4=r(beta4) SEM4=r(SEM4) pvalues4=r(pval4) ci_lower4=r(ci_lower4) ci_upper4=r(ci_upper4) beta_coeff5=r(beta5) SEM5=r(SEM5) pvalues5=r(pval5) ci_lower5=r(ci_lower5) ci_upper5=r(ci_upper5), reps(10) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
+		simulate N=r(subsample_size) beta_coeff1=r(beta1) SEM1=r(SEM1) beta_coeff2=r(beta2) SEM2=r(SEM2) beta_coeff3=r(beta3) SEM3=r(SEM3) beta_coeff4=r(beta4) SEM4=r(SEM4) beta_coeff5=r(beta5) SEM5=r(SEM5), reps(500) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
 		
-		gen population_size = `num_districts'
+		*gen population_size = `num_districts'
 		
 		use `sims', clear 
+		
+		gen ID = `i'  
+		order ID, first
+		
 		append using `combined'
 		save `combined', replace
 		
-
 }
 
 
@@ -197,9 +202,9 @@ save "stats_sanitation_alt_v1.dta", replace
 *_________________________________________________
 *DATA VISUALIZATION START 
 clear 
-use stats_sanitation_alt.dta
+use stats_sanitation_alt_v1.dta
 
-drop mean_beta mean_SEM mean_pvalues mean_ci_lower mean_ci_upper
+*drop mean_beta mean_SEM mean_pvalues mean_ci_lower mean_ci_upper
 
 *Make graphs 
 forvalues r = 1/5 { 
@@ -211,11 +216,11 @@ histogram beta_coeff, by(N)
 graph export "beta_graph_sanitation_alt_`r'.png", replace
 
 *Figures for table 
-bysort N r: egen mean_beta = mean(beta)
-bysort N r: egen mean_SEM = mean(SEM)
-bysort N r: egen mean_pvalues = mean(pvalues)
-bysort N r: egen mean_ci_lower = mean(ci_lower)
-bysort N r: egen mean_ci_upper = mean(ci_upper)
+bysort ID: egen mean_beta = mean(beta)
+bysort ID: egen mean_SEM = mean(SEM)
+*bysort N r: egen mean_pvalues = mean(pvalues)
+*bysort N r: egen mean_ci_lower = mean(ci_lower)
+*bysort N r: egen mean_ci_upper = mean(ci_upper)
 
 save "stats_sanitation_alt_v2.dta", replace
 
@@ -224,6 +229,8 @@ save "stats_sanitation_alt_v2.dta", replace
 } 
 
 *histo
+
+
 
 
 
@@ -251,3 +258,16 @@ save "stats_sanitation_alt_v2.dta", replace
 *Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.) Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each, and produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N?
 
 *Fully describe your results in your README.md file, including figures and tables as appropriate.
+
+
+/*
+
+*Collider DGP 
+gen income_future = 10000 + rnormal(10000, 1000) * treatment - 30*scav_years - 40*transit_time + 300*educ + u_i + u_ij + e_ijk  
+
+*Collider is caused by both treatment and outcome (future earnings) variables 
+gen mhealth = rnormal(10000, 1000) * treatment + income_future
+
+*Now include the collider in at least one of the regressions, to test how it biases the estimate 
+
+*/
