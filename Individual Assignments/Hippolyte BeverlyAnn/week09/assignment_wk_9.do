@@ -26,71 +26,51 @@ cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignment
 
 capture program drop week9          // Data Generating Process 
 program define week9, rclass 
-syntax, samplesize(integer)
-	clear 
-* Process for data x
+	syntax, samplesize(integer)
 
-	gen x = rnormal()
-			
+
+** Generate strata groups 
+		set obs 10   // number of localities in Bogota
+		gen localitie = _n
+		gen leffect = rnormal(0,2) // localitie effect
+		expand `samplesize' // number of businesses in a localitie  
+
+					
 ** Generate continuous covariates 
 
 	gen num_child = rnormal()
 	gen num_hrs = rnormal()
 	gen age_child = rnormal()
-
-
-** Generate strata groups 
-
-	clear 
-		set obs `samplesize'   // number of localities in Bogota
-		gen localitie = _n
-		gen leffect = rnormal(0,2) // localitie effect
-		expand 4 // number of businesses in a localitie  
-		bysort localitie: gen business = _n
-		
-		gen beffect = rnormal(0,3) // business effect 
-		expand int((5+10-1))*rnormal() // number of female entrepreneurs 
-		
-* generate outcome Y 
-
-	generate y = localitie + num_child + num_hrs *rnormal()
-
+	
 * generate treatment variable
 
 	generate treatment = num_child + age_child 
 
+* generate outcome y
+
+	generate y = localitie/10 + num_child + num_hrs + 2*rnormal() + 0.4*treatment
+
+
+* run five regression models 
 		reg y treatment 
 		reg y treatment i.localitie 
-		reg y treatment i.localitie i.business 
-		reg y treatment i.localitie i.business num_child num_hrs
-		reg y treatment i.localitie i.business num_child num_hrs age_child
+		reg y treatment i.localitie#c.num_child
+		reg y treatment i.localitie#c.num_child#c.num_hrs
+		reg y treatment i.localitie#c.num_child#c.num_hrs#c.age_child
 
-		matrix f = r(table)
+* table
+		matrix results = r(table)
 		
-		return scalar beta = f[]
-		return scalar pval = f[]
-		return scalar std = f[]
+		return scalar beta = results(beta)
 
 end 
 
-	clear 
-	tempfile secondary 
-	save `secondary', replace emptyok
-		
-		forvalues i = 1/6 {
-			local female_busin = 10^ `i'
-			
-			simulate col_beta=r(beta) col_std=r(std) col_pval=r(pval), reps(5): week9, samplesize(`female_busin')
-			gen samplesize = `female_busin'
-			
-			save `secondary'			
-			
-		}
-	
-			use `secondary', clear 
-			
-tempfile nine
-simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr), reps(5) saving(`nine'): week9, samplesize(10)
+list results beta 
 
-	use `nine', clear
-		
+*week9, samplesize(500)
+
+
+
+
+
+
