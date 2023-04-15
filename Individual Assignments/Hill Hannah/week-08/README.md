@@ -3,9 +3,11 @@ Finalized code, files, and figures for Assignment 08.
 
 ## Question 1 - Sampling Noise in a Fixed Population
 
+The figure below illustrates that as the sample size increases in greater magnitude, the histogram concentrates around the mean and becomes much more narrow. Essentially, this means that as sample sizes increase, a random sample from the population is more likely to be in proximity to the true mean.
+
 ![Beta_Graph](https://github.com/gui2de/ppol768-spring23/blob/e419748e7b46dc0e77f06e0e5cffd11aefd66f6b/Individual%20Assignments/Hill%20Hannah/week-08/outputs/wk08_q1beta.png)
 
-
+In the table below, the standard error decreases exponentially as the sample size increases. The lower bound and upper bound values represent the 25th & 75th percentiles of the data. These values also decrease exponentialy as the sample size increases indicating a more narrow distribution.
 
 
 ### Table of Beta Coefficients:
@@ -19,7 +21,11 @@ Finalized code, files, and figures for Assignment 08.
 
 ## Question 2 - Sampling Noise in an Infinite Superpopulation
 
+The program I built in Stata creates random samples from infinite populations. In the first question, the population was fixed to 10,000 at the maximum. Here in the figure below, we see that the distribution also becomes much more narrow.
+
 ![Beta_Graph2](https://github.com/gui2de/ppol768-spring23/blob/50a664800385a51f76628c60cd5cb0a0a72f7f61/Individual%20Assignments/Hill%20Hannah/week-08/outputs/wk08_q2beta.png)
+
+In the table below, the standard error again decreases substantially as the sample size increases exponentially. The values for the 25th and 75th percentile again shrink as the sample size continues to increase.
 
 ### Table of Beta Coefficients:
 | Sample Size | Beta Coefficient | SE | Lower Bound | Upper Bound|
@@ -50,5 +56,16 @@ Finalized code, files, and figures for Assignment 08.
 | 2097152 | .0019396 | 9.24e-07 | .0019407 | .0019385 |
 | **Total** | .0567152 | .226919 | .4418451 | .4333361 |
 
-In particular, take care to discuss the reasons why you are able to draw a larger sample size than in Part 1, and why the sizes of the SEM and confidence intervals might be different at the powers of ten than in Part 1. Can you visualize Part 1 and Part 2 together meaningfully, and create a comparison table?
-Do these results change if you increase or decrease the number of repetitions (from 500)?
+### Comparison Table : Fixed vs. Infinite Superpopulation
+
+The table below compares the data on distribution between the fixed population (10,000) and the infinite superpopulation. With the understanding that as the sample size increases and the random samples drawn begin to center more around the mean, I expepcted the IQR to considerably smaller for the simulations running a high amount of iterations and vice versa for simulations with a lower number of iterations.
+| Population | Sample Size | Beta Coefficient | SE | Lower Bound | Upper Bound|
+| --------- |------------|-------------|----|--------|-------|
+| Fixed | 10 | .9180499 | .2413039 | 1.046967 | 1.04694 |
+| Infinite | 10 | .8897903 | .2361932 | .9611148 | 1.04795 |
+| Fixed | 100 | .970479 | .0199844 | .3054613 | .3026856 |
+| Infinite | 100 | .2983231 | .0211691 | .3029103 | .3064287 |
+| Fixed | 1000 | .0929588 | .0022879 | .092936 |.0917521 |
+| Infinite | 1000 | .0946949 | .0021097 | .094779 | .0941375 |
+| Fixed | 10000 | .032614 | .0002057 | .0325673 | .032985 |
+| Infinite | 10000 | .032614 | .002057 | .0325673 | .032985 |
