@@ -24,53 +24,89 @@ cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignment
 
 * Define a program 
 
-capture program drop week9          // Data Generating Process 
-program define week9, rclass 
-	syntax, samplesize(integer)
+cap prog drop weeknine          				// program setup 
+program define weeknine, rclass						// define the program
+		syntax, samplesize(integer) 		// samplesize is an argument to the program 
 
 
 ** Generate strata groups 
 		set obs 10   // number of localities in Bogota
-		gen localitie = _n
-		gen leffect = rnormal(0,2) // localitie effect
-		expand `samplesize' // number of businesses in a localitie  
+		gen localitie = _n // define variable 
+		expand 100 // expand localitie 
+		gen leffect = rnormal(0,3) // generate local effect 
 
 					
 ** Generate continuous covariates 
-
-	gen num_child = rnormal()
-	gen num_hrs = rnormal()
-	gen age_child = rnormal()
+	
+	gen num_child = 3 +int((10-2)*runiform()) // number of children ranges from 3 to 10
+	gen num_hrs = 2 + int((26-2)*rnormal())  // number of hours working ranges from 2 to 24 
+	gen age_child = 5+int((20-11)*runiform()) // child's age ranges from 5 to 14
 	
 * generate treatment variable
 
-	generate treatment = num_child + age_child 
+	generate treatment = num_child + num_hrs + rnormal() + (localitie/4)> 0 // treatment variable; confounder is number of children(num_child)
 
-* generate outcome y
+* generate outcome y; treatment variable has an effect of 0.5 units 
 
-	generate y = localitie/10 + num_child + num_hrs + 2*rnormal() + 0.4*treatment
-
-
-* run five regression models 
+	generate y = 2 + localitie/10 + num_child + (3)*age_child + 2*rnormal() + 2.5*treatment + leffect // dependent variable 
+	
+* regression models 
 		reg y treatment 
 		reg y treatment i.localitie 
-		reg y treatment i.localitie#c.num_child
-		reg y treatment i.localitie#c.num_child#c.num_hrs
-		reg y treatment i.localitie#c.num_child#c.num_hrs#c.age_child
+		reg y treatment i.localitie num_child
+		reg y treatment i.localitie num_child age_child 
+		reg y treatment i.localitie num_child num_hrs
+		reg y treatment i.localitie num_child num_hrs age_child 
+
+end
+
+
+/* DGP 
+
+		generate productivity score  = 2 /// base score is 2
+					
+					+ (-1)*num_child    /// if the number of children you have is greater than three your score decreases by -1
+					+ 3*age_child /// 		if your child is older than five your score increases by 3
+					+ 5*num_hrs ///         your hours are more than three, your score increases by 5 
+				
+		
+*/	 
 
 * table
 		matrix results = r(table)
 		
-		return scalar beta = results(beta)
+		return scalar one_beta = _b(treatment)
+		
 
-end 
-
-list results beta 
-
-*week9, samplesize(500)
+week9, samplesize(100)
 
 
+/*
+** run simulation 
+ 
+	tempfile secondary 
+	save `secondary', replace emptyok
+		
+		forvalues i = 1/6 {
+			local female_busin = 10^ `i'
+			
+			simulate col_beta=r(beta) reps(5): week9, samplesize(`female_busin')
+			gen samplesize = `female_busin'
+			
+			save `secondary'			
+			
+		}
+	
+	use `secondary', clear 
+			
+tempfile nine
+save `nine, replace emptyok'
 
 
+simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr), reps(5) saving(`nine'): week9, samplesize(10)
 
+	use `nine', clear
+
+
+*/
 
