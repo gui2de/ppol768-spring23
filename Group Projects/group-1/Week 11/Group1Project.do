@@ -131,11 +131,58 @@ graph twoway (scatter salary age, msymbol(circle) msize(tiny)) ///
     (lfit salary age) ///
     ytitle("Salary") xtitle("Age") legend(off) name(salary_age, replace)
 
+	*Our group still needs to create figures and tables, and we need to put them into a README.md file. 
 
+	
+	
+*********************************
+*WEEK 11 ASSIGNMENT STARTS HERE*
+*********************************
+**Data quality checks**
+// Simulate data for start and end time
+gen start_time = runiformint(1, 100)
+gen end_time = start_time + runiformint(10, 30)
 
+// Calculate the duration of the survey
+gen duration = end_time - start_time
 
+// Simulate completion rates
+gen completion_rate = runiform()
 
+// Calculate the number of completed surveys
+gen completed = rbinomial(_N, completion_rate)
 
+// Calculate the number of incomplete surveys
+gen incomplete = _N - completed
 
-*Our group still needs to create figures and tables, and we need to put them into a README.md file. 
+// Print summary statistics and examine for outlyers
+summarize start_time end_time duration completion_rate completed incomplete
 
+// Check for missing values
+summarize if missing(), detail // This simulated dataset does not have missing values, but real data will
+
+// Check for extreme values
+summarize distance_to_station distance_to_station_home distance_to_station_work commute_time salary, detail
+
+// Check for negative and outlying income values NOTE: there's a syntax error, not sure why
+if min(income) < 0 {
+    di "Negative values detected!"
+}
+
+// check for outlying values
+qui sum income
+local min = r(min)
+local p1 = r(p1)
+local p99 = r(p99)
+local max = r(max)
+
+//Again, more syntax errors here, but the spirit of the code is that it will display a message that there are some outliers that deserve examination
+if min < p1 {
+    di "Outlying values detected below 1st percentile! Total outlying values: " _Noutlying(income, `p1')
+    drop if income < `p1'
+}
+
+if max > p99 {
+    di "Outlying values detected above 99th percentile! Total outlying values: " _Noutlying(income, `p99')
+    drop if income > `p99'
+}
