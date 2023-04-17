@@ -1,0 +1,16 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx1296\clbrdrt\brdrs\cellx2448\clbrdrt\brdrs\cellx3024
+\ql \cell\qc (1)\cell\qc (2)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1296\cellx2448\cellx3024
+\ql \cell\qc n 10000\cell\qc \cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1296\cellx2448\cellx3024
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx1296\clbrdrb\brdrs\cellx2448\clbrdrb\brdrs\cellx3024
+\ql VARIABLES\cell\qc mean\cell\qc sd\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1296\cellx2448\cellx3024
+\ql \cell\qc \cell\qc \cell\row
+\ql betas\cell\qc 1.002\cell\qc \cell\row
+\ql ses\cell\qc 0.00290\cell\qc \cell\row
+\ql interval\cell\qc 0.0114\cell\qc \cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx1296\clbrdrb\brdrs\cellx2448\clbrdrb\brdrs\cellx3024
+\ql \cell\qc \cell\qc \cell\row
+}
