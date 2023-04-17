@@ -501,19 +501,55 @@ save "stats_sanitation_alt_v2.dta", replace
 
 
 
-. histogram beta_coeff1, by(runID)
 
-. histogram beta_coeff2, by(runID)
 
-. histogram beta_coeff3, by(runID)
 
-. histogram beta_coeff4, by(runID)
 
-. histogram beta_coeff5, by(runID)
+*_______________________________ 
+*DATA VISUALIZATION 
 
-. histogram beta_coeff6, by(runID)
+*Make graphs for Part 1 
+clear 
+use stats_sanitation_part1_v1
 
-. histogram beta_coeff7, by(runID)
+bysort runID: egen meanN = mean(N)
+order meanN, after(N)
+
+forvalues j = 1/5 {
+	histogram beta_coeff`j', by(meanN)
+	graph export hist_part1_reg`j'.png, replace
+	
+	bysort runID: egen mean_beta`j' = mean(beta_coeff`j') 
+	bysort runID: egen mean_SEM`j' = mean(SEM`j')
+}
+
+drop runID N beta_coeff1 SEM1 beta_coeff2 SEM2 beta_coeff3 SEM3 beta_coeff4 SEM4 beta_coeff5 SEM5
+
+*xpose, clear
+
+duplicates drop
+
+
+
+
+*serrbar y s x
+
+
+
+*Make graphs for Part 2 
+clear 
+use stats_sanitation_part2_v1
+
+bysort runID: egen meanN = mean(N) 
+order meanN, after(N)
+
+forvalues j = 1/7 {
+	histogram beta_coeff`j', by(meanN)
+	graph export hist_part2_reg`j'.png, replace
+}
+
+
+*use stats_sanitation_part2_v1
 
 
 
