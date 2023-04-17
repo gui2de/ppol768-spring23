@@ -33,7 +33,7 @@ gen u_ij = rnormal(0,3)
 *Creating a variable for years of teaching experience. 
 bysort school: generate teach_exp = 5+int((20-5+1)*runiform())
 *Generate student-level dataset where each school-class will have 16-25 students.
-expand 16+int((25-16+1)*runiform())
+expand 16+int(10*runiform())
 *Create student IDs
 bysort school classroom: generate child = _n 
 *Create student-level effects
@@ -68,7 +68,7 @@ mat a = r(table)
 return scalar Beta2 = a[1,1]
 
 *Third regression: 
-reg score treat h urban teach_exp mother_educ h 
+reg score treat h urban teach_exp mother_educ 
 mat a = r(table)
 return scalar Beta3 = a[1,1]
 
@@ -82,7 +82,9 @@ reg score treat urban teach_exp mother_educ i.(school classroom)
 mat a = r(table)
 return scalar Beta5 = a[1,1]
 
-end
+return scalar N=`c(N)'
+
+end 
 
 clear
 *Defining a temporary space Stata to store data created in loop to follow:
@@ -94,7 +96,7 @@ forvalues i=1/8 {
 	local samplesize= 2^`i'
 	display as error "iteration = `i'" 
 	tempfile sims
-	simulate beta1 = r(Beta1) beta2 = r(Beta2) beta3 = r(Beta3) beta4 = r(Beta4) beta5 = r(Beta5) ///
+	simulate n=r(N) beta1 = r(Beta1) beta2 = r(Beta2) beta3 = r(Beta3) beta4 = r(Beta4) beta5 = r(Beta5) ///
 	, reps(50) seed(4454) saving(`sims') ///
 	: RDI, samplesize(`samplesize') 
 	 
@@ -104,12 +106,13 @@ forvalues i=1/8 {
 	save `combinedtwo', replace 
 }
 
-tabstat beta1 beta2 beta3 beta4 beta5, by(samplesize)
-twoway (line beta1 samplesize, color(orange)) ///
-       (line beta2 samplesize, color(green)) ///
-       (line beta3 samplesize, color(purple)) ///
-       (line beta4 samplesize, color(blue)) ///
-       (line beta5 samplesize, color(red)) ///
+tabstat beta1 beta2 beta3 beta4 beta5, by(n)
+twoway (lpolyci beta1 n, color(orange) fc(gray%15)) ///
+       (lpolyci beta2 n, color(green) fc(gray%15)) ///
+       (lpolyci beta3 n, color(purple) fc(gray%15)) ///
+       (lpolyci beta4 n, color(blue) fc(gray%15)) ///
+       (lpolyci beta5 n, color(red) fc(gray%15)) ///
        , ytitle("Beta values") xtitle("Sample size") ///
-       legend(order(1 "Beta1" 2 "Beta2" 3 "Beta3" 4 "Beta4" 5 "Beta5")) ///
-       title("Line Graph of Beta Values")
+       legend(order(2 "Beta1" 4 "Beta2" 6 "Beta3" 8 "Beta4" 10 "Beta5")) ///
+       title("Line Graph of Beta Coefficients")
+

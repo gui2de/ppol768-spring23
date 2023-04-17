@@ -98,7 +98,7 @@ forvalues i=1/8 {
 	display as error "iteration = `i'" 
 	tempfile sims
 	simulate n=r(N) beta1 = r(Beta1) beta2 = r(Beta2) beta3 = r(Beta3) beta4 = r(Beta4) beta5 = r(Beta5) ///
-	, reps(50) seed(8870) saving(`sims') ///
+	, reps(500) seed(8870) saving(`sims') ///
 	: PPOL768, samplesize(`samplesize') 
 	
 	use `sims' , clear
@@ -115,5 +115,4 @@ twoway (lpolyci beta1 n, color(orange) fc(gray%15)) ///
        , ytitle("Beta values") xtitle("Sample size") ///
        legend(order(2 "Beta1" 4 "Beta2" 6 "Beta3" 8 "Beta4" 10 "Beta5")) ///
        title("Line Graph of Beta Coefficients")
-	   
-*graph save "Graph1" "/Users/peytonweber/Desktop/GitHub/ppol768-spring23/Individual Assignments/Weber Peyton/Week 09/2023.03.27.line.graph.gph", replace
+
