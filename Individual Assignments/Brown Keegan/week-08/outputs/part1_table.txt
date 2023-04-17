@@ -1,0 +1,8 @@
+	(1)	(2)
+	n 10000	
+VARIABLES	mean	sd
+		
+betas	1.002	
+ses	0.00290	
+interval	0.0114	
+		
