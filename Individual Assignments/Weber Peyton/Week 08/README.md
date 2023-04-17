@@ -9,7 +9,7 @@ The 2,000 regression results provide evidence that the data distribution narrows
 
 The following table illustrates the IQR of the beta coefficient estimates, the standard errors, and the confidence intervals at various sample sizes. 
 
-![Part One Histograms by Sample Size](Outputs/USETHISONE_BetasbySampleSizeHistogram.gph)
+![Part One Histograms by Sample Size](USETHISONE_BetasbySampleSizeHistogram.png)
 
 | samplesize | beta_coef | se        | lowerbound | upperbound |
 |------------|-----------|-----------|------------|------------|
@@ -24,7 +24,7 @@ The following table illustrates the IQR of the beta coefficient estimates, the s
 
 Similarly to part one, the IQR becomes smaller with larger sample sizes. Unlike part one, we are no longer constrained to a population of 10,000 observations. I believe this is why the standard errors and confidence intervals would be different. 
 
-![Part Two Histograms by Sample Size](Outputs/USETHISONE_EstimatedBetaCoefsBySampleSize.gph)
+![Part Two Histograms by Sample Size](USETHISONE_EstimatedBetaCoefsBySampleSize.png)
 
 The following table illustrates the IQR generated for part two. 
 
@@ -85,16 +85,4 @@ The following table illustrates the IQR generated for part two.
 | 1048576    | 0.0027341 | 2.16E-06  | 0.0027282  | 0.0027401  |
 | 2097152    | 0.0017831 | 8.27E-07  | 0.0017848  | 0.0017815  |
 
-**OLD, please disregard: 
-| Sample Size | Variance |
-|-------------|----------|
-| 10          | 1.03e-06 |
-| 100         | 1.03e-06 |
-| 1000        | 1.03e-06 |
-| 10000       | 1.03e-06 |
-| Total       | 1.03e-06 |
-
-I still need to paste the histogram from part 1, summarize my results, and complete part 2! 
-
-Author: Peyton Weber
-Week 08 Assignment as of 12:00AM EDT March 22, 2023. 
+![Final Question Histograms by Sample Size](USETHISONE_EstimatedBetaCoefsBySampleSize_final_q.png)
