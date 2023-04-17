@@ -53,9 +53,8 @@ program define week9, rclass
 
 * generate outcome y
 
-	generate y = localitie/10 + intvar + num_child + num_hrs + 2*rnormal() + 0.5*treatment
-
-
+	generate y = (localitie/10) + intvar + num_child + num_hrs + 2*rnormal() + 0.5*treatment
+	
 * run five regression models 
 		reg y treatment 
 		reg y treatment i.localitie 
