@@ -1,31 +1,50 @@
-
 # Week08 Assignment
-
 ## Daniel Fang
 
-## Part I
-My name is Yuqing (Daniel) Fang, and I am a second year MPP student at Georgetown University. I grew up in Shenzhen, a vibrant, populous megacity located right next to the world-famous Hong Kong. I completed my undergraduate degree from Macalester College with political science and economic majors, and a minor in statistics. My policy interests are economic policies and international development policies. 
+## Part 1:
 
-![Profile picture](img/profilepicture.png){height=200px} 
-![Shenzhen](img/shenzhen.png){height=200px}
+| Sample size |  SE   | CI (Lower) | CI (Upper) |
+|:------------|:-----:|:----------:|:----------:|
+| 10          |   0   |     0      |     0      |
+| 100         | 0.047 |   0.927    |   1.113    |
+| 1000        | 0.026 |   0.928    |   1.031    |
+| 10000       | 0.010 |   0.992    |   1.031    |
 
-##Technical Background
-Having completed McCourt's prerequisites, I have experiences working on Stata, performing tasks such as data editing and analysis. I have some experience using Git and Github in statistics courses in college, but mostly for turning in assignments and managing a group project. I have not participated in a formal research experience that requires Github collaborations. I have no experience working with SurveyCTO.
+| Sample size | Beta variance |
+|:------------|:-------------:|
+| 10          |       0       |
+| 100         |   0.0038735   |
+| 1000        |   0.0008315   |
+| 10000       |   0.0019327   |
 
-##Research Interests
-It is exciting to having taken the research design and implementation course because I get to be led by top researchers at professional research institutions, and have the chance of learning their skills and experiences. As an Economics major in college, I received rigorous academic trainings, and got to work on some exciting research topics on macroeconomic theories and economic developments with my peers. 
+Based on my simulation results in part 1, the relationship between sample size and confidence interval (CI) can be expressed as follows: a larger sample size leads to a tighter confidence interval with a smaller margin of error (ME), whereas a smaller sample size leads to a wider confidence interval with a larger margin of error. As the sample size (N) increases, the standard error of the mean (SEM) decreases and the confidence intervals become narrower. This can be observed in the first table, which indicates the change in SEM and confidence intervals with varying sample sizes.
 
-For example, one of my research projects attempted to predict a demand-deficient recession after COVID-19 hits global economy. Supply shocks affect both consumption and production but eventually have spillover disruption on demand. An example of the equation we used is the classical consumption and leisure tradeoff function: $U(C_t, l_t) = lnC_t + ln(h - N_t), where $C_t$ and $l_t$ denote the consumption and leisure at time t and h denotes total hours people have that can be spent on working and relaxing. I am also interested in other policy areas such as:
-1. Technology policy
-2. Housing policy
-3. Healthcare policy
-4. Environmental policy
+As for the relationship between sample sizes and variance, the second table indicates that with a larger sample size, the variance of estimated beta (estimated parameters) is getting relatively smaller.
 
-Here are some resources I think would be helpful in developing a potential research topic in this class:
-| Name               | Link                                                                |   |   |   |
-|--------------------|---------------------------------------------------------------------|---|---|---|
-| D.C. Policy Center | https://www.dcpolicycenter.org/                                     |   |   |   |
-| Analysis Group     | https://www.analysisgroup.com/Insights/                             |   |   |   |
-| Econometrica       | https://www.econometricsociety.org/publications/econometrica/browse |   |   |   |
-| World Bank         | https://www.worldbank.org/en/research                               |   |   |   |
+## Part 2:
 
+In part two, the program is built first and the data set is created within the program, with the argument setting the number of observations in the data set. This allows for the sample size to be set without any limits. Furthermore, since the randomly distributed variable (x) is created first and then the sample size is set, the distribution of x in the new sample is closer to a random distribution. In contrast, in part one, the sample size was set before the creation of x, which may have resulted in a less random distribution of x in the sample. Due to the difference in the distributions of x in the two parts, the sizes of the SEM and confidence intervals may differ by orders of magnitude.
+
+The following table shows the SEM, confidence intervals and the beta variance for varying sample sizes in part two:
+
+| Sample size |   SE   | CI (Lower) | CI (Upper) |
+|:------------|:------:|:----------:|:----------:|
+| 10          | 0.395  |   0.802    |   2.622    |
+| 100         | 0.060  |   0.926    |   1.164    |
+| 1000        | 0.014  |   0.968    |   1.023    |
+| 10000       | 0.002  |   0.994    |   1.002    |
+| 100000      | 0.0002 |   0.999    |   1.000    |
+| 1000000     | 0.0001 |   1.000    |   1.000    |
+
+| Sample size | Beta variance |
+|:------------|:-------------:|
+| 10          |   0.1263214   |
+| 100         |   0.0035254   |
+| 1000        |   0.0001876   |
+| 10000       |   3.73e-06    |
+| 100000      |   3.65e-08    |
+| 1000000     |   6.65e-08    |
+| 10000000    |   8.26e-10    |
+
+### Histograms
+To further demonstrate the relationships described above, the user can also refer to the histogram created in the Stata do file.
