@@ -14,15 +14,15 @@ drop _all
 *B. INTEROPERABILITY
 ********************************************************************************
  
-global user "C:\Users\kevin\Github\ppol768-spring23\Individual Assignments\Fan Serenity\week-12"
+global user "C:\Users\kevin\Github\ppol768-spring23\Group Projects\group-5\week-12"
 
 
 *******************************************************************************
 *C. GLOBALS
 *******************************************************************************
 
-global midline "$user\02_data\20180716\Project_DiFi.dta"
-global dashboard "$user\03_output\dashboard.xls"
+global midline "$user\Project_DiFi.dta"
+global dashboard "$user\dashboard.xls"
 
 
 ********************************************************************************
@@ -30,7 +30,73 @@ global dashboard "$user\03_output\dashboard.xls"
 *******************************************************************************
 use "$midline", clear 
 
+*Drop Un-needed Variables 
+drop c1 c2 d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 e1_sources f1 f2 f3 f3_other f4 f4_other f5 f6 hhmencouraged j3 df_working df_notworking 
+drop surveystatus1 surveystatus2 surveystatus3 surveystatus4 surveystatus5 surveystatus6 surveystatus7 surveystatus8 surveystatus9 surveystatus10 surveystatus11 surveystatus12 surveystatus13
 
+***** 
+*Adding Manual-Scavenging-Specific Elements, relevant to HFC
+*commute_time_
+
+sort starttime_manual
+*keep starttime_manual if regex(starttime_manual, "Mar-12", .)
+
+
+
+foreach j in 2 5 6 7 8 9 12 13 14 15 16 {
+
+preserve 
+
+keep if strpos(starttime_manual, "Mar-`j'")
+
+gen starttime_new = starttime_manual 
+order starttime_new, after(starttime_manual)
+
+replace starttime_new = subinstr(starttime_new, "2018-Mar-`j'", "",.)
+split starttime_new, parse(:) 
+*replace starttime_new = substr(starttime_new, 1, strpos(starttime_new, ".") - 5) 
+drop starttime_new2 starttime_new3
+order starttime_new1, after(starttime_new)
+drop starttime_new 
+destring starttime_new1, replace
+
+*Generate indicator variable 
+gen surveysuccess = 0 
+replace surveysuccess = 1 if hh_found==1 & members_present==1 & consentyesno==1 
+order surveysuccess, after(consentyesno)
+bysort starttime_new1: egen sum_surveysuccess = sum(surveysuccess)
+order sum_surveysuccess, after(surveysuccess)
+
+bysort starttime_new1: egen count_time = count(starttime_new1)
+order starttime_new1, after(sum_surveysuccess)
+
+gen rate = sum_surveysuccess / count_time * 100
+order rate, after(starttime_new1)
+order count_time, after(sum_surveysuccess)
+
+ 
+
+keep starttime_new1 rate
+duplicates drop
+
+graph twoway bar rate starttime_new1, xla(9(1)17) xtitle("Start Time Hour in Day [24 h clock]") ytitle("Success Rate (%)") title("Mar `j' 2018 Survey Time Success Rates")
+graph export times_surveys_Mar_`j'_2018.png, replace 
+
+*export excel using "$dashboard", sheet("Mar_`j'_2018 Summ") sheetreplace firstrow(variables)
+
+restore 
+
+
+
+}
+
+
+
+
+
+
+
+/* 
 
 *Duplicates
 *****************************************
@@ -111,9 +177,9 @@ exit
 
 
 
+*/ 
 
 
 
 
-
-exit 
+* exit 
