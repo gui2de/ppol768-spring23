@@ -9,7 +9,9 @@ An error we expect in the survey output is the wrong number of children entered.
 ## Below is the sample output: 
 
 The graph below shows the amount of errors by the enumerator ID.
+
 ![Amount of Possible Errors by Enumerator IDs](img/errors by enumerator.png)
 
 Below shows the data that could be errors by differentiating them as red crosses.
+
 ![Scatterplot of errors](img/scatter errors.png)
