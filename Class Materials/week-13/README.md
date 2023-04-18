@@ -1,6 +1,6 @@
 # Week 13 Homework Assignment
 
-## Survey Update 
+## Survey Update
 
 For the last individual assignment of this class, you will be updating your surveycto survey by adding the following features to it. This assignment is due on Monday May 1.
 
@@ -35,9 +35,9 @@ This is the final submission for your group project. It will incorporate feedbac
 
 Real life examples of what the final submission of the group project is are available [here](https://github.com/gui2de/ppol768-spring23/blob/0f07d94d58514f81598f478eb30c45c4d56eccc2/Group%20Projects/examples/PAP%20Rwanda%20Cash%20Benchmarking%20-%20Stage%201.pdf) or [here](https://github.com/gui2de/ppol768-spring23/blob/0f07d94d58514f81598f478eb30c45c4d56eccc2/Group%20Projects/examples/PAP_Final_Caria%20et%20alpdf.pdf).
 
-You will submit it through Github, as a new document inside your project folder. You are welcome to submit either another .MD file called FinalProject, or a .pdf file. You will submit your group assignment via a dedicated branch and pull request, which one of you will create. You are welcome to use that branch to work together on the document remotely within your group (ie once one of you has created the branch for your group project, all of you can check it out locally and work on it), or work outside of github and simply upload the final document to the class repo. Because there is no peer review requested for the group project, you will not be assigning anyone for review when creating the pull request.
+You will submit it through Github, as a new document inside your project folder. You are welcome to submit either another .md file called FinalProject, or a .pdf file. You will submit your group assignment via a dedicated branch and pull request, which one of you will create. You are welcome to use that branch to work together on the document remotely within your group (ie once one of you has created the branch for your group project, all of you can check it out locally and work on it), or work outside of github and simply upload the final document to the class repo. Because there is no peer review requested for the group project, you will not be assigning anyone for review when creating the pull request.
 
-## Final Individual Self-Evaluation
+## Final Individual Self-Evaluation : due by Monday 05/08
 
 The final assignment is your self evaluation. The template for it is available [here](https://docs.google.com/document/d/1tWC3z3pbHoNAn_octc_Edj3W4f7DinQd6sLhLbjo-Lw/edit?usp=sharing).
 
