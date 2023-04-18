@@ -76,9 +76,22 @@ program define normal_reg_sanitation, rclass
 	*Affects treatment but not outcome 
 	gen female = round(runiform(0,1), 1)
 
-	*Generate Treatment: Apply treatment to the 1st 5 districts (this assumes that the district numbers have already been randomized in our dataset), to female manual scavengers with at most 10 years of experience in the field
+	*Generate Treatment: Randomize by district 
 	generate treatment = 0 
-	replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
+	  gen d_elig = rnormal() // District-eligibility randomizer
+	    bysort district: egen d_rmean = mean(d_elig)
+		gen d_elig_ind = d_rmean > 0
+		
+	*Randomize by gender (female): 75% of female manual scavengers are eligible, 25% of male manual scavengers are eligible 
+	  gen d_gender = rnormal() 
+		b
+		
+		
+		
+		
+		
+	replace treatment = 1 if d_elig_ind==1
+	*replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
 
 	*DGP (DATA GENERATING PROCESS) 
 	gen income = 10000 + rnormal(10000, 1000) * treatment - 30*scav_years - 40*transit_time + 300*educ + u_i + u_ij + e_ijk  
@@ -512,6 +525,15 @@ save "stats_sanitation_alt_v2.dta", replace
 clear 
 use stats_sanitation_part1_v1
 
+bysort runID: egen N_avg = mean(N)
+order N_avg, after(N)
+
+*if runID==1 {
+	twoway lpolyci beta_coeff3 N_avg
+*} 
+
+
+/* 
 bysort runID: egen meanN = mean(N)
 order meanN, after(N)
 
@@ -528,7 +550,7 @@ drop runID N beta_coeff1 SEM1 beta_coeff2 SEM2 beta_coeff3 SEM3 beta_coeff4 SEM4
 *xpose, clear
 
 duplicates drop
-
+*/ 
 
 
 
