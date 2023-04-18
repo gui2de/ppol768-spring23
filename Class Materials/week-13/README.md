@@ -1,5 +1,7 @@
 # Week 13 Homework Assignment
 
+## Survey Update 
+
 For the last individual assignment of this class, you will be updating your surveycto survey by adding the following features to it. This assignment is due on Monday May 1.
 
 - Address the feedback from the peer review and instructor review from your week-07 submission
@@ -47,10 +49,10 @@ Please download the template and fill it out by giving yourself a rating on each
 
 Each week, you will do the following steps to submit your assignment in the class repo.
 - Pull the `instructions` branch of the class repository to your local repo using GitKraken to make sure you are working off the latest version published on GitHub.
-- Create and check out a branch for this week's asssignments called `w07-netid` (replace "netid" by your netid) using GitKraken. The branch should be pointing to the latest commit, which will be named something like __"Start week-13 assignment here"__
+- Create and check out a branch for this week's asssignments called `w13-netid` (replace "netid" by your netid) using GitKraken. The branch should be pointing to the latest commit, which will be named something like __"Start week-13 assignment here"__
 - Navigate in your file browser (ie, Finder or Files Explorer) to the repository, and open the folder with your name inside the "Individual Assignments" directory.
-- Create a `week-07` folder inside your folder in the "Individual Assignments" directory.
-- In your `week-07` folder, create and save all your assignment files (dofiles, markdown files, etc).
+- Create a `week-13` folder inside your folder in the "Individual Assignments" directory.
+- In your `week-13` folder, create and save all your assignment files (dofiles, markdown files, etc).
 - Stage your changes into commits, and push your branch to the GitHub remote using GitKraken (it will prompt you to create the branch in the remote repo)
 - Open a Pull Request (PR) to the `main` branch using the online GitHub interface. Assign someone at random from the group to review your request by tagging the class group (@ppol768-spring23) under the Reviewers' box on the right.
 - When you are assigned someone else's assignment to review, you should check-out their branch on your own local repo, so you can run their dofiles and perform a complete review by running their code locally, then leaving comments on the PR interface on Github.
