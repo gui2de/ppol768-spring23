@@ -34,10 +34,27 @@ use "$midline", clear
 drop c1 c2 d1 d2 d3 d4 d5 d6 d7 d8 d9 d10 e1_sources f1 f2 f3 f3_other f4 f4_other f5 f6 hhmencouraged j3 df_working df_notworking 
 drop surveystatus1 surveystatus2 surveystatus3 surveystatus4 surveystatus5 surveystatus6 surveystatus7 surveystatus8 surveystatus9 surveystatus10 surveystatus11 surveystatus12 surveystatus13
 
+
+*CHECK 1: ATTEMPT 1 
+gen commute_times_past = runiform(0,120)
+gen commute_times_pres = commute_times_past + rnormal(3,3)
+gen commute_times_diff = (commute_times_pres - commute_times_past) / commute_times_past * 100 
+
+gen newjob = 0 
+	replace newjob = 1 if rnormal()>0 
+
+gen check1 = 0 
+	replace check1=1 if (newjob==0) & (commute_times_diff>10) 
+
+	
+
+	
+	
 ***** 
 *Adding Manual-Scavenging-Specific Elements, relevant to HFC
 *commute_time_
 
+*CHECK 2: CHECK THE MOST SUCCESSFUL TIMES FOR ENUMERATORS TO DO SURVEYS 
 sort starttime_manual
 *keep starttime_manual if regex(starttime_manual, "Mar-12", .)
 
