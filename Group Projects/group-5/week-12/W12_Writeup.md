@@ -4,9 +4,9 @@ Serenity Fan, Alexa Coon, Saloni Bhatia
 ## Check 1: Survey Timing Check 
 
 We want to characterize the most effective times during the day when enumerators obtain responses. If the check is repeated on a daily basis over a period of at least a month, patterns of responsiveness amongst the target population can be ascertained. To this end, we show results from the checks below, binning the survey start time into 1-hour intervals from 9:00-9:59 am, 10:00-10:59 am, ..., up to 5:00-5:59 pm. We define survey success, the dependent variable, as occurences in which: 
-*a) The enumerator found the household 
-*b) Member of household was present 
-*c) Consent to perform survey obtained 
+* a) The enumerator found the household 
+* b) Member of household was present 
+* c) Consent to perform survey obtained 
 
 We acknowledge that this assumes that surveys that were started were also completed during this enumerator visit. 
 
