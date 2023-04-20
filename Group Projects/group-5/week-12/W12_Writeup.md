@@ -1,14 +1,12 @@
 # Week 12 - High Frequency Checks (HFC's) Group Assignment 
-Serenity Fan 
-Alexa Coon 
-Saloni Bhatia 
+Serenity Fan, Alexa Coon, Saloni Bhatia 
 
 ## Check 1: Survey Timing Check 
 
 We want to characterize the most effective times during the day when enumerators obtain responses. If the check is repeated on a daily basis over a period of at least a month, patterns of responsiveness amongst the target population can be ascertained. To this end, we show results from the checks below, binning the survey start time into 1-hour intervals from 9:00-9:59 am, 10:00-10:59 am, ..., up to 5:00-5:59 pm. We define survey success, the dependent variable, as occurences in which: 
-a) The enumerator found the household 
-b) Member of household was present 
-c) Consent to perform survey obtained 
+*a) The enumerator found the household 
+*b) Member of household was present 
+*c) Consent to perform survey obtained 
 
 We acknowledge that this assumes that surveys that were started were also completed during this enumerator visit. 
 
@@ -24,8 +22,9 @@ We acknowledge that this assumes that surveys that were started were also comple
 ![Mar15](times_surveys_Mar_15_2018.png)  
 ![Mar16](times_surveys_Mar_16_2018.png)  
 
+Based on the graphs, we do not see an obvious pattern in most successful times during which to conduct surveys. This could be because we only have data for ~2 work-weeks (11 days) in this dataset, which is a small sample. If continued for a few more weeks, however, patterns may emerge, which could used to inform the field manager of when to best schedule enumerator shifts. 
 
-## Check 2: 
+## Check 2: Respondent Recall Check 
 
 Our group had considered choosing to focus our HFC on verifying the accuracy of information provided by surveyed individuals. During our midline survey we anticipate asking questions about individual's commute times to work. We will test respondent recall by asking the following: 
 
