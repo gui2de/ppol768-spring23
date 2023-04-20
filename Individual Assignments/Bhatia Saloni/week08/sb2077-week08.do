@@ -23,12 +23,14 @@ save "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments
 
 *Step 2: Write a do-file defining a `program` that: (a) loads this data; (b) randomly samples a subset whose sample size is an argument to the program; (c) create the Y's from the X's with a true relationship an an error source; (d) performs a regression of Y on one X; and (e) returns the N, beta, SEM, p-value, and confidence intervals into `r()`.
 
+set seed 200
 capture program drop example
 program define example, rclass
 syntax, samplesize(integer) 
+clear 
 
 *(a) loads this data
- use "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments/Bhatia Saloni/week08/outputs/w08-dataset.dta", replace
+use "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments/Bhatia Saloni/week08/outputs/w08-dataset.dta", replace
 
 *(b) randomly samples a subset whose sample size is an argument to the program;
 sample `samplesize', count
@@ -42,7 +44,7 @@ matrix results = r(table)
 
 matrix list results 
 
-return scalar N = `e(N)'
+return scalar N = e(N)
 return scalar beta = results[1,1]
 return scalar SEM = results[2,1]
 return scalar pval = results[4,1]
@@ -50,19 +52,20 @@ return scalar ll = results[5,1]
 return scalar ul = results[6,1]
 end
 
-example, samplesize(1234)
-display r(beta)
-display r(SEM)
-display r(pval)
-display r(ll)
-display r(ul)
+*example, samplesize(1234)
+*display r(beta)
+*display r(SEM)
+*display r(pval)
+*display r(ll)
+*display r(ul)
 
-exit
 
 *Step 3: Using the `simulate` command, run your program 500 times each at sample sizes N = 10, 100, 1,000, and 10,000. Load the resulting data set of 2,000 regression results into Stata.
 
 tempfile example_temp
 tempfile results
+clear 
+
 save `results', emptyok
 
 forvalues i=1/4{
@@ -73,10 +76,11 @@ forvalues i=1/4{
 	  , reps(500) seed(200) saving(`example_temp' , replace) ///
 	  : example, samplesize(`samplesize')
 
-	use `example_temp'
+	  preserve
+	use `example_temp', clear 
 	  append using `results'
 	  save `results' , replace
-
+	restore
 }
 
 use `results', clear
@@ -84,21 +88,16 @@ use `results', clear
 *Step 4: Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger.
 
 histogram beta, by(N)
+graph export betavar.png, replace 
 *generating a histogram of betas for samplesize=10
-local style "start(-0.5) barwidth(0.09) width(.1) fc(gray) freq"
-tw ///
-(histogram beta, `style' lc(red) ) ///
-(histogram beta if pval < 0.05 , `style' lc(blue) fc(none) ) ///
-, by(N) xtit("") legend(on ring(0) pos(1) order(2 "p < 0.05") region(lc(none)))
+*local style "start(-0.5) barwidth(0.09) width(.1) fc(gray) freq" tw ///
+*(histogram beta, `style' lc(red) ) ///
+*(histogram beta if pval < 0.05 , `style' lc(blue) fc(none) ) ///
+*, by(N) xtit("") legend(on ring(0) pos(1) order(2 "p < 0.05") region(lc(none)))
 
 *creating a table 
-tw lpolyci beta samplesize
-
-*Doubts: 
-*1. The histogram is centered around 3, I am not sure why. I am getting errors such as '=10000 invalid name'. How to solve for this?
-*2. I am not sure how to generate multiple tables and figures becuase of which I have not yet uploaded a README file. 
-*3. How should I load my 2000 values? aren't they going to my tempfile? iif yes, how do i check?
-*4. the results do not return in a matric format 
+tw lpolyci beta N
+ 
 
 *________________________________________________________________________________________*
 
@@ -113,9 +112,11 @@ tw lpolyci beta samplesize
 
 *1. Write a do-file defining a `program` that: (a) randomly creates a data set whose sample size is an argument to the program following your DGP from Part 1 including a true relationship an an error source; (b) performs a regression of Y on one X; and (c) returns the N, beta, SEM, p-value, and confidence intervals into `r()`.
 
+set seed 250
 capture program drop example2
 program define example2, rclass
-syntax, samplesize(integer) 
+syntax, samplesize(integer)
+clear 
 
 *(a) loads this data
  use "/Users/salonibhatia/Desktop/Github/ppol768-spring23/Individual Assignments/Bhatia Saloni/week08/outputs/w08-dataset.dta", replace
@@ -152,42 +153,69 @@ exit
 
 *2. Using the `simulate` command, run your program 500 times each at sample sizes corresponding to the first twenty powers of two (ie, 4, 8, 16 ...); as well as at N = 10, 100, 1,000, 10,000, 100,000, and 1,000,000. Load the resulting data set of 13,000 regression results into Stata.
 
+clear 
+tempfile example_temp2
+save `example_temp2', replace emptyok
+*tempfile results2
+
+*save `results2', emptyok
+
 forvalues i=1/21{
 	local samplesize= 2^`i'
-tempfile example_temp2
-simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_temp2'): example2, samplesize(`samplesize')
+tempfile results2
+simulate beta_coef=r(beta) pvalues=r(pval) se=r(se), reps(50) seed(200) saving(`results2'): example2, samplesize(`samplesize')
+
+ preserve
+	use `results2', clear 
+	gen samplesize = `samplesize'
+	  append using `example_temp2'
+	  save `example_temp2' , replace
+	restore
 }
 
+use `example_temp2', clear
+
+histogram beta, by(samplesize) //or
+tw (histogram beta, by(samplesize) lc(none) fc(gray) freq width(.1) barwidth(.1))(histogram beta if p < .00001, lc(black) fc(none) freq width(.1) barwidth(.1) legend(order(1 "Beta" 2 "p < 0.05")))
+
+graph bar (mean) se, over(samplesize) ytitle("Mean of Standard Error") title("Differences in Variance per Sample Size") subtitle("Reductions in Variance Experienced by Different Sample Sizes")
+
+clear 
+tempfile example_temp3
+save `example_temp3', replace emptyok
+**tempfile results3
 
 forvalues i=1/6{
 	local samplesize= 10^`i'
-tempfile example_temp2
-simulate beta_coef=r(beta) pvalues=r(pval), reps(500) seed(200) saving(`example_temp2'): example2, samplesize(`samplesize')
+tempfile results3
+simulate beta_coef=r(beta) pvalues=r(pval) se=r(se), reps(50) seed(200) saving(`results3'): example2, samplesize(`samplesize')
+
+preserve
+	use `results3', clear
+	gen samplesize = `samplesize'
+	  append using `example_temp3'
+	  save `example_temp3' , replace
+	restore
 }
+
+use `example_temp3', clear
 
 exit
 
 *3. Create at least one figure and at least one table showing the variation in your beta estimates depending on the sample size, and characterize the size of the SEM and confidence intervals as N gets larger.
+histogram beta, by(samplesize) //or 
+
+tw (histogram beta, by(samplesize) lc(none) fc(gray) freq width(.1) barwidth(.1))(histogram beta if p < .00001, lc(black) fc(none) freq width(.1) barwidth(.1) legend(order(1 "Beta" 2 "p < 0.05")))
+
+estpost tabstat beta se, by(samplesize) col(stats) s(mean sem max min)
+
+graph bar (mean) se, over(samplesize) ytitle("Mean of Standard Error") title("Differences in Variance per Sample Size") subtitle("Reductions in Variance Experienced by Different Sample Sizes")
+
+*4. Fully describe your results in your `README.md` file, including figures and tables as appropriate.
+*5. In particular, take care to discuss the reasons why you are able to draw a larger sample size than in Part 1, and why the sizes of the SEM and confidence intervals might be different at the powers of ten than in Part 1. Can you visualize Part 1 and Part 2 together meaningfully, and create a comparison table?
+*6. Do these results change if you increase or decrease the number of repetitions (from 500)?
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-*Doubts:
-*1) Even though I used the same code as in Part 1, stata says 'file w08-dataset.dta not found' - why?
-*2) The simulation runs for a long time but I dont know how to analyize it or ensure that my code is correct. How do I analyze the output? 
-*3) Similar issue as Part 1 regarding lack of graphs and tables in README 
-*4) How to check that both my simulation loops were run?
-*5)I could not visualize Part 1 and Part 2 together meaningfully, and create a comparison table
 
 
 
