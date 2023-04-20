@@ -52,13 +52,13 @@ program define normal_reg_sanitation, rclass
 	generate u_i = rnormal(500,100) // District-level error effects 
 
 	*Village/Municipality-level effects (j) 
-	expand 100 + int((50)*runiform()) 
+	expand 25 + int((50)*runiform()) 
 	 // Assume mean of 100 villages/municipalities per district 
 	bysort district: generate village = _n
 	generate u_ij = rnormal(500,100)
 
 	*Household-level effects (k) 
-	expand 100 + int((50)*runiform()) 
+	expand 25 + int((50)*runiform()) 
 	 // Assume mean of 100 manual-scavenging households per village/municipality 
 
 	bysort district village: generate hh = _n // generate household ID
@@ -80,16 +80,7 @@ program define normal_reg_sanitation, rclass
 	generate treatment = 0 
 	  gen d_elig = rnormal() // District-eligibility randomizer
 	    bysort district: egen d_rmean = mean(d_elig)
-		gen d_elig_ind = d_rmean > 0
-		
-	*Randomize by gender (female): 75% of female manual scavengers are eligible, 25% of male manual scavengers are eligible 
-	  gen d_gender = rnormal() 
-		b
-		
-		
-		
-		
-		
+		gen d_elig_ind = d_rmean > 0 
 	replace treatment = 1 if d_elig_ind==1
 	*replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
 
@@ -100,7 +91,7 @@ program define normal_reg_sanitation, rclass
 	reg income treatment 		
 	mat results1 = r(table) 
 	return scalar beta1 = results1[1,1] 
-	return scalar SEM1 = results1[2,1] 
+	*return scalar SEM1 = results1[2,1] 
 	*return scalar pval1 = results1[4,1]
 	*return scalar ci_lower1 = results1[5,1]
 	*return scalar ci_upper1 = results1[6,1]		
@@ -113,7 +104,7 @@ program define normal_reg_sanitation, rclass
 	mat results2 = r(table) 
 	*return scalar subsample_size2 = e(N)
 	return scalar beta2 = results2[1,1] 
-	return scalar SEM2 = results2[2,1] 
+	*return scalar SEM2 = results2[2,1] 
 	*return scalar pval2 = results2[4,1]
 	*return scalar ci_lower2 = results2[5,1]
 	*return scalar ci_upper2 = results2[6,1]
@@ -123,7 +114,7 @@ program define normal_reg_sanitation, rclass
 	mat results3 = r(table) 
 	*return scalar subsample_size4 = e(N)
 	return scalar beta3 = results3[1,1] 
-	return scalar SEM3 = results3[2,1] 
+	*return scalar SEM3 = results3[2,1] 
 	*return scalar pval4 = results4[4,1]
 	*return scalar ci_lower4 = results4[5,1]
 	*return scalar ci_upper4 = results4[6,1]
@@ -133,7 +124,7 @@ program define normal_reg_sanitation, rclass
 	mat results4 = r(table) 
 	*return scalar subsample_size5 = e(N)
 	return scalar beta4 = results4[1,1] 
-	return scalar SEM4 = results4[2,1] 
+	*return scalar SEM4 = results4[2,1] 
 	*return scalar pval5 = results5[4,1]
 	*return scalar ci_lower5 = results5[5,1]
 	*return scalar ci_upper5 = results5[6,1]
@@ -143,7 +134,7 @@ program define normal_reg_sanitation, rclass
 	mat results5 = r(table) 
 	*return scalar subsample_size5 = e(N)
 	return scalar beta5 = results5[1,1] 
-	return scalar SEM5 = results5[2,1] 
+	*return scalar SEM5 = results5[2,1] 
 	*return scalar pval5 = results5[4,1]
 	*return scalar ci_lower5 = results5[5,1]
 	*return scalar ci_upper5 = results5[6,1]
@@ -177,12 +168,12 @@ clear
 tempfile combined 
 save `combined', replace emptyok
 	
-forvalues i = 1/6 {
+forvalues i = 1/5 {
 	*N = 2, 4, 8, 16, ..., 1,048,576
 
 		local num_districts = 2^`i'
 		tempfile sims
-		simulate N=r(subsample_size) beta_coeff1=r(beta1) SEM1=r(SEM1) beta_coeff2=r(beta2) SEM2=r(SEM2) beta_coeff3=r(beta3) SEM3=r(SEM3) beta_coeff4=r(beta4) SEM4=r(SEM4) beta_coeff5=r(beta5) SEM5=r(SEM5), reps(500) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
+		simulate N=r(subsample_size) beta_coeff1=r(beta1) beta_coeff2=r(beta2) beta_coeff3=r(beta3) beta_coeff4=r(beta4) beta_coeff5=r(beta5), reps(50) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
 		
 		*gen population_size = `num_districts'
 		
@@ -195,12 +186,21 @@ forvalues i = 1/6 {
 		save `combined', replace
 		
 }
-
+/* 
+forvalues j=1/5 {
+	histogram, beta_coeff, by(N) 
+} 
+*/ 
 
 
 *Load back in all the simulation regression data 
 use `combined', clear
 sort N
+
+drop if beta_coeff1==0 // Drop runs in which all districts were randomly assigned to untreated, i.e. controls
+
+bysort runID: egen N_avg = mean(N)
+order N_avg, after(N)
 
 save "stats_sanitation_part1_v1.dta", replace
 
@@ -531,7 +531,7 @@ order N_avg, after(N)
 *if runID==1 {
 	twoway lpolyci beta_coeff3 N_avg
 *} 
-
+graph box beta_coeff?, over(sample_size) yline(true_beta_value) noout 
 
 /* 
 bysort runID: egen meanN = mean(N)
@@ -573,6 +573,7 @@ forvalues j = 1/7 {
 
 *use stats_sanitation_part2_v1
 
+histogram beta, by(N) by(reg_number)
 
 
 
