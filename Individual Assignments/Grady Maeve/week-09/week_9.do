@@ -17,19 +17,18 @@ global wd "C:/Users/Maeve/GitHub/ppol768-spring23/Individual Assignments/Grady M
 		 *at least one covariate affects outcome and not treatment
 		 *at least one covariate affects treatment and not outcome
 */
+clear
+
+set seed 03232023
 		
 		
 * creating program
 capture program drop parameterestimates
 program define parameterestimates, rclass 
-	syntax, samplesize(integer)
+syntax, samplesize(integer)
 		
-		clear
-		set seed 03232023
-
-		set obs `samplesize'
-		
-		
+		set obs 5
+				
 		//generating strata groups 
 		
 		generate regions = _n //generating regions instead of states b/c I want something closer to counties
@@ -44,7 +43,7 @@ program define parameterestimates, rclass
 		
 		generate urban = runiform()<0.80   // randomly assigns urban rural status
 		
-		expand  40000 + int(5000 * runiform()) // creating individual level dataset
+		expand  `samplesize' // creating individual level dataset
 		generate u_individual = rnormal(0,5) // indivdual level effects 
 		
 		gen individual_id = _n  //individual id
@@ -63,8 +62,11 @@ program define parameterestimates, rclass
 			
 		//generating treatment groups 
 		
-		
-		gen treatment = police + .7*urban + .5*education // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
+		generate random_treatment = police + .7*urban + .5*education + region/5
+		sum random_treatment
+		local meantreat r(mean)
+		gen treatment = 0
+		replace treatment = 1 if random_treatment >= `meantreat' // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
 		
 		
 		
@@ -78,24 +80,25 @@ program define parameterestimates, rclass
 		
 		//model 1
 		reg citation_risk treatment //simple regression of outcome on treatment
-		scalar m1_beta = _b[treatment]
+		return scalar  m1_beta=_b[treatment]
 		
 		//model 2
-		reg citation_risk treatment police i.region i.towns  // confounder
-		return scalar m2_beta = _b[treatment]
+		reg citation_risk treatment police i.region // confounders
+		return scalar m2_beta=_b[treatment]
 		
 		//model 3
-		reg citation_risk treatment police education i.region i.towns  // adding variable that affects treatment not outcome
-		return scalar m3_beta = _b[treatment]
+		reg citation_risk treatment  education i.region i.towns  // adding variable that affects treatment not outcome
+		return scalar m3_beta=_b[treatment]
 		
 		//model 4
-		reg citation_risk treatment police income commute distance i.region i.towns  //dropping education and adding vars that affect outcome and not treatment 
-		return scalar m4_beta = _b[treatment]
+		reg citation_risk treatment police income commute distance  //dropping education and adding vars that affect outcome and not treatment 
+		return scalar m4_beta=_b[treatment]
 		
 		//model 5
-		reg citation_risk treatment police education income commute distance i.region i.towns // adding strata
-		return scalar m5_beta = _b[treatment]
+		reg citation_risk treatment  education income commute distance  i.towns // adding strata
+		return scalar m5_beta=_b[treatment]
 		
+		return scalar n= e(N)
 		
 end 
 			
@@ -111,14 +114,14 @@ end
 	save `combined', replace emptyok
 
 	
-	forvalues i=5(10)20 { 
+	forvalues i=5(5)40 { 
 		local samplesize = `i'
 		tempfile sims
-		simulate n = r(N) m1 = r(m1_beta) m2 = r(m2_beta) m3 = r(m3_beta) m4 = r(m4_beta) m5 = r(m5_beta), reps(50) saving(`sims'): parameterestimates, samplesize(`samplesize')
+		simulate n=r(n) m1=r(m1_beta) m2=r(m2_beta) m3=r(m3_beta) m4=r(m4_beta) m5=r(m5_beta), reps(30) saving(`sims'): parameterestimates, samplesize(`samplesize')
 		
 
 		use `sims', clear 
-		*gen samplesize = `samplesize'
+		gen samplesize = `samplesize'
 		append using `combined'
 		save `combined', replace
 		display as error "this is samplesize `i'"
