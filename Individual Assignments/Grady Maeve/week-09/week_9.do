@@ -63,8 +63,9 @@ program define parameterestimates, rclass
 			
 		//generating treatment groups 
 		
-		gen treatment = 0
-		replace treatment = 1 if police >= 0.7 & urban == 1 & education >= 20 // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
+		
+		gen treatment = police + .7*urban + .5*education // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
+		
 		
 		
 		//DGP
@@ -110,7 +111,7 @@ end
 	save `combined', replace emptyok
 
 	
-	forvalues i=10(50)100 { 
+	forvalues i=5(10)20 { 
 		local samplesize = `i'
 		tempfile sims
 		simulate m1 = r(m1_beta) m2 = r(m2_beta) m3 = r(m3_beta) m4 = r(m4_beta) m5 = r(m5_beta), reps(50) saving(`sims'): parameterestimates, samplesize(`samplesize')
@@ -127,16 +128,19 @@ use `combined', clear
 save "$wd/debias_results.dta", replace
 		
 		
-/*produce figures and tables comparing the biasedness and convergence of the models as N grows. 
+/*produce figures and tables*/. 
 
-requirements: 
-*figure showing the mean and variance of beta for different regression models, as a function of N
-*Can you visually compare these to the "true" parameter value?*/
+/*comparing the biasedness and convergence of the models as N grows*/
+
+graph twoway area
+/*figure showing the mean and variance of beta for different regression models, as a function of N*/
+
+		
+eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
+esttab, wide label 
 		
 		
-		
-		
-		
+/*Can you visually compare these to the "true" parameter value?*/
 		
 		
 /*Biasing parameter estimates using controls */
@@ -199,13 +203,15 @@ program define parameterestimates, rclass
 		
 		//generating treatment groups 
 		
-		gen treatment = 0
-		replace treatment = 1 if police >= 0.7 & urban == 1 & education >= 20 // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
+				
+		gen treatment = police + .7*urban + .5*education // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
+		
+		
 		
 		
 		//DGP
 		
-		gen citation_risk = 2 +  1.5 *police -  2 * ln(income)  - 2*treatment  + 4* rnormal() + 2 * commute + .5 * distance  + u_regions + u_towns + u_individual
+		gen citation_risk = 2 +  1.5 *police -  2 * ln(income)  - 2*registeredvoter + 4* rnormal() + 2 * commute + .5 * distance  + u_regions + u_towns + u_individual
 		
 		//collider
 		gen collider = 5*treatment + 2*citation_risk
@@ -248,7 +254,7 @@ end
 	save `combined2', replace emptyok
 
 	
-	forvalues i=10(50)100 { 
+	forvalues i=5(10)20 { 
 		local samplesize = `i'
 		tempfile sims
 		simulate mA = r(mA_beta) mB = r(mB_beta) mC = r(mC_beta) mD = r(mD_beta) mE = r(mE_beta), reps(50) saving(`sims'): parameterbiasestimates, samplesize(`samplesize')
@@ -267,7 +273,11 @@ save "$wd/bias_results.dta", replace
 
 
 	
-	**5 Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.) Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each, and produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N?
+/*produce figures and tables comparing the biasedness and convergence of the models as N grows. 
 
+requirements: 
+*figure showing the mean and variance of beta for different regression models, as a function of N
+*Can you visually compare these to the "true" parameter value?*/
+		
+		
 	
-	**6 Fully describe your results in your README.md file, including figures and tables as appropriate.
