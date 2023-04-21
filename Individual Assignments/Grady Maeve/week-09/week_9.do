@@ -118,7 +118,7 @@ end
 		
 
 		use `sims', clear 
-		gen samplesize = `samplesize'
+		*gen samplesize = `samplesize'
 		append using `combined'
 		save `combined', replace
 		display as error "this is samplesize `i'"
@@ -135,15 +135,15 @@ eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
 graph twoway area 
 
 
-twoway (histogram m1 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m1 if n == 5, start(-.2) width(2) color(navy%50))
+twoway (histogram m1 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m1 if n == 5, start(-4) width(2) color(navy%50))
 graph save "m1" "$wd/m1.gph" , replace
-twoway (histogram m2 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m2 if n == 5, start(-.2) width(2) color(navy%50))
+twoway (histogram m2 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m2 if n == 5, start(-4) width(2) color(navy%50))
 graph save "m2" "$wd/m2.gph" , replace
-twoway (histogram m3 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m3 if n == 5, start(-.2) width(2) color(navy%50))
+twoway (histogram m3 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m3 if n == 5, start(-4) width(2) color(navy%50))
 graph save "m3" "$wd/m3.gph" , replace
-twoway (histogram m4 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m4 if n == 5, start(-.2) width(2) color(navy%50))
+twoway (histogram m4 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m4 if n == 5, start(-4) width(2) color(navy%50))
 graph save "m4" "$wd/m4.gph" , replace
-twoway (histogram m5 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m5 if n == 5, start(-.2) width(2) color(navy%50))
+twoway (histogram m5 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m5 if n == 5, start(-4) width(2) color(navy%50))
 graph save "m5" "$wd/m5.gph" , replace
 
 graph combine "$wd/m1.gph""$wd/m2.gph""$wd/m3.gph" "$wd/m4.gph" "$wd/m5.gph", altshrink
@@ -262,7 +262,6 @@ end
 		
 
 /*running siulations*/
-		
 		
 
 	clear
