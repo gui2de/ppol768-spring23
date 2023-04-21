@@ -78,7 +78,7 @@ program define parameterestimates, rclass
 		
 		//model 1
 		reg citation_risk treatment //simple regression of outcome on treatment
-		return scalar m1_beta = _b[treatment]
+		scalar m1_beta = _b[treatment]
 		
 		//model 2
 		reg citation_risk treatment police i.region i.towns  // confounder
@@ -114,7 +114,7 @@ end
 	forvalues i=5(10)20 { 
 		local samplesize = `i'
 		tempfile sims
-		simulate m1 = r(m1_beta) m2 = r(m2_beta) m3 = r(m3_beta) m4 = r(m4_beta) m5 = r(m5_beta), reps(50) saving(`sims'): parameterestimates, samplesize(`samplesize')
+		simulate n = r(N) m1 = r(m1_beta) m2 = r(m2_beta) m3 = r(m3_beta) m4 = r(m4_beta) m5 = r(m5_beta), reps(50) saving(`sims'): parameterestimates, samplesize(`samplesize')
 		
 
 		use `sims', clear 
@@ -131,8 +131,24 @@ save "$wd/debias_results.dta", replace
 /*produce figures and tables*/. 
 
 /*comparing the biasedness and convergence of the models as N grows*/
+eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
+graph twoway area 
 
-graph twoway area
+
+twoway (histogram m1 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m1 if n == 5, start(-.2) width(2) color(navy%50))
+graph save "m1" "$wd/m1.gph" , replace
+twoway (histogram m2 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m2 if n == 5, start(-.2) width(2) color(navy%50))
+graph save "m2" "$wd/m2.gph" , replace
+twoway (histogram m3 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m3 if n == 5, start(-.2) width(2) color(navy%50))
+graph save "m3" "$wd/m3.gph" , replace
+twoway (histogram m4 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m4 if n == 5, start(-.2) width(2) color(navy%50))
+graph save "m4" "$wd/m4.gph" , replace
+twoway (histogram m5 if n == 5, start(-.2) width(2) color(lavender%50)) (histogram m5 if n == 5, start(-.2) width(2) color(navy%50))
+graph save "m5" "$wd/m5.gph" , replace
+
+graph combine "$wd/m1.gph""$wd/m2.gph""$wd/m3.gph" "$wd/m4.gph" "$wd/m5.gph", altshrink
+
+
 /*figure showing the mean and variance of beta for different regression models, as a function of N*/
 
 		
