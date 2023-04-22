@@ -66,37 +66,25 @@ program define weeknine, rclass				// define the program
 	reg y treatment i.localitie 
 	mat results = r(table) // ADDED THIS, TO GET MATRIX/TABLE OF REGRESSION RESULTS
 	return scalar base_beta2 = results[1,1]
-	return scalar SEM2 = results[2,1] 
-	
-	*return scalar N_observations = e(N)
 	
 
 *** third regression 
 
 	reg y treatment i.localitie num_child
-	mat results = r(table) // ADDED THIS, TO GET MATRIX/TABLE OF REGRESSION RESULTS
+	mat results = r(table) // 
 	return scalar base_beta3 = results[1,1]
-	return scalar SEM3 = results[2,1] 
-	
-	*return scalar N_observations = e(N)
 	
 *** fourth regression 
 	reg y treatment i.localitie num_child num_hrs
-	mat results = r(table) // ADDED THIS, TO GET MATRIX/TABLE OF REGRESSION RESULTS
+	mat results = r(table) // 
 	return scalar base_beta4 = results[1,1]
-	return scalar SEM4 = results[2,1] 
-	
-	*return scalar N_observations = e(N)
 	
 
 ** fifth regression 
 	
 	reg y treatment i.localitie num_child num_hrs age_child 	
-	mat results = r(table) // ADDED THIS, TO GET MATRIX/TABLE OF REGRESSION RESULTS
+	mat results = r(table) // 
 	return scalar base_beta5 = results[1,1]
-	return scalar SEM5 = results[2,1] 
-	
-	*return scalar N_observations = e(N)
 	
 	
 end
@@ -105,12 +93,12 @@ end
 ** run simulation
 	clear 
 	tempfile secondary 
-	save `secondary', replace emptyok // ADDED EMPTYOK HERE; NOT SURE WHAT IT DOES, BUT I THINK IT'S IMPORTANT 
+	save `secondary', replace emptyok //  
 		
 		forvalues i=1/5{
-			local samplesize = 10^ `i' // I CHANGED THE NAME OF THIS LOCAL VARIABLE FROM B TO SAMPLESIZE; THIS IS BECAUSE, IF YOU LOOK AT THE FIRST LINE IN YOUR PROGRAM, YOU DEFINED THE LINE "syntax, samplesize(integer)". AND SO WHEN THE PROGRAM RUNS, IT WILL BE LOOKING FOR AN (INTEGER) VARIABLE NAMED SAMPLESIZE.  
+			local samplesize = 10^ `i' //   
 			tempfile bias
-			simulate N = r(N_observations) base_beta1=r(base_beta1) base_SEM1=r(SEM1) base_beta2=r(base_beta2) base_SEM2=r(SEM2) base_beta3=r(base_beta3) base_SEM3=r(SEM3) base_beta4=r(base_beta4) base_SEM4=r(SEM4) base_beta5=r(base_beta5) base_SEM5=r(SEM5), reps(500) saving(`bias', replace): weeknine, samplesize(`samplesize') // CHANGED THIS A BIT
+			simulate N = r(N_observations) base_beta1=r(base_beta1) base_beta2=r(base_beta2) base_beta3=r(base_beta3) base_beta4=r(base_beta4) base_beta5=r(base_beta5) , reps(500) saving(`bias', replace): weeknine, samplesize(`samplesize') // 
 			
 			use `bias', clear // ADDED CLEAR HERE	
 			gen sample_size = `samplesize'
