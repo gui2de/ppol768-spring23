@@ -17,6 +17,7 @@ global wd "C:/Users/Maeve/GitHub/ppol768-spring23/Individual Assignments/Grady M
 		 *at least one covariate affects outcome and not treatment
 		 *at least one covariate affects treatment and not outcome
 */
+
 clear
 
 set seed 03232023
@@ -27,6 +28,7 @@ capture program drop parameterestimates
 program define parameterestimates, rclass 
 syntax, samplesize(integer)
 		
+		clear
 		set obs 5
 				
 		//generating strata groups 
@@ -87,15 +89,15 @@ syntax, samplesize(integer)
 		return scalar m2_beta=_b[treatment]
 		
 		//model 3
-		reg citation_risk treatment  education i.region i.towns  // adding variable that affects treatment not outcome
+		reg citation_risk treatment education i.region i.towns  // adding variable that affects treatment not outcome, only one confounder
 		return scalar m3_beta=_b[treatment]
 		
 		//model 4
-		reg citation_risk treatment police income commute distance  //dropping education and adding vars that affect outcome and not treatment 
+		reg citation_risk treatment education income commute distance i.towns  //dropping second confounder and adding vars that affect outcome and not treatment 
 		return scalar m4_beta=_b[treatment]
 		
 		//model 5
-		reg citation_risk treatment  education income commute distance  i.towns // adding strata
+		reg citation_risk treatment education income commute distance  i.towns // adding strata
 		return scalar m5_beta=_b[treatment]
 		
 		return scalar n= e(N)
@@ -117,7 +119,7 @@ end
 	forvalues i=5(5)40 { 
 		local samplesize = `i'
 		tempfile sims
-		simulate n=r(n) m1=r(m1_beta) m2=r(m2_beta) m3=r(m3_beta) m4=r(m4_beta) m5=r(m5_beta), reps(30) saving(`sims'): parameterestimates, samplesize(`samplesize')
+		simulate n=r(n) m1=r(m1_beta) m2=r(m2_beta) m3=r(m3_beta) m4=r(m4_beta) m5=r(m5_beta), reps(500) saving(`sims'): parameterestimates, samplesize(`samplesize')
 		
 
 		use `sims', clear 
@@ -135,34 +137,40 @@ save "$wd/debias_results.dta", replace
 
 /*comparing the biasedness and convergence of the models as N grows*/
 eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
-graph twoway area 
 
 
-twoway (histogram m1 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m1 if n == 5, start(-4) width(2) color(navy%50))
-graph save "m1" "$wd/m1.gph" , replace
-twoway (histogram m2 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m2 if n == 5, start(-4) width(2) color(navy%50))
-graph save "m2" "$wd/m2.gph" , replace
-twoway (histogram m3 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m3 if n == 5, start(-4) width(2) color(navy%50))
-graph save "m3" "$wd/m3.gph" , replace
-twoway (histogram m4 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m4 if n == 5, start(-4) width(2) color(navy%50))
-graph save "m4" "$wd/m4.gph" , replace
-twoway (histogram m5 if n == 5, start(-4) width(2) color(lavender%50)) (histogram m5 if n == 5, start(-4) width(2) color(navy%50))
-graph save "m5" "$wd/m5.gph" , replace
+
+twoway  (histogram m1 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m1 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m1.gph" , replace
+
+twoway (histogram m2 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m2 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m2.gph" , replace
+
+twoway  (histogram m3 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m3 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m3.gph" , replace
+
+twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m4.gph" , replace
+twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m5.gph" , replace
 
 graph combine "$wd/m1.gph""$wd/m2.gph""$wd/m3.gph" "$wd/m4.gph" "$wd/m5.gph", altshrink
-
+graph save "$wd/hist_debias.gph"
 
 /*figure showing the mean and variance of beta for different regression models, as a function of N*/
-
+graph twoway rarea 
 		
 eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
 esttab, wide label 
 		
 		
 /*Can you visually compare these to the "true" parameter value?*/
+
+
 		
-		
+************************************************************************************		
 /*Biasing parameter estimates using controls */
+************************************************************************************
 
 	/* Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect.
 		
@@ -174,17 +182,17 @@ esttab, wide label
 		 *p(individual receives treatment) must vary accross strata groups
 		 *at least one collider (function of both Y and the treatment variable)
 		 *at least one channel (intermediate variable that is a function of treatment)*/
-		 
+clear 
+set seed 03232023
 				
 * creating program
 capture program drop parameterbiasestimates
-program define parameterestimates, rclass 
+program define parameterbiasestimates, rclass 
 	syntax, samplesize(integer)
 		
 		clear
-		set seed 03232023
-
-		set obs `samplesize'
+	
+		set obs 5
 		
 		
 		//generating strata groups 
@@ -201,7 +209,7 @@ program define parameterestimates, rclass
 		
 		generate urban = runiform()<0.80   // randomly assigns urban rural status
 		
-		expand  40000 + int(5000 * runiform()) // creating individual level dataset
+		expand  `samplesize' // creating individual level dataset
 		generate u_individual = rnormal(0,5) // indivdual level effects 
 		
 		gen individual_id = _n  //individual id
@@ -217,23 +225,24 @@ program define parameterestimates, rclass
 		
 		gen distance = rnormal(10, 2) // generating continuous variable representing distance in miles from nearest urban center
 		
-		//Generating channel
-		gen registeredvoter = 0.8*treatment  // treatment was derived from registered voter rolls 
-		
+				
 		//generating treatment groups 
 		
-				
-		gen treatment = police + .7*urban + .5*education // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
+		generate random_treatment = police + .7*urban + .5*education + region/5
+		sum random_treatment
+		local meantreat r(mean)
+		gen treatment = 0
+		replace treatment = 1 if random_treatment >= `meantreat' // police affects both treatment and citation risk, education affects treatment and not citation risk , and income affects citation risk and not treatment
 		
-		
-		
+		//Generating channel
+		gen registeredvoter = 0.8*treatment  // treatment was derived from registered voter rolls 		
 		
 		//DGP
 		
 		gen citation_risk = 2 +  1.5 *police -  2 * ln(income)  - 2*registeredvoter + 4* rnormal() + 2 * commute + .5 * distance  + u_regions + u_towns + u_individual
 		
 		//collider
-		gen collider = 5*treatment + 2*citation_risk
+		gen collider = 2+ treatment/4 + 2*citation_risk
 		
 		/*Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.)*/
 
@@ -243,22 +252,22 @@ program define parameterestimates, rclass
 		return scalar mA_beta = _b[treatment]
 		
 		//model B
-		reg citation_risk treatment police i.region i.towns  // confounder
+		reg citation_risk treatment police i.region   // confounders
 		return scalar mB_beta = _b[treatment]
 		
 		//model C
-		reg citation_risk treatment police registeredvoter i.region i.towns  // channel
+		reg citation_risk treatment police registeredvoter i.region   // channel
 		return scalar mC_beta = _b[treatment]
 		
 		//model D
-		reg citation_risk treatment police collider i.region i.towns  //collider
+		reg citation_risk treatment police collider i.region  //collider
 		return scalar mD_beta = _b[treatment]
 		
 		//model E
-		reg citation_risk treatment police collider registeredvoter i.region i.towns // all
+		reg citation_risk treatment police collider registeredvoter i.region  // all
 		return scalar mE_beta = _b[treatment]
 		
-		
+		return scalar n= e(N)
 end 
 			
 /*Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each */ 
@@ -272,10 +281,10 @@ end
 	save `combined2', replace emptyok
 
 	
-	forvalues i=5(10)20 { 
+	forvalues i=5(5)40 { 
 		local samplesize = `i'
 		tempfile sims
-		simulate mA = r(mA_beta) mB = r(mB_beta) mC = r(mC_beta) mD = r(mD_beta) mE = r(mE_beta), reps(50) saving(`sims'): parameterbiasestimates, samplesize(`samplesize')
+		simulate  n=r(n)  mA = r(mA_beta) mB = r(mB_beta) mC = r(mC_beta) mD = r(mD_beta) mE = r(mE_beta), reps(500) saving(`sims'): parameterbiasestimates, samplesize(`samplesize')
 		
 
 		use `sims', clear 
@@ -299,3 +308,34 @@ requirements:
 		
 		
 	
+/*comparing the biasedness and convergence of the models as N grows*/
+eststo: estpost tabstat mA mB mC mD mE, col(stat) stat(min max mean sd semean)
+
+
+
+twoway  (histogram m1 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m1 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m1.gph" , replace
+
+twoway (histogram m2 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m2 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m2.gph" , replace
+
+twoway  (histogram m3 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m3 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m3.gph" , replace
+
+twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m4.gph" , replace
+twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/m5.gph" , replace
+
+graph combine "$wd/m1.gph""$wd/m2.gph""$wd/m3.gph" "$wd/m4.gph" "$wd/m5.gph", altshrink
+graph save "$wd/hist_debias.gph"
+
+/*figure showing the mean and variance of beta for different regression models, as a function of N*/
+graph twoway rarea 
+		
+eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
+esttab, wide label 
+		
+		
+/*Can you visually compare these to the "true" parameter value?*/
+
