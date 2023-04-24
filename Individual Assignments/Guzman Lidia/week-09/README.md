@@ -53,7 +53,7 @@ Table showing the mean and variance of beta for different regression models, as 
 
 These findings are then ploted on a boxplot below: 
 
-![Mean and Variance of Beta vs true parameter value for part 2](img/biasbox2.png "Mean and Variance of Beta vs true parameter value")
+![Mean and Variance of Beta vs true parameter value for part 2](img/biasboxpart2.png "Mean and Variance of Beta vs true parameter value")
 
 Where the x axis represents N and the Y-axis the Variance of Beta, and where outliers have been eliminated.
 
