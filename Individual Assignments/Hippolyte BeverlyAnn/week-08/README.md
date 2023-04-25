@@ -1,8 +1,7 @@
 Week 8 Assignment
 
-![Figure_2](/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-08/outputs/part1_500.png)
-
-![Figure_2](/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-08/outputs/part1_50.png)
+![Figure_1](outputs/part1_50.png)
+![Figure_2](outputs/part1_500.png)
 
 Part I
 
@@ -35,11 +34,11 @@ In conclusion, as the sample size gets larger in the simulation, the beta estima
 In this case we are able to draw a larger sample size because we have
 
 
-![Figure_3](/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-08/outputs/part_two_png)
+![Figure_3](outputs/part_two_five.png)
 
-![Figure_4](/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-08/outputs/power_twenty_500.png)
+![Figure_4](output/power_twenty_500.png)
 
-|       Sample Size        |    Beta estimate   | Repetitions | Std. error | Conf. Interval |
+|       **Sample Size**    |   **Beta estimate**| **Reps**    | *Std. error*| *Conf. Interval* |
 |          10              |       5.81         |     500     |            |                |
 |          100             |       7.18         |     500     |   0.57     |  6.04 - 8.33   |
 |          1000            |       6.99         |     500     |   0.18     |  6.62 - 7.36   |
