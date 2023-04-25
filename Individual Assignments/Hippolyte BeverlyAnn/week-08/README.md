@@ -1,8 +1,8 @@
 Week 8 Assignment
 
-![Figure 1 : Graph  displays 50 simulations](part1_50.png)
+![Figure_1](part1_50.png)
 
-![Figure 2 : Graph  displays 500 simulations](part1_500.png)
+![Figure_2](part1_500.png)
 
 Part I
 
@@ -35,9 +35,9 @@ In conclusion, as the sample size gets larger in the simulation, the beta estima
 In this case we are able to draw a larger sample size because we have
 
 
-![Figure 2 : Graph  displays 5 simulations](part_two_five.png)
+![Figure_3](part_two_five.png)
 
-![Figure 3 : Graph  displays 500 simulations](power_twenty_500.png)
+![Figure_4](power_twenty_500.png)
 
 |       Sample Size        |    Beta estimate   | Repetitions | Std. error | Conf. Interval |
 |          10              |       5.81         |     500     |            |                |
