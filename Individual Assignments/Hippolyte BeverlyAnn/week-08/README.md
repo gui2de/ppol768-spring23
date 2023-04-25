@@ -14,13 +14,13 @@ The first simulation consisted of the following
       * Sample size of the dataset increases: 10 ^ (1,2,3,4)
 
 |       Sample Size        |    Beta estimate   | Std.error |  Conf.Interval |
-|                          |                    |           |                |
-|          10              |         4.43       |    1.61   |   0.71 - 8.15  |
-|                          |                    |           |                |
+-------------------------- | -------------------|-----------|----------------
+|          10              |        4.43        |    1.61   |  0.71 - 8.15  |
+---------------------------|--------------------|-----------|----------------
 |          100             |         4.38       |    0.47   |   3.44 - 5.32  |
-|                          |                    |           |                |
+---------------------------|--------------------|-----------|----------------
 |         1000             |         4.09       |   0.16    |   3.78 - 4.41  |
-|                          |                    |           |                |
+---------------------------|--------------------|-----------|----------------
 |        10000             |         4.01       |    0.04   |   3.91 - 4.10  |
 
 The beta, SEM and confidence intervals get smaller as the sample size gets larger. The larger sample size means that estimates   are getting closer to the true population estimate.
