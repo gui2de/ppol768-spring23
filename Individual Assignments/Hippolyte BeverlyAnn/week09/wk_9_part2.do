@@ -8,21 +8,6 @@ cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignment
 
 ***  Data Generating Process 
 
-*** ## Part 2: Biasing a parameter estimate using controls
-
-*** 1. Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable.
-
-*** 2. This DGP should include strata groups and continuous covariates, as well as random noise. Make sure that the strata groups affect the outcome Y and are of different sizes, and make the probability that an individual unit receives treatment vary across strata groups. You will want to create the strata groups first, then use a command like `expand` or `merge` to add them to an individual-level data set.
-
-*** 3. When creating the outcome, make sure there is an intermediate variable that is a function of treatment. Have this variable determine Y in the true DGP, not the treatment variable itself. (This is a "channel".)
-
-*** 4. In addition, create a second independent variable that is a function of both Y and the treatment variable. (This is a "collider".)
-
-*** 5. Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type `h fvvarlist` for information on using fixed effects in regression.) Run these regressions at different sample sizes, using a `program` like last week. Collect as many regression runs as you think you need for each, and produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N?
-
-
-***6. Fully describe your results in your `README.md` file, including figures and tables as appropriate.
-
 * Define a program 
 
 capture program drop week9          // Data Generating Process 
@@ -30,14 +15,14 @@ program define week9, rclass
 	syntax, samplesize(integer)
 
 
-** Generate strata groups 
+** generate strata groups 
 		set obs 10   // number of localities in Bogota
 		gen localitie = _n
 		gen leffect = rnormal(0,2) // localitie effect
 		expand `samplesize' // number of businesses in a localitie  
 
 					
-** Generate continuous covariates 
+** generate continuous covariates 
 
 	gen num_child = rnormal()
 	gen num_hrs = rnormal()
@@ -45,28 +30,75 @@ program define week9, rclass
 	
 * generate treatment variable
 
-	generate treatment = num_child + age_child 
+	generate treatment = 1.2*num_child + 0.5*age_child
 	
-** Generate intermediate variable
+** generate channel variable 
 
-	generate intvar = treatment + 0.2*rnormal()
+	generate channel = 1.5*treatment
 
 * generate outcome y
 
-	generate y = (localitie/10) + intvar + num_child + num_hrs + 2*rnormal() + 0.5*treatment
+	generate y = (localitie/10) + channel + num_child + num_hrs + 2*rnormal() + 0.5*treatment
 	
-* run five regression models 
-		reg y treatment 
-		reg y treatment i.localitie 
-		reg y treatment i.localitie#c.num_child
-		reg y treatment i.localitie#c.num_child#c.num_hrs
-		reg y treatment i.localitie#c.num_child#c.num_hrs#c.age_child
+** generate collider variable 
 
-table
-		matrix results = r(table)
+	generate collider = y + treatment
+	
+* run five regression models
+
+*** first regression 
+		reg y treatment 
+		mat results = r(table) // 
+		return scalar base_beta1 = results[1,1]
+		return scalar N_observations = `r(N)'
+	
+** second regression 
+		reg y treatment i.localitie 	
+		mat results = r(table) // 
+		return scalar base_beta2 = results[1,1]
+	
 		
-		return scalar beta = results(beta)
+** third regression 
+		reg y treatment i.localitie channel
+		mat results = r(table) // 
+		return scalar base_beta3 = results[1,1]
+		
+** fourth regression 
+		reg y treatment i.localitie treatment collider
+		mat results = r(table) // 
+		return scalar base_beta4 = results[1,1]
+		
+** fifth regression 
+		reg y treatment i.localitie treatment channel collider	
+		mat results = r(table) // 
+		return scalar base_beta5 = results[1,1]
 
 end 
 
-*week9, samplesize(10000)
+
+*_______________________________________
+** run simulation
+	clear 
+	tempfile secondary 
+	save `secondary', replace emptyok //  
+		
+		forvalues i=1/4{
+			local samplesize = 10^ `i' //   
+			tempfile bias
+			simulate N = r(N_observations) base_beta1=r(base_beta1) base_beta2=r(base_beta2) base_beta3=r(base_beta3) base_beta4=r(base_beta4) base_beta5=r(base_beta5) , reps(500) saving(`bias', replace): weeknine, samplesize(`samplesize') // 
+			
+			use `bias', clear // ADDED CLEAR HERE	
+			gen sample_size = `samplesize'
+			append using `secondary'
+			save `secondary', replace
+			
+	}
+	
+	use `secondary', clear 
+
+	
+*** Graph betas for each sample size 
+
+	graph box base_beta? , over(sample_size) yline(0.5) noout
+
+	graph export bias_50.png, replace 
