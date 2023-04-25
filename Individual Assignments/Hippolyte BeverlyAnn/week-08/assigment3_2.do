@@ -20,6 +20,7 @@ syntax, samplesize(integer)					// Randomly create a dataset; Sample size is an 
 
 	matrix a = r(table)
 
+	return scalar sample_size = e(N)
 	return scalar beta = a[1,1]
 	return scalar pval = a[4,1]
 	return scalar stderr = a[2,1]
@@ -35,21 +36,24 @@ save `primary', replace emptyok							// Empty local file
 
 forvalues i = 1/6 {										// Define loop
 	local sm = 10^`i'									// Establish local file to run simulations N number of times
-	
-	simulate col_beta=r(beta) col_pvalues=r(pval), reps(5): nissan, samplesize(`sm')	// Run simulation
+	tempfile sems
+	simulate N=r(sample_size) col_beta=r(beta) col_pvalues=r(pval), reps(500) saving (`sems'): nissan, samplesize(`sm')	// Run simulation
 	gen samplesize=`sm'									// Generate local file to save N number of simulations
 
+	use`sems',clear
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
 	save `primary', replace								// Save local file
 	}
 	
 	
-forvalues i = 2/21 {
-	local sp = 2^`i'
-
-	simulate col_beta=r(beta)  col_st= r(stderr), reps(5): nissan, samplesize(`sp')
-	gen samplesize =`sp'
+forvalues i = 2/20 {
+	local sm = 2^`i'
 	
+	tempfile sems
+	simulate N=r(sample_size) col_beta=r(beta) col_st= r(stderr), reps(500) saving(`sems'): nissan, samplesize(`sm')
+	gen samplesize =`sm'
+	
+	use `sems',clear 
 	append using `primary'								// Append local file everytime the simulation is run N number of times 
 	save `primary', replace								// Save local file
 	
@@ -58,16 +62,13 @@ forvalues i = 2/21 {
 use `primary', clear 
 	
 
-tempfile sems
-simulate column_beta=r(beta) column_pvalues=r(pval) column_st=r(stderr) column_upl=r(upl) column_lowl=r(lowl), reps(5) saving(`sems'): nissan, samplesize(1000000)
+hist col_beta, by(N)
+graph export part_two_five.png,replace
 
-use `sems', clear
 
-hist column_beta 
-display column_beta, column_pvalues, column_st, column_upl, column_lowl
-graph export sample1000000rep5.png, replace
 
-exit
+
+
 
 
 
