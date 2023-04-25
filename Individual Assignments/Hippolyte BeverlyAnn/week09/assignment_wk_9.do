@@ -57,7 +57,7 @@ program define weeknine, rclass				// define the program
 	return scalar SEM1 = results[2,1] // ADDED THIS, AS THE STANDARD ERROR IS GOOD TO KNOW AS WELL TO CHARACTERIZE THE VARIANCE IN THE BETA ESTIMATES 
 	
 	*ADDED THE FOLLOWING, SO THAT WE CAN TRACK WHAT N EACH REGRESSION RESULT WAS PRODUCED AT AS WELL IN THE FINAL DATASET
-	return scalar N_observations = e(N)
+	return scalar N_observations = `r(N)'
 	
 
 	
