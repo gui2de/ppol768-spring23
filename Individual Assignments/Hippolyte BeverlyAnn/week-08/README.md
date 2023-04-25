@@ -14,7 +14,7 @@ The first simulation consisted of the following
 
 |       Sample Size        |    Beta estimate   | Std.error |  Conf.Interval |
 -------------------------- | -------------------|-----------|----------------
-|          10              |        4.43        |    1.61   |  0.71 - 8.15  |
+|          10              |        4.43        |    1.61   |  0.71 - 8.15   |
 ---------------------------|--------------------|-----------|----------------
 |          100             |         4.38       |    0.47   |   3.44 - 5.32  |
 ---------------------------|--------------------|-----------|----------------
@@ -29,16 +29,16 @@ Part II
 (i) Sample size changes
 (ii) Number of simulations change
 
-To analyze these differences, I made changes to the simulations and the sample sizes from 5 to 500 and from 10 to 1000000.
-In conclusion, as the sample size gets larger in the simulation, the beta estimates are centered around the mean of the sample. Similarly, as the number of simulations increase, the beta estimates are clustered around the mean and the distribution has less variation as opposed to a smaller sample with less simulations which have more variation. The SEM and confidence intervals are larger because the increase in sample size reduces the SEM and confidence intervals
-In this case we are able to draw a larger sample size because we have
+To analyze these differences, I made changes to the simulations and the sample sizes. First I ran five hundred simulations and then five simulations at the sample sizes ranging from 10 to 1000000.
+
+In conclusion, as the sample size gets larger in the simulation, the beta estimates are centered around the mean of the sample. Similarly, as the number of simulations increase, the beta estimates are clustered around the mean and the distribution has less variation as opposed to a smaller sample with less simulations which have more variation. The SEM and confidence intervals are larger because the increase in sample size reduces the SEM and confidence intervals.
 
 
 ![Figure_3](outputs/part_two_five.png)
 
-![Figure_4](output/power_twenty_500.png)
-
-|       **Sample Size**    |   **Beta estimate**| **Reps**    | *Std. error*| *Conf. Interval* |
+![Figure 4](outputs/power_twenty_500.png)
+|       Sample Size        |  Beta estimate     |    Reps     | Std. error | Conf. Interval |   
+|--------------------------| ------------------ |-------------| -----------| -------------- |
 |          10              |       5.81         |     500     |            |                |
 |          100             |       7.18         |     500     |   0.57     |  6.04 - 8.33   |
 |          1000            |       6.99         |     500     |   0.18     |  6.62 - 7.36   |
@@ -47,6 +47,7 @@ In this case we are able to draw a larger sample size because we have
 |          1000000         |       7.00         |     500     |   0.00     |  6.99 - 7.01   |
 
 |       Sample Size        |    Beta estimate   |   Reps    | Std. error | Conf. Interval |
+| -------------------------| -------------------| ----------| ---------- |----------------|
 |          10              |       9.57         |     5     |   1.57     | 5.94 - 13.19   |
 |          100             |       7.18         |     5     |   0.57     |  6.04 - 8.33   |
 |          1000            |       6.99         |     5     |   0.18     |  6.62 - 7.36   |
