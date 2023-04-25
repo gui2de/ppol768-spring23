@@ -11,4 +11,4 @@ Part II
 ![figure1_50simulations](bias_50.png)
 ![figure2_500simulations](bias_500.png)
 
-In part two of the model we observe what happens to our estimates when we include a collider variable and a channel. In the first two models the predicted treatment effect is very close to the true estimate. In the fourth regression, the estimate on the collider variable is very far from the true estimate which indicates that the collider variable is creating bias. 
+In part two of the model we observe what happens to our estimates when we include a collider variable and a channel. In the first two models the predicted treatment effect is very close to the true estimate. In the fourth regression, the estimate on the collider variable is very far from the true estimate which indicates that the collider variable is creating bias.
