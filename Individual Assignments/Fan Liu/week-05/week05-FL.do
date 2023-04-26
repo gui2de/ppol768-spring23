@@ -83,7 +83,6 @@ forvalues i = 1/19{
 	}
 }
 
-
 //Q4: 2010 Tanzania Election Data cleaning
 clear
 import excel "q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:J7927) firstrow

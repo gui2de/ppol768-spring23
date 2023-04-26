@@ -1,5 +1,8 @@
 Maeve Grady, Emma Nyhof, Marlyn Bruno
 
+[Final Presentation](https://docs.google.com/presentation/d/1CHMigFCtCuxkkSgbO8PZjXu5IX9Ux1cFCWCH8wWvUcQ/edit?usp=sharing)
+
+
 ## Introduction
 
 The United States has 2.5 million fewer people in the labor force compared to pre-pandemic trends.<sup>1</sup> As help wanted signs appear in windows, today’s staggering labor shortages appear in headlines with increasing alarm. Despite these conditions, the US continues to deport tens of thousands of undocumented immigrants annually. Given legal status, this population could fill the gaps across industries that the  current economy faces. However, legal immigration restrictions have created an inefficiency prohibiting a traditionally labor-seeking population from safely entering the US labor market.
