@@ -173,7 +173,7 @@ forvalues i = 1/5 {
 
 		local num_districts = 2^`i'
 		tempfile sims
-		simulate N=r(subsample_size) beta_coeff1=r(beta1) beta_coeff2=r(beta2) beta_coeff3=r(beta3) beta_coeff4=r(beta4) beta_coeff5=r(beta5), reps(50) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
+		simulate N=r(subsample_size) beta_coeff1=r(beta1) beta_coeff2=r(beta2) beta_coeff3=r(beta3) beta_coeff4=r(beta4) beta_coeff5=r(beta5), reps(100) 	saving(`sims', replace): normal_reg_sanitation, num_districts(`num_districts') 
 		
 		*gen population_size = `num_districts'
 		
@@ -529,9 +529,9 @@ bysort runID: egen N_avg = mean(N)
 order N_avg, after(N)
 
 *if runID==1 {
-	twoway lpolyci beta_coeff3 N_avg
+	twoway lpolyci beta_coeff2 N_avg
 *} 
-graph box beta_coeff?, over(sample_size) yline(true_beta_value) noout 
+graph box beta_coeff?, over(N_avg) yline(10000) noout 
 
 /* 
 bysort runID: egen meanN = mean(N)
