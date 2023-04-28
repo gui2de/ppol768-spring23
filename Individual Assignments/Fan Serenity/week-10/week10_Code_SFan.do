@@ -202,9 +202,24 @@ forvalues j = 1/5 {
 	replace sig`j'=1 if pval`j'<0.05 
 	sum sig`j'
 	mean sig`j', over(N_avg) 
+	
 }
 
 save "stats_power_part1_v2.dta", replace
+
+
+
+*_________________________________________________
+use stats_power_part1_v1.dta, clear 
+
+*Now, choose a sample size. Go back to the DGP and allow the size of the treatment effect to vary. With the sample size fixed, find the "minimum detectable effect size" at which you can obtain 80% power for regression models with and without the non-biasing controls.
+
+
+
+
+
+
+
 
 
 
@@ -262,11 +277,18 @@ power twomeans 0 0.05, sd(1)
 
 /*
 *Part 2: Calculating power for DGPs with clustered random errors
+
 Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
+
 Instead of having strata groups contributing to the main effect, create some portion of the random error term at the strata level (now, they are clusters, rather than strata). Use a moderately large number of clusters, and also assign treatment at the cluster level.
+
 Take the means and 95% confidence interval estimates (or, equivalently, their widths) from many regressions at various sample sizes in an unbiased regression.
+
 Calculate "exact" 95% confidence interval estimates using the betas you can use the collapse or mean command for this, or use something like lpolyci to get 95% CIs graphically. Plot the "empirical/exact" CIs against the "analytical" ones (the ones obtained from the regression). Discuss any differences.
+
 Create another DGP in which the random error terms are only determined at the cluster level. Repeat the previous step here. What happens to the convergence of the "exact" CIs?
+
 Can you get the "analytical" confidence intervals to be correct using the vce() option in regress?
+
 Fully describe your results in your README.md file, including figures and tables as appropriate.
 */ 
