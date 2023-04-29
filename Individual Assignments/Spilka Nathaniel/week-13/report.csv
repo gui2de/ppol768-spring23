@@ -1,0 +1,61 @@
+
+This report was created by user nathanielhugospilka on 29Apr2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,nhs40_wk7
+,Form Title,nhs40_wk7
+,Form Version,2304291527
+,Form File,/Users/nathanielhugospilka/Downloads/nhs40_wk7.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" ,"labelstata" 
+,"16","continent","Continent_Code","Continent_Name","Continent_Name"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA FIELD LABEL
+----------------------------------------------------------------------
+
+"There is no column in the survey sheet with the name [label:stata]. This is best practice as this "
+"allows you to automatically import variable labels optimized for Stata, making the data set easier "
+"to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"16","select_one","revisit"
+,"22","select_one","ML_q_1"
+,"50","integer","alc_num"
+,"51","integer","cig_num"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.
