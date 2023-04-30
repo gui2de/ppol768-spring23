@@ -1,97 +1,152 @@
 *PPOL 768-01: Research, Design, and Implementation
 *Week 10 Assignment Do File
 *Author: Peyton Weber
-*Last edited: April 4, 2023, April 14, 2023 
+*Last edited: April 4, 2023, April 14, 2023,  April 30, 2023
+
+*PLEASE NOTE: Coding below was heavily relied upon the code previously submitted by my peers. 
 
 cd "/Users/peytonweber/Desktop/GitHub/ppol768-spring23/Individual Assignments/Weber Peyton/Week 10"
 *Reviewer to adjust working directory appropriately. 
 
 ********************************Part One:***************************************
-*Step 1: Determine the required sample size for 80% power. 
-
 clear 
 
-set seed 04142023 // *Generate unique seed for replicability. 
-
-set obs 50 // *Simulate data in Stata. 
+set obs 51 // *Simulate data in Stata. 
  
-gen state = _n // *Create a state variable using the 100 observations.
+gen state = _n // *Create a state variable using the observations.
 
-gen u_i = rnormal(1,3) // *Create state effects. 
+gen polparty = 1 // *Create political party variable, where 1 is for Dems and 0 is for Repubs
 
-gen unemploy = rnormal(0.032, 0.0085) // *Generate unemployment "noise." 
+replace polparty = 0 if state > 25
 
-bysort state: gen temprand_state = rnormal(0.5, 0.1) // *Sort observations and create random variable. 
+*gen u_i = rnormal(1,3) // *Create state effects. 
+*gen unemploy = rnormal(0.032, 0.0085) // *Generate unemployment "noise." 
+*bysort state: gen temprand_state = rnormal(0.5, 0.1) // *Sort observations and create random variable. 
 
-expand int(runiform(10000,100000))
+expand 30+int(50-30+1)*runiform() // *Each state will have 30-50 factories. 
  
-gen u_ij = rnormal(1,2) // *Create individual person effects.
+*gen u_ij = rnormal(1,2) // *Create individual person effects.
+*bysort state: gen person = _n
+*gen temprand_person = runiform()
+*gen unemployed = runiform()<unemploy // *Create variable that affects the treatment & not the outcome. 
+*gen hoursworked = rnormal(25,5) if unemployed != 0 // *Create the confounder. 
+*keep if hoursworked < 20 | unemployed == 1 
+*egen temprand = rowmean(temprand_state temprand_person) 
+*gen treatment = temprand<0.5 
+*gen age = runiform(18,64) // *Create age variable that affects the outcome, but not the treatment. 
+*gen weekly_income = rnormal(800,250) + (100 * treatment) + (8 * hoursworked) + (4.5 * age) + u_i + u_ij
 
-bysort state: gen person = _n
+local N = _N
+	
+local N_2 = `N'/2
 
-gen temprand_person = runiform()
+bysort state: gen factory = _n // *Generate factory level ID
 
-gen unemployed = runiform()<unemploy // *Create variable that affects the treatment & not the outcome. 
+gen industry = int(1 + 10 * uniform()) // *The factory industry with the larger number will be more likely to generate GHGs. 
 
-gen hoursworked = rnormal(25,5) if unemployed != 0 // *Create the confounder. 
+gen activity = rnormal(100,8) // *The average number of GHG activities per factory in the past decade
 
-keep if hoursworked < 20 | unemployed == 1 
+gen rand = polparty + 10*industry + rnormal() // *The treatment liklihood depends on the state. 
 
-egen temprand = rowmean(temprand_state temprand_person) 
+egen rank = rank(rand)
 
-gen treatment = temprand<0.5 
+sort rank
 
-gen age = runiform(18,64) // *Create age variable that affects the outcome, but not the treatment. 
+gen treatment = rank > `N_2'
 
-gen weekly_income = rnormal(800,250) + (100 * treatment) + (8 * hoursworked) + (4.5 * age) + u_i + u_ij
+gen emission = 500 - 50*treatment + 10*state - 40*polparty  + 50*activity + rnormal(100, 10) // Generate outcome variable of interest
 
 save "week-10-part-one.dta", replace  
 
-capture program drop ppol768 // drop program if already defined 
+global data_1 "week-10-part-one.dta"
 
-program define ppol768, rclass // define program and use rclass to create results matrix 
+capture program drop ppol768rdi1 // *Tell Stata to drop program if it is already defined 
+
+*Create a program that includes a regression that creates the unbiased, "true" model: 
+
+program define ppol768rdi1, rclass // define program and use rclass to create results matrix 
 
 	syntax, samplesize(integer) // sample size is the program argument 
 	
 		clear
 		
-		use "week-10-part-one.dta" // loading in the simulated dataset
+		use "$data_1", clear  // loading in the simulated dataset
 		
 		sample `samplesize', count // setting varying observation levels
 		
-		return scalar N = `samplesize' 
+		reg emission treatment i.polparty industry activity // regress y on x with proper covariates (1st regression)
 		
-		reg weekly_income treatment i.state hoursworked age // regress y on x (1st regression)
-		
-			mat results  = r(table) // create a matrix to recall the scalars 
+			mat a  = r(table) // create a matrix to recall the scalars 
 			
-			return scalar beta = results[1,1] // recall the beta coefficient 
+			*return scalar beta = a[1,1] // recall the beta coefficient 
 			
-			return scalar pval = results[4,1] // recall the p-value 
+			return scalar pval = a[4,1] // recall the p-value 
 			
-			return scalar SEM = results[2,1] // recall the standard errors 
+			*return scalar SEM = a[2,1] // recall the standard errors 
+			
+			return scalar n = e(N) // recall the sample size
 
 end
 
-local samples 225 250 255 275
+capture program drop ppol768rdi2
 
-foreach x in `samples'{
-	tempfile sims`x'
-	simulate N = r(N) beta = r(beta) SEM = r(SEM) pval = r(pval), reps(100) seed(2713) saving(`sims`x''): ppol768, samplesize(`x') 
-	save `sims`x'', replace
-}
+*Create a program that includes a regression that creates a biased model, subject to OMV bias: 
 
-local samples 250 255 275
-use `sims225'
+program define ppol768rdi2, rclass // define program and use rclass to create results matrix 
 
-foreach x in `samples' {
-    append using `sims`x''
-}
-gen sig = 0
-replace sig = 1 if pval < 0.05
+	syntax, samplesize(integer) // sample size is the program argument 
+	
+		clear
+		
+		use "$data_1", clear  // loading in the simulated dataset
+		
+		sample `samplesize', count // setting varying observation levels
+		
+		reg emission treatment // regress y on x (2nd regression)
+		
+			mat a  = r(table) // create a matrix to recall the scalars  
+			
+			return scalar pval = a[4,1] // recall the p-value 
+			
+			return scalar n = e(N) // recall the sample size 
+
+end
+*local samples 225 250 255 275
+
+clear
+
+tempfile combined
+
+save `combined', replace emptyok 
+
+foreach i in 100 234 235 1957 1958{
+	forvalues j=1(1)2{
+	tempfile sims
+	simulate p=r(pval), reps(300) seed(1234) saving(`sims'): ppol768rdi`j', samplesize(`i') 
+	gen samplesize=`i' 
+	gen model=`j' 
+	append using `combined'
+	save `combined', replace	
+	}
+} 
+
+*local samples 250 255 275
+*use `sims225'
+
+*foreach x in `samples' {
+    *append using `sims`x''
+*}
+
+gen sig = 0 // *Generate sig variable if the result is significant at 5% level 
+replace sig = 1 if p<=0.05 // *Generate sig variable if the result is significant at 5% level
+bysort model samplesize: egen sig_pob = mean(sig)  
+collapse (mean) sig_pob, by(model samplesize)
+table samplesize model, stat(mean sig) 
+
 sum sig
+mean sig, over(samplesize) // *The minimum sample size to get 80% power is 235?
 
-mean sig, over(N) // *The minimum sample size to get 80% power is 255.
+exit 
 
 clear
 
