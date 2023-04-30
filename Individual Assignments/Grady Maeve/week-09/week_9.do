@@ -97,7 +97,7 @@ syntax, samplesize(integer)
 		return scalar m4_beta=_b[treatment]
 		
 		//model 5
-		reg citation_risk treatment education income commute distance  i.towns // adding strata
+			reg citation_risk treatment police i.region education income // confounders and covariates
 		return scalar m5_beta=_b[treatment]
 		
 		return scalar n= e(N)
@@ -140,31 +140,25 @@ eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
 
 
 
-twoway  (histogram m1 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m1 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+twoway  (histogram m1 if samplesize == 40, start(-4.5) width(.1) color(navy)) (histogram m1 if samplesize == 5, start(-4.5) width(.1) color(lavender%80))
 graph save "Graph" "$wd/m1.gph" , replace
 
-twoway (histogram m2 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m2 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+twoway (histogram m2 if samplesize == 40, start(-4.5) width(.1) color(navy)) (histogram m2 if samplesize == 5, start(-4.5) width(.1) color(lavender%80))
 graph save "Graph" "$wd/m2.gph" , replace
 
-twoway  (histogram m3 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m3 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+twoway  (histogram m3 if samplesize == 40, start(-4.5) width(.1) color(navy)) (histogram m3 if samplesize == 5, start(-4.5) width(.1) color(lavender%80))
 graph save "Graph" "$wd/m3.gph" , replace
 
-twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+twoway  (histogram m4 if samplesize == 40, start(-4.5) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4.5) width(.1) color(lavender%80))
 graph save "Graph" "$wd/m4.gph" , replace
-twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
+twoway  (histogram m5 if samplesize == 40, start(-4.5) width(.1) color(navy)) (histogram m5 if samplesize == 5, start(-4.5) width(.1) color(lavender%80))
 graph save "Graph" "$wd/m5.gph" , replace
 
 graph combine "$wd/m1.gph""$wd/m2.gph""$wd/m3.gph" "$wd/m4.gph" "$wd/m5.gph", altshrink
-graph save "$wd/hist_debias.gph"
+graph save "$wd/hist_debias.gph", replace
 
-/*figure showing the mean and variance of beta for different regression models, as a function of N*/
-graph twoway rarea 
-		
-eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
-esttab, wide label 
-		
-		
-/*Can you visually compare these to the "true" parameter value?*/
+
+
 
 
 		
@@ -241,8 +235,9 @@ program define parameterbiasestimates, rclass
 		
 		gen citation_risk = 2 +  1.5 *police -  2 * ln(income)  - 2*registeredvoter + 4* rnormal() + 2 * commute + .5 * distance  + u_regions + u_towns + u_individual
 		
+		
 		//collider
-		gen collider = 2+ treatment/4 + 2*citation_risk
+		gen collider = 2+ treatment/4 + 2*citation_risk + rnormal()
 		
 		/*Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.)*/
 
@@ -313,29 +308,21 @@ eststo: estpost tabstat mA mB mC mD mE, col(stat) stat(min max mean sd semean)
 
 
 
-twoway  (histogram m1 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m1 if samplesize == 5, start(-4) width(.1) color(lavender%80))
-graph save "Graph" "$wd/m1.gph" , replace
+twoway  (histogram mA if samplesize == 40, start(-4) width(.1) color(navy)) (histogram mA if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/mA.gph" , replace
 
-twoway (histogram m2 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m2 if samplesize == 5, start(-4) width(.1) color(lavender%80))
-graph save "Graph" "$wd/m2.gph" , replace
+twoway (histogram mB if samplesize == 40, start(-4) width(.1) color(navy)) (histogram mB if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/mB.gph" , replace
 
-twoway  (histogram m3 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m3 if samplesize == 5, start(-4) width(.1) color(lavender%80))
-graph save "Graph" "$wd/m3.gph" , replace
+twoway  (histogram mC if samplesize == 40, start(-4) width(.1) color(navy)) (histogram mC if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/mC.gph" , replace
 
-twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
-graph save "Graph" "$wd/m4.gph" , replace
-twoway  (histogram m4 if samplesize == 40, start(-4) width(.1) color(navy)) (histogram m4 if samplesize == 5, start(-4) width(.1) color(lavender%80))
-graph save "Graph" "$wd/m5.gph" , replace
+twoway  (histogram mD if samplesize == 40, start(-4) width(.1) color(navy)) (histogram mD if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/mD.gph" , replace
+twoway  (histogram mE if samplesize == 40, start(-4) width(.1) color(navy)) (histogram mE if samplesize == 5, start(-4) width(.1) color(lavender%80))
+graph save "Graph" "$wd/mE.gph" , replace
 
-graph combine "$wd/m1.gph""$wd/m2.gph""$wd/m3.gph" "$wd/m4.gph" "$wd/m5.gph", altshrink
-graph save "$wd/hist_debias.gph"
+graph combine "$wd/mA.gph""$wd/mB.gph""$wd/mC.gph" "$wd/mD.gph" "$wd/mE.gph", altshrink
+graph save "$wd/hist_bias.gph", replace
 
-/*figure showing the mean and variance of beta for different regression models, as a function of N*/
-graph twoway rarea 
-		
-eststo: estpost tabstat m1 m2 m3 m4 m5, col(stat) stat(min max mean sd semean)
-esttab, wide label 
-		
-		
-/*Can you visually compare these to the "true" parameter value?*/
 
