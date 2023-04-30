@@ -2,187 +2,184 @@
 *PPOL 768
 *Week 09 STATA Assignment 04
 
-cd "C:\Users\easpi\OneDrive\Desktop\Georgetown MPP\MPP Spring 2023\Research Design and Implmentation"
+global wd "C:/Users/easpi/OneDrive/Desktop/Georgetown MPP/MPP Spring 2023/Research Design and Implmentation/Week09"
 
-***Part 1: De-biasing a parameter estimate using controls
+********************Part 1: De-biasing a parameter estimate using controls*************
 
 *1. Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
 
-// Set seed for reproducibility
-set seed 1234
-
-// Specify number of observations
-set obs 1000
-
-// Generate treatment variable
-gen treatment = rbinomial(1, 0.5)
-
-// Generate covariates that affect outcome and treatment
-gen age = rnormal(50, 10)
-gen gender = rbinomial(1, 0.5)
-gen bmi = rnormal(25, 5)
-
-// Generate outcome variable (resting heart rate)
-gen resting_hr = 60 + 0.5*treatment - 0.2*age + 2*gender + 1.5*bmi + rnormal(0, 5)
-
-
-
 *2. This DGP should include strata groups and continuous covariates, as well as random noise. Make sure that the strata groups affect the outcome Y and are of different sizes, and make the probability that an individual unit receives treatment vary across strata groups. You will want to create the strata groups first, then use a command like expand or merge to add them to an individual-level data set.
-// Set seed for reproducibility
-
-clear all
-
-set seed 1234
-
-// Specify number of strata groups and individuals per group
-local nstrata 5
-local npergroup 200
-
-// Generate strata variable
-gen strata = ""
-forvalues i = 1/`nstrata' {
-    replace strata = "`i'" if _n <= `npergroup'*`i'
-}
-
-// Generate covariates that affect outcome and treatment
-gen age = rnormal(50, 10)
-gen gender = rbinomial(1, 0.5)
-gen bmi = rnormal(25, 5)
-
-// Generate treatment probability that varies by strata
-gen treat_prob = .
-replace treat_prob = 0.1 if strata == "1"
-replace treat_prob = 0.2 if strata == "2"
-replace treat_prob = 0.3 if strata == "3"
-replace treat_prob = 0.4 if strata == "4"
-replace treat_prob = 0.5 if strata == "5"
-
-// Generate treatment variable based on treatment probability
-gen treatment = rbinomial(1, treat_prob)
-
-// Generate outcome variable (resting heart rate)
-gen resting_hr = 60 + 0.5*treatment - 0.2*age + 2*gender + 1.5*bmi + rnormal(0, 5)
- 
 
 *3. Make sure that at least one of the continuous covariates also affects both the outcome and the likelihood of receiving treatment (a "confounder"). Make sure that another one of the covariates affects the outcome but not the treatment. Make sure that another one affects the treatment but not the outcome. (What do these do?)
 
-clear all
-
-* Set the seed for replicability
-set seed 1234567
-
-* Generate strata variable
-gen strata = ceil(runiform()*5)
-
-* Generate treatment variable
-gen nudge = rbinomial(1, 0.5)
-
-* Generate age covariate that affects both outcome and treatment
-gen age = rnormal(50, 10)
-replace age = age + 0.5*nudge + 0.5*resting_heart_rate
-
-* Generate gender covariate that affects only outcome
-gen gender = rbinomial(1, 0.5)
-replace gender = gender + 0.5*resting_heart_rate
-
-* Generate BMI covariate that affects only treatment
-gen bmi = rnormal(25, 5)
-replace bmi = bmi + 0.5*nudge
-
 *4. Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.) Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each, and produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N? Can you visually compare these to the "true" parameter value?
-
-clear all
-set seed 12345
-
-* Generate simulated data
-set obs 10000
-gen age = rnormal(50, 10)
-gen gender = rbinomial(1, 0.5)
-gen bmi = rnormal(25, 5)
-gen strata = ceil(runiform()*5)
-gen treatment_prob = rnormal(0.5, 0.2)
-replace treatment_prob = 0.1 if strata == 1
-replace treatment_prob = 0.2 if strata == 2
-replace treatment_prob = 0.3 if strata == 3
-replace treatment_prob = 0.4 if strata == 4
-replace treatment_prob = 0.5 if strata == 5
-gen treatment = rbinomial(1, treatment_prob)
-gen nudge = rnormal(0, 2)
-gen Y = 60 - 0.5 * age + 1.5 * gender + 1.2 * bmi + 2 * treatment + nudge + 3 * strata + rnormal(0, 5)
-
-* Set up sample sizes
-local N "100 200 500 1000 2000 5000 10000"
-
-* Define regression models
-local models "reg Y treatment i.strata i.gender i.age i.bmi, fe
-              reg Y treatment i.strata i.gender, fe
-              reg Y treatment i.strata, fe
-              reg Y i.strata, fe
-              reg Y i.strata i.gender i.age i.bmi, fe"
-
-* Loop over sample sizes and regression models
-foreach n of local N {
-    di "N = `n'"
-    foreach model of local models {
-        di "Model: `model'"
-        clear
-        set obs `n'
-        gen age = rnormal(50, 10) in 1/`n'
-        gen gender = rbinomial(1, 0.5) in 1/`n'
-        gen bmi = rnormal(25, 5) in 1/`n'
-        gen strata = ceil(runiform()*5) in 1/`n'
-        gen treatment_prob = rnormal(0.5, 0.2) in 1/`n'
-        replace treatment_prob = 0.1 if strata == 1 in 1/`n'
-        replace treatment_prob = 0.2 if strata == 2 in 1/`n'
-        replace treatment_prob = 0.3 if strata == 3 in 1/`n'
-        replace treatment_prob = 0.4 if strata == 4 in 1/`n'
-        replace treatment_prob = 0.5 if strata == 5 in 1/`n'
-        gen treatment = rbinomial(1, treatment_prob) in 1/`n'
-        gen nudge = rnormal(0, 2) in 1/`n'
-        gen Y = 60 - 0.5 * age + 1.5 * gender + 1.2 * bmi + 2 * treatment + nudge + 3 * strata + rnormal(0, 5) in 1/`n'
-        qui `model'
-        qui est store `model'
-    }}
-    * Generate summary statistics for each model
-    local summary ""
-    foreach model of local models
-	
-*To generate a table that compares the parameter estimates for each model, I need to store the parameter estimates for each model in a separate "estimation set".
-
-estimates clear
-foreach model in models {
-    qui reg outcome treatment age gender bmi i.strata if _n <= `n'
-    qui est store `model'
-}
-
-esttab *, se(%14.8f) p(%14.8f) b(3) star(* 0.1 ** 0.05 *** 0.01) mtitle("Model 1" "Model 2" "Model 3" "Model 4" "Model 5") collabels(none) unstack noobs
-
-
-*This should produce a graph that shows the mean and variance of beta for each model as a function of N, along with the true parameter value. I should be able to compare the estimates to the true value to see how well the models perform as sample size increases.
-
-estimates clear
-qui reg outcome treatment age gender bmi i.strata
-estimates store true
-
-foreach model in models {
-    qui reg outcome treatment age gender bmi i.strata if _n <= `n'
-    qui est store `model'
-}
-
-estimates table true `models', b(%14.8f)
-marginsplot, by(`models') xsample(`nsample') yline(0)
-
 
 *5. Fully describe your results in your README.md file, including figures and tables as appropriate.
 
-*I am having problems getting my figures and tables and overall code to work. The code included is done to the best of my knowledge and ability. I assume that my resulting figures and tables would show the following:
 
-*Biasedness and convergence of the models as N grows: This involves comparing the regression estimates of the models at different sample sizes. Biasedness can be assessed by comparing the estimates to the true parameter value (if available). Convergence can be assessed by examining how the estimates change as sample size increases. Tables can be used to display the estimates for each model and sample size, while figures can be used to visually compare the estimates across models and sample sizes.
+clear
+// Set the number of observations to 62, representing 62 cities in New York
+set obs 62 
 
-*Mean and variance of beta for different regression models, as a function of N: This involves computing the mean and variance of the estimated coefficients (beta) for each model and sample size, and plotting them against sample size (N). The "true" parameter value can also be plotted for comparison. The figure should allow for easy comparison of the estimates across models and sample sizes, and should show how the estimates converge to the true value as sample size increases.
+// Create strata and entity effects
+gen city = _n //setting a city ID
+gen city_effects = rnormal(0, 5) //city effects
+expand 1+int((968-1+1) *runiform()) //generate individual-level dataset. Range of 1,000 to 968,000 individuals in each city with smart watches 
+sort city
+bysort city: generate individual = _n
+gen individual_effects = rnormal(0, 2) //individual effects
+
+//Create continuous variates
+gen conf_education = rnormal() //affects treatment and outcome
+gen corr_y_gym_membership = rnormal() //affects only outcome
+gen corr_x_age = rnormal() //affects only treatment
+
+//Generate treatment (digital nudge)
+gen nudge = (city/10) ///make the probability that an individual unit receives treatment vary across strata groups
+	+ conf_education ///confounder
+	+ corr_x_age ///variable affecting treatment but not outcome
+	+ rnormal() > 0
+	
+//Generate outcome Y (heart rate)
+gen heartrate = 13 + (0.25)*city ///make sure that the strata groups affect the outcome 
+	+ conf_education ///counfounder
+	+ corr_y_gym_membership ///variable affecting outcome but not treatment
+	+ (2)*nudge ///treatment effect 
+	+ city_effects + individual_effects ///entity effects
+	+ 0.5*rnormal() //random noise
+
+//Construct at least five regression models
+reg heartrate nudge //simple bivariate model
+reg heartrate nudge conf_education i.city //unbiased model
+reg heartrate nudge conf_education i.city corr_x_age //biased
+reg heartrate nudge conf_education i.city corr_y_gym_membership //biased
+reg heartrate nudge conf_education i.city corr_x_age corr_y_gym_membership //biased
 
 
-***Part 2: Biasing a parameter estimate using controls
+// Define program to run regressions at different sample sizes
+
+capture program drop regressionruns //Before defining program, drop it
+program define regressionruns, rclass //define program that will allow us to return values to memory
+syntax, samplesize(integer) ////sample size is an argument to the program
+	
+	//Setting parameters
+	clear
+	set obs 62
+	
+	//DGP
+		//Create STRATA and entity effects
+		gen city = _n //setting a city ID
+		gen city_effects = rnormal(0, 5) //City effects
+		expand 1+int((`samplesize'-1+1) *runiform()) //generate individual-level dataset. Range of 1,000 to "infinite" individuals in each city with wearables
+		sort city
+		bysort city: generate individual = _n
+		gen individual_effects = rnormal(0, 2) //individual effects
+
+		//Create continuous variates
+		gen conf_education = rnormal() //affects treatment and outcome
+		gen corr_y_gym_membership = rnormal() //affects only outcome
+		gen corr_x_age = rnormal() //affects only treatment
+
+		//Generate treatment (nudge)
+		gen nudge = (city/10) ///make the probability that an individual unit receives treatment vary across strata groups
+			+ conf_education ///confounder
+			+ corr_x_age ///variable affecting treatment but not outcome
+			+ rnormal() > 0
+			
+		//Generate outcome Y (heart rate)
+		gen heartrate = 13 + (0.25)*city ///make sure that the strata groups affect the outcome 
+			+ conf_education ///counfounder
+			+ corr_y_gym_membership ///variable affecting outcome but not treatment
+			+ (2)*nudge ///true treatment effect is 2
+			+ city_effects + individual_effects ///entity effects
+			+ 0.5*rnormal() //random noise
+	
+	//Running regressions and saving Betas 
+	reg heartrate nudge //simple bivariate model
+	return scalar bivar_B = _b[nudge]
+	
+	reg heartrate nudge conf_education i.city //unbiased model
+	return scalar unbiased_B = _b[nudge]
+	
+	reg salary daca conf_education i.city corr_x_age //biased
+	return scalar biased1_B = _b[nudge]
+	
+	reg salary daca conf_education i.city corr_y_gym_membership //biased
+	return scalar biased2_B = _b[nudge]
+
+	reg salary daca conf_education i.city corr_x_age corr_y_gym_membership //biased
+	return scalar biased3_B = _b[nudge]
+	
+end
+
+*Run simulations
+
+clear
+tempfile combined_sims
+save `combined_sims', replace emptyok
+
+forvalues i=50(200)850 {
+	local samplesize=`i'
+	tempfile sims
+	simulate bivar=r(bivar_B) unbias=r(unbiased_B) bias1=r(biased1_B) bias2=r(biased2_B) bias3 =r(biased3_B), reps(150) seed(8675309) saving(`sims'): regressionruns, samplesize(`samplesize') 
+
+	use `sims' , clear
+	gen samplesize=`samplesize'
+	append using `combined_sims'
+	save `combined_sims', replace
+	
+	display as error "This is sample size `i'"
+}
+
+use `combined_sims', clear
+save "$wd/output/part1.dta", replace
+
+exit 
+
+//Produce figures and tables comparing the biasedness and convergence of the models as N grows.
+egen min_bivar = min(bivar), by(samplesize)
+egen max_bivar = max(bivar), by(samplesize)
+
+egen min_unbias = min(unbias), by(samplesize)
+egen max_unbias = max(unbias), by(samplesize)
+
+egen min_bias1 = min(bias1), by(samplesize)
+egen max_bias1 = max(bias1), by(samplesize)
+
+egen min_bias2 = min(bias2), by(samplesize)
+egen max_bias2 = max(bias2), by(samplesize)
+
+egen min_bias3 = min(bias3), by(samplesize)
+egen max_bias3 = max(bias3), by(samplesize)
+
+//Make twoway area graphs
+twoway rarea min_bivar max_bivar samplesize, title("Bivariate") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bivariate.gph", replace
+
+twoway rarea min_unbias max_unbias samplesize, title("City + Confounder") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/unbias.gph", replace
+
+twoway rarea min_bias1 max_bias1 samplesize, title("Biased Model 1") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bias1.gph", replace
+
+twoway rarea min_bias2 max_bias2 samplesize, title("Biased Model 2") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bias2.gph", replace
+
+twoway rarea min_bias3 max_bias3 samplesize, title("Biased Model 3") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/bias3.gph", replace
+
+//Combine the five models' graphs
+graph combine "$wd/output/bivariate.gph" "$wd/output/unbias.gph" "$wd/output/bias1.gph" "$wd/output/bias2.gph" "$wd/output/bias3.gph", altshrink 
+
+//Table of summary stats
+estpost tabstat bivar unbias bias1 bias2 bias3, col(stat) stat(mean sd semean min max) 
+
+// Clear all existing data and programs
+clear all 
+
+
+
+********************Part 2: Biasing a parameter estimate using controls****************
 
 
 *1. Develop some data generating process for data X's and for outcome Y, with some (potentially multi-armed) treatment variable.
@@ -192,59 +189,115 @@ marginsplot, by(`models') xsample(`nsample') yline(0)
 *5. Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.) Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each, and produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N?
 *6. Fully describe your results in your README.md file, including figures and tables as appropriate.
 
-*For this scenario, a good option for the channel variable could be "physical activity level". This variable can be affected by the treatment (fitbit nudge) and can also affect the outcome (resting heart rate) through its impact on an individual's fitness level.
 
-*A good option for the collider variable could be "medication use". This variable can be influenced by both the treatment and the outcome. For example, if an individual has a high resting heart rate, they may be more likely to take medication for hypertension. Similarly, if an individual receives the fitbit nudge and experiences a decrease in their resting heart rate, they may be less likely to take medication for hypertension.
+capture program drop regressionruns2 //Before defining program, drop it
+program define regressionruns2, rclass //define program that will allow us to return values to memory
+syntax, samplesize(integer) ////sample size is an argument to the program
+	
+//Setting parameters
+clear
+set obs 50
+	
+//DGP
+//Create strata and entity effects
+gen city = _n //setting a city ID
+gen city_effects = rnormal(0, 5) //City effects
+expand 1+int((`samplesize'-1+1) *runiform()) //generate individual-level dataset. Range of 1,000 to "infinite" individuals in each city with smart watches
+sort city
+bysort city: generate individual = _n
+gen individual_effects = rnormal(0, 2) //individual effects
 
-* Generate data for outcome variable (resting heart rate) and treatment variable (nudge)
-clear all
-set obs 10000
-gen treatment = rbinomial(1,0.5)
-gen Y = 65 + 0.3*treatment + rnormal(0, 10)
+//Create continuous variates
+gen conf_education = rnormal() //affects treatment and outcome
+gen corr_y_gym_membership = rnormal() //affects only outcome
+gen corr_x_age = rnormal() //affects only treatment
 
-*Create channel variable (physical activity level) that is a function of treatment
-gen channel = 2*treatment + rnormal(0, 1)
+//Generate treatment (nudge)
+gen nudge = (city/10) + conf_education + corr_x_age + rnormal() > 0
+		
+//Generate channel
+gen channel_stepcount = 2*nudge
+			
+//Generate outcome Y (heartrate)
+gen heartrate= 13 + ((0.25)*city) + conf_education + corr_y_gym_membership + channel_stepcount + ((2)*nudge) + city_effects + individual_effects + 0.5*rnormal()	
 
-* Create collider variable (medication use) that is a function of both Y and treatment
-gen collider = 0.5*Y - 0.8*treatment + rnormal(0, 1)
+//Generate collider
+gen collider_social = 2*nudge + 1.5*heartrate
+	
+//Running regressions and saving Betas
+reg heartrate nudge //simple bivariate model
+return scalar bivar_B = _b[nudge]
+	
+reg heartrate nudge conf_education i.city //unbiased model
+return scalar unbiased_B = _b[nudge]
+	
+reg heartrate nudge conf_education i.city channel_stepcount //biased
+return scalar biased1_B = _b[nudge]
+	
+reg heartrate nudge conf_education i.city collider_social //biased
+return scalar biased2_B = _b[nudge]
 
-* Create strata variable and assign probabilities of treatment within each stratum
-gen strata = rbinomial(3,0.5)
-egen p_treatment = mean(treatment), by(strata)
+reg heartrate nudge conf_education i.city channel_stepcount collider_social //biased
+return scalar biased3_B = _b[nudge]
+	
+end
 
-* Create different regression models with combinations of covariates and fixed effects
-local models "reg Y treatment i.strata i.gender i.age i.bmi channel collider, fe
-reg Y treatment i.strata i.gender i.age i.bmi channel, fe
-reg Y treatment i.strata i.gender i.age i.bmi collider, fe
-reg Y treatment i.strata i.gender i.age i.bmi channel collider i.gender#c.collider i.bmi#c.channel, fe
-reg Y treatment i.strata i.gender i.age i.bmi channel collider i.gender#c.collider i.age#c.channel, fe"
+//Run simulations
 
-*Run regressions at different sample sizes and store coefficients
-forvalues n = 100 100 1000 10000 {
-    qui set obs `n'
-    qui foreach model of local models {
-        qui `model'
-        qui est store `model'
-    }
-    qui suest `: list est*'
-    qui mat b = e(b)
-    qui mat V = e(V)
-    qui svmat b_`n' = b'
-    qui svmat V_`n' = V'
+clear
+tempfile combined_sims_2
+save `combined_sims_2', replace emptyok
+
+forvalues i=50(200)850 {
+	local samplesize=`i'
+	tempfile sims
+	simulate bivar=r(bivar_B) unbias=r(unbiased_B) bias1=r(biased1_B) bias2=r(biased2_B) bias3 =r(biased3_B), reps(150) seed(8675309) saving(`sims'): regressionruns2, samplesize(`samplesize') 
+
+	use `sims' , clear
+	gen samplesize=`samplesize'
+	append using `combined_sims_2'
+	save `combined_sims_2', replace
+	
+	display as error "This is sample size `i'"
 }
 
-*Compute mean and variance of beta for each regression model as a function of sample size
-local models_list "Model 1: Channel, Collider, and all Covariates
-Model 2: Channel and all Covariates
-Model 3: Collider and all Covariates
-Model 4: Channel, Collider, Interaction Effects, and all Covariates"
-matrix list models = `models_list'
-forvalues i = 1/`=rows(models)' {
-    local model = word(models[`i',1],2)
-    qui mata: b_meanvar = st_matrix("b_10000") : st_matrix("V_10000")
-    matrix b_meanvar = b_meanvar'
-    matrix model_bv = b_meanvar[.,colnames(b_meanvar) : substr(colnames(b_meanvar),1,strlen("`model'")) == "`model'"]
-    matrix list model_bv
-}
+use `combined_sims_2', clear
+save "$wd/output/part2.dta"
 
-*I am having problems getting my figures and tables and overall code to work. The code included is done to the best of my knowledge and ability. 
+exit 
+
+//Produce figures and tables comparing the biasedness and convergence of the models as N grows.
+egen min_bivar = min(bivar), by(samplesize)
+egen max_bivar = max(bivar), by(samplesize)
+
+egen min_unbias = min(unbias), by(samplesize)
+egen max_unbias = max(unbias), by(samplesize)
+
+egen min_bias1 = min(bias1), by(samplesize)
+egen max_bias1 = max(bias1), by(samplesize)
+
+egen min_bias2 = min(bias2), by(samplesize)
+egen max_bias2 = max(bias2), by(samplesize)
+
+egen min_bias3 = min(bias3), by(samplesize)
+egen max_bias3 = max(bias3), by(samplesize)
+
+//Make twoway area graphs
+twoway rarea min_bivar max_bivar samplesize, title("Bivariate") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bivariate.gph", replace
+
+twoway rarea min_unbias max_unbias samplesize, title("City + Confounder") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2unbias.gph", replace
+
+twoway rarea min_bias1 max_bias1 samplesize, title("Biased Model 1") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bias1.gph", replace
+
+twoway rarea min_bias2 max_bias2 samplesize, title("Biased Model 2") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bias2.gph", replace
+
+twoway rarea min_bias3 max_bias3 samplesize, title("Biased Model 3") ylin(2, lcolor(midgreen)) ytitle("Estimated Effect Size") xtitle("Sample Size") yscale(range (0 10))
+graph save "Graph" "$wd/output/p2bias3.gph", replace
+
+//Combine the five models' graphs
+graph combine "$wd/output/p2bivariate.gph" "$wd/output/p2unbias.gph" "$wd/output/p2bias1.gph" "$wd/output/p2bias2.gph" "$wd/output/p2bias3.gph", altshrink 
+
