@@ -18,11 +18,21 @@ The table below shows the descriptive statistics for each of the models. Again, 
 | Maximum | 10.35675 | 17.53874 | 17.53874 | 15.53005 | 15.42391 |
 
 # Part 2: Biasing a parameter estimate using controls
-Develop some data generating process for data X’s and for outcome Y, with some (potentially multi-armed) treatment variable.
-This DGP should include strata groups and continuous covariates, as well as random noise. Make sure that the strata groups affect the outcome Y and are of different sizes, and make the probability that an individual unit receives treatment vary across strata groups. You will want to create the strata groups first, then use a command like expand or merge to add them to an individual-level data set.
+Introducing more controls (with the addition of one related to the treatment) shows a larger difference between models than the in the first part. This graph shows that there is much more variation between models 1, 2, and 3-5. Model 1, the bivariate regression, produces consistent negative estimates. Model 2, the multivariate regression with no fixed effects or the inclusion of the control related to the treatment, is concentrated around zero. However, models 3-5 are almost identical to each other and it is hard to distinguish where those three models vary.
+
+### Graph
+![Graph](https://github.com/gui2de/ppol768-spring23/blob/c39d9a99a788b245bba2f241333a4e770a4c8985/Individual%20Assignments/Hill%20Hannah/week09/outputs/use_wk9_q2.png)
 
 
-When creating the outcome, make sure there is an intermediate variable that is a function of treatment. Have this variable determine Y in the true DGP, not the treatment variable itself. (This is a "channel".)
-In addition, create a second independent variable that is a function of both Y and the treatment variable. (This is a "collider".)
-Construct at least five different regression models with combinations of these covariates and strata fixed effects. (Type h fvvarlist for information on using fixed effects in regression.) Run these regressions at different sample sizes, using a program like last week. Collect as many regression runs as you think you need for each, and produce figures and tables comparing the biasedness and convergence of the models as N grows. Can you produce a figure showing the mean and variance of beta for different regression models, as a function of N?
-Fully describe your results in your README.md file, including figures and tables as appropriate.
+### Descriptive Statistics
+The descriptive statistics table below shows again how closely the beta estimates are across models 3-5. The difference in beta estimates is quite stark between the bivariate regression model and the multivariate model.
+
+
+| Stat | Beta1 | Beta2 | Beta3 | Beta4 | Beta5|
+| --- | ----- | ------ | ----- | ------ | ---- |
+|Mean	|-11.78717|	-.0121736|	-1.427405|	-1.421238	|-1.416551|
+|SD	|3.505125|	2.974457	|.3300313|	.4066494|	.4102723|
+|Min	|-27.71192	|-15.02476	|-3.340859|	-7.164005	|-7.164005|
+|Max	|5.475519	|12.92577|	.0513222|	1.444167|	1.444167|
+					
+
