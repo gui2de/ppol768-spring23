@@ -1,26 +1,21 @@
 # Part 1: De-biasing a parameter estimate using controls
 
+Below, we see that the Beta estimate for Model 1 ("Beta1") outlined in red stands out from the rest of the models' estimates. Model 1, a bivariate model, is downwardly biased. The other models (2-5) which include multivariate controls and fixed effects, concentrate around 0. One exception is Beta4, which has a higher peak than the other models with an upwards bias.
 
-Based on the output of the figures below, I am sure that I was unable to correctly de-bias the parameter estimate as there is really not much of a difference between all of them.
+### Graph
+![Graph](https://github.com/gui2de/ppol768-spring23/blob/6d75b8b9b691baaf20b5d94604c468fa89cbb93c/Individual%20Assignments/Hill%20Hannah/week09/outputs/use_wk9_q1.png)
 
-### Figures
-![Model_1](https://github.com/gui2de/ppol768-spring23/blob/1dee10f767a713e65773019c20fc7cd42348549e/Individual%20Assignments/Hill%20Hannah/week09/outputs/wk09_model1.png)
-![Model_2](https://github.com/gui2de/ppol768-spring23/blob/1dee10f767a713e65773019c20fc7cd42348549e/Individual%20Assignments/Hill%20Hannah/week09/outputs/wk09_model2.png)
-![Model_3](https://github.com/gui2de/ppol768-spring23/blob/1dee10f767a713e65773019c20fc7cd42348549e/Individual%20Assignments/Hill%20Hannah/week09/outputs/wk09_model3.png)
-![Model_4](https://github.com/gui2de/ppol768-spring23/blob/1dee10f767a713e65773019c20fc7cd42348549e/Individual%20Assignments/Hill%20Hannah/week09/outputs/wk09_model4.png)
-![Model_5](https://github.com/gui2de/ppol768-spring23/blob/1dee10f767a713e65773019c20fc7cd42348549e/Individual%20Assignments/Hill%20Hannah/week09/outputs/wk09_model5.png)
 
 ### Descriptive Statistics
 
-The table below shows the descriptive statistics for each of the models. There is not much difference between the different biased models, however, there is a significant difference between the base bivariate regression and the other four regressions.
+The table below shows the descriptive statistics for each of the models. Again, we see that Model 1, the bivariate regression, has substantially different values than the rest of the models that incorporate more variables and fixed effects. 
 
-| Stat | Bivariate | Unbiased | First Bias | Second Bias | Third Bias|
+| Stat | Beta1 | Beta2 | Beta3 | Beta4 | Beta5|
 | --- | ----- | ------ | ----- | ------ | ---- |
-| Mean | 6.951256 | 3.025204 | 3.136162 | 3.023204 | 3.135963 |
-| SD | .9179278 | .4301396 | .4589228 | .41324666 | .4432821 |
-| SE | .020522 | .0096182 | .0102618 | .0092405 | .0099121 |
-| Minimum | 4.302641 | 2.037162 | 2.102715 | 2.016371 | 2.090404 |
-| Maximum | 9.630885 | 4.133864 | 4.237675 | 4.13929 | 4.313892 |
+| Mean | -11.85955 | .0637742 | .0933259 | .0017102 | .0428582 |
+| SD | 3.47035 | 3.161506 | 3.029504 | 3.190822 | 2.93994 |
+| Minimum |  -27.84032 | -45.26399 | -45.26399 | -53.10278 | -53.10278 |
+| Maximum | 10.35675 | 17.53874 | 17.53874 | 15.53005 | 15.42391 |
 
 # Part 2: Biasing a parameter estimate using controls
 Develop some data generating process for data X’s and for outcome Y, with some (potentially multi-armed) treatment variable.
