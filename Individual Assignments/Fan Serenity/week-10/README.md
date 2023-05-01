@@ -2,12 +2,9 @@
 Author: Serenity Fan (kaf121)
 Last Updated: April 30th, 2023
 
-## Part 1: Calculating required sample sizes and minimum detectable effects 
+* Fix part 1(a), i.e. update tables and pros accordingly, as adjusted code to get confounder right* 
 
-[
-Construct unbiased regression models to estimate the treatment parameter, and run these regressions at various sample sizes.
-
-Calculate the "power" of these regression models, defined as "the proportion of regressions in which p<0.05 for the treatment effect". Based on this definition, find the "minimum sample size" required to obtain 80% power for regression models with and without the non-biasing controls.
+## Part 1 (a): Calculating required sample sizes and minimum detectable effects 
 
 ![Beta_FixedPop_Graph](beta_graph_fixed.png)  
 ] 
@@ -34,9 +31,9 @@ Results of the power calculations corresponding to each regression are shown in 
 * Model 4: Ranging between N=[1600, 2300] households, i.e. Power=[0.722, 0.864]
 * Model 5: Approximately N=1600 households, i.e. Power=0.788 
 
-In general, for all models, power values are low (close to 0) for small values of N, and increase monotonically, converging to 1 for larger values of N. 
+In general, for all models, power values are low (close to 0) for small values of N, and increase monotonically, converging to 1 for larger values of N. The minimum sample size is lowest for Model 1 at N of approximately 1100, the base binary regression case. It ranges from 1600 to 2300 households in Models 2-4, in which village indicators, a confounder, 
 
-### Regression 1: Power Calculations 
+### Regression 1: Power Calculations (Base Binary)
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               |
@@ -54,7 +51,7 @@ In general, for all models, power values are low (close to 0) for small values o
 |  6400  |     1 |         0  |         .     |         .     | 
 
    
-### Regression 2: Power Calculations 
+### Regression 2: Power Calculations (Add Village Indicators, as village affects treatment due to randomization at village level)
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               |
@@ -71,8 +68,7 @@ In general, for all models, power values are low (close to 0) for small values o
 |  4500  |  .976 |  .0068514  |  .9625688     |  .9894312     |
 |  6400  |  .99  |  .0044542  |  .9812682     |  .9987318     |
 
-
-### Regression 3: Power Calculations 
+### Regression 3: Power Calculations (Add confounder affecting both outcome and likelihood of receiving treatment, years worked in manual scavenging)
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               | 
@@ -89,7 +85,7 @@ In general, for all models, power values are low (close to 0) for small values o
 |  4500  |  .976 |  .0068514  |  .9625688     |  .9894312     |
 |  6400  |  .992 |  .003988   |  .9841822     |  .9998178     | 
 
-### Regression 4: Power Calculations 
+### Regression 4: Power Calculations (Add covariate affecting outcome but not treatment, transit time)
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               | 
@@ -106,7 +102,7 @@ In general, for all models, power values are low (close to 0) for small values o
 |  4500  |  .976 |  .0068514  |  .9625688     |  .9894312     |
 |  6400  |  .994 |  .0034572  |  .9872227     | 1.000777      |
 
-### Regression 5: Power Calculations 
+### Regression 5: Power Calculations (Add (another) covariate affecting outcome but not treatment, years of education)
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               | 
@@ -125,3 +121,92 @@ In general, for all models, power values are low (close to 0) for small values o
 
 
 
+
+
+
+## Part 1 (b): MDE Calculations at Power=0.8 
+
+### Regression 1: MDE Calculations (Base Binary)
+                  |       Mean   Std. err.     [95% conf. interval]
+------------------+------------------------------------------------
+c.sig1@treat_size |
+             100  |       .334   .0211135      .2926092    .3753908
+             123  |       .316   .0208124      .2751995    .3568005
+             152  |       .376   .0216838      .3334911    .4185089
+             187  |        .43   .0221626      .3865525    .4734475
+             230  |       .498   .0223829      .4541207    .5418793
+             283  |       .544   .0222962      .5002906    .5877094
+             348  |       .644   .0214347      .6019795    .6860205
+             429  |        .78   .0185442       .743646     .816354
+             528  |       .848    .016072      .8164926    .8795074
+             650  |       .912    .012682      .8871382    .9368618
+             800  |       .976   .0068514      .9625685    .9894315
+-------------------------------------------------------------------
+
+### Regression 2: MDE Calculations (Add Village Indicators, as village affects treatment due to randomization at village level)
+
+               |       Mean   Std. err.     [95% conf. interval]
+------------------+------------------------------------------------
+c.sig2@treat_size |
+             100  |       .318   .0208476      .2771305    .3588695
+             123  |       .334   .0211135      .2926092    .3753908
+             152  |       .366   .0215643      .3237255    .4082745
+             187  |       .432   .0221751       .388528     .475472
+             230  |       .462   .0223183      .4182472    .5057528
+             283  |       .582     .02208      .5387144    .6252856
+             348  |        .64   .0214878      .5978755    .6821245
+             429  |       .772   .0187813      .7351812    .8088188
+             528  |       .862   .0154398      .8317318    .8922682
+             650  |       .924   .0118629      .9007439    .9472561
+             800  |       .974   .0071239      .9600344    .9879656
+
+### Regression 3: MDE Calculations (Add confounder affecting both outcome and likelihood of receiving treatment, years worked in manual scavenging)
+
+                 |       Mean   Std. err.     [95% conf. interval]
+------------------+------------------------------------------------
+c.sig3@treat_size |
+             100  |       .096   .0131877      .0701469    .1218531
+             123  |        .07   .0114219      .0476085    .0923915
+             152  |       .108   .0138945      .0807612    .1352388
+             187  |        .12   .0145473      .0914816    .1485184
+             230  |        .17   .0168156      .1370347    .2029653
+             283  |       .224    .018664      .1874112    .2605888
+             348  |       .282   .0201436      .2425106    .3214894
+             429  |       .416   .0220649       .372744     .459256
+             528  |       .568   .0221751       .524528     .611472
+             650  |        .72      .0201      .6805961    .7594039
+             800  |       .894   .0137807      .8669844    .9210156
+
+
+### Regression 4: MDE Calculations (Add covariate affecting outcome but not treatment, transit time)
+
+                |       Mean   Std. err.     [95% conf. interval]
+------------------+------------------------------------------------
+c.sig4@treat_size |
+             100  |       .098   .0133096      .0719079    .1240921
+             123  |       .076   .0118629      .0527439    .0992561
+             152  |         .1   .0134298      .0736722    .1263278
+             187  |       .128   .0149559      .0986805    .1573195
+             230  |       .158    .016328      .1259906    .1900094
+             283  |       .218   .0184834      .1817653    .2542347
+             348  |       .292   .0203544      .2520974    .3319026
+             429  |       .424    .022123      .3806302    .4673698
+             528  |        .57   .0221626      .5265525    .6134475
+             650  |       .734   .0197806      .6952223    .7727777
+             800  |         .9   .0134298      .8736722    .9263278
+
+### Regression 5: MDE Calculations (Add (another) covariate affecting outcome but not treatment, years of education)
+                  |       Mean   Std. err.     [95% conf. interval]
+------------------+------------------------------------------------
+c.sig5@treat_size |
+             100  |       .104   .0136653      .0772105    .1307895
+             123  |       .088    .012682      .0631382    .1128618
+             152  |       .106   .0137807      .0789844    .1330156
+             187  |       .146   .0158072      .1150116    .1769884
+             230  |       .188   .0174907      .1537114    .2222886
+             283  |        .22   .0185442       .183646     .256354
+             348  |       .318   .0208476      .2771305    .3588695
+             429  |       .484   .0223716      .4401428    .5278572
+             528  |        .62   .0217289      .5774028    .6625972
+             650  |       .768   .0188962       .730956     .805044
+             800  |       .926   .0117185      .9030272    .9489728
