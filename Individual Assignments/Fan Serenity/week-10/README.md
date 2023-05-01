@@ -135,8 +135,7 @@ In summary, the MDE's for each regression model are:
 To contextualize the substantive significance of these MDE values, consider that a typical manual scavenger may make on the order of ~10,000 INR (~120 USD) per month in wages; this is reflected in the DGP equation, which has an intercept of 10,000 INR, i.e. for a male 'manual scavenger' with 0 years of education, 0 years of manual scavenging experience, and 0 transit time. In this respect, the smallest treatment effect size we can detect at a reasonable power, in proportional terms, ranges from 4% to 8% of the dependent variable in question (income). If our employment matching and certification program boosts incomes by less than this proportion, then we will not be able to detect this change with suitable power. 
 
 ### Regression 1: MDE Calculations (Base Binary)
-|Treatment Effect  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
-|Size (INR)        |            |            |               |               |
+|Treat. Eff. Size  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |------------------|------------|------------|---------------|---------------|
 |                  |            |            |               |               |
 |             100  |       .334 |  .0211135  |    .2926092   | .3753908      |
@@ -153,8 +152,7 @@ To contextualize the substantive significance of these MDE values, consider that
 
 ### Regression 2: MDE Calculations (Add Village Indicators, as village affects treatment due to randomization at village level)
 
-|Treatment Effect  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
-|Size (INR)        |            |            |               |               |
+|Treat. Eff. Size  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |------------------|------------|------------|---------------|---------------|
 |                  |            |            |               |               |
 |             100  |       .318 |  .0208476  |    .2771305   | .3588695      |
@@ -171,8 +169,7 @@ To contextualize the substantive significance of these MDE values, consider that
 
 ### Regression 3: MDE Calculations (Add confounder affecting both outcome and likelihood of receiving treatment, years worked in manual scavenging)
 
-|Treatment Effect  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
-|Size (INR)        |            |            |               |               |
+|Treat. Eff. Size  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |------------------|------------|------------|---------------|---------------|
 |                  |            |            |               |               |
 |             100  |       .096 |  .0131877  |    .0701469   | .1218531      |
@@ -190,8 +187,7 @@ To contextualize the substantive significance of these MDE values, consider that
 
 ### Regression 4: MDE Calculations (Add covariate affecting outcome but not treatment, transit time)
 
-|Treatment Effect  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
-|Size (INR)        |            |            |               |               |
+|Treat. Eff. Size  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |------------------|------------|------------|---------------|---------------|
 |                  |            |            |               |               |
 |             100  |       .098 |  .0133096  |    .0719079   | .1240921      |
@@ -207,8 +203,7 @@ To contextualize the substantive significance of these MDE values, consider that
 |             800  |         .9 |  .0134298  |    .8736722   | .9263278      |
 
 ### Regression 5: MDE Calculations (Add (another) covariate affecting outcome but not treatment, years of education)
-|Treatment Effect  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper|
-|Size (INR)        |            |            |               |               |
+|Treat. Eff. Size  |    Mean    |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |------------------|------------|------------|---------------|---------------|
 |                  |            |            |               |               |
 |             100  |       .104 |  .0136653  |    .0772105   | .1307895      |
