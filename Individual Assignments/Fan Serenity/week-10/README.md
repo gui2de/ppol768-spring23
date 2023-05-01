@@ -1,13 +1,10 @@
 # Week 10 - Power Calculations Assignment 
 Author: Serenity Fan (kaf121)
-Last Updated: April 30th, 2023
+Last Updated: May 1st, 2023
 
 * Fix part 1(a), i.e. update tables and pros accordingly, as adjusted code to get confounder right* 
 
 ## Part 1 (a): Calculating required sample sizes and minimum detectable effects 
-
-![Beta_FixedPop_Graph](beta_graph_fixed.png)  
-] 
 
 I employ the same Data Generating Process (DGP) as from the W9 assignment, as applied to the simulation of a cluster RCT rehabilitation program for manual scavengers, subjected to an exogenous mechanization of their (sanitation) labor. The dependent variable is income (in INR, i.e. rupees), while the independent variables are the treatment (an employment matching & certification program), years of education, years spent working in manual scavenging, door-to-door transit time (from household to city centre), and an indicator variable for gender (female=1, male=0). Randomization occurs at the panchiyat (village) / municipality level, i.e. we work with the Uttar Pradesh government to decide, within our 3 pilot districts of Budaon, Shahjahanpur, and Farrukhabad, which villages receive mechanized de-sludging machines. For the purpose of this code, we vary and iterate the number of districts as 1, 2, 3, 4, 6, 8, 11, 16, 23, 32, 45, 64 (in half-unit-exponential increments) - noting that in reality, UP contains 75 districts. Each district in turn is assumed to contain 10 villages/municipalities, of which each village/municipality contains 10 households, such that N increments as N = 100, 200, 300, 400, 600, 800, ... , 6400. 
 
