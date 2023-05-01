@@ -1,0 +1,135 @@
+
+This report was created by user dolph on 1May2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,hh803__w07
+,Form Title,HH803 - W07
+,Form Version,2305011325
+,Form File,hh_w13.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"48","state","state_name","state_name"
+,"49","county","county","county_full"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA LIST LABEL
+----------------------------------------------------------------------
+
+"There is no column in the choice sheet with the name [label:stata]. This is best practice as it "
+"allows you to automatically import choice list labels optimized for Stata's value labels, making "
+"the data set easier to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (survey sheet)
+----------------------------------------------------------------------
+
+"The string values in [name] column in the survey sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file"
+
+,"row" ,"name" 
+,"75","thankyou "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: END/BEGIN NAME MISMATCH
+----------------------------------------------------------------------
+
+"The name in the end group/repeat does not match the name in the most recent begin group/repeat. "
+"This does not cause an error in ODK, but is recommended to solve programming errors with "
+"missmatching group/repeats fields. These cases were found:"
+
+"begin_group [no_duplicate] on row 17 and end_group [consented] on row 72"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Matching_begin_.2Fend
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA FIELD LABEL
+----------------------------------------------------------------------
+
+"There is no column in the survey sheet with the name [label:stata]. This is best practice as this "
+"allows you to automatically import variable labels optimized for Stata, making the data set easier "
+"to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"21","select_one","race"
+,"22","select_one","sex"
+,"23","select_one","edparents1"
+,"24","select_one","edparents2"
+,"25","select_one","state"
+,"27","select_one","county"
+,"29","date","dateresidency"
+,"33","integer","income"
+,"34","select_one","incsource1"
+,"35","select_one","incsource2"
+,"36","select_one","incsource3"
+,"37","select_one","lostincome"
+,"38","select_one","lostincome1"
+,"42","select_one","typeresident"
+,"45","integer","treatment_rent"
+,"46","integer","treatment_utilities"
+,"47","integer","treatment_roommates"
+,"50","integer","control_rent"
+,"51","integer","control_utilities"
+,"52","integer","control_roommates"
+,"54","select_one","houseless"
+,"55","select_one","houseless1"
+,"56","integer","commute"
+,"57","select_multiple","commute1"
+,"58","select_one","commute2"
+,"59","integer","commute3"
+,"63","select_one","govt"
+,"65","select_one","govt1"
+,"66","select_one","govt2"
+,"67","select_one","govt3"
+,"68","select_one","dev"
+,"69","select_one","dev1"
+,"70","select_one","scale"
+,"75","text","thankyou"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.
