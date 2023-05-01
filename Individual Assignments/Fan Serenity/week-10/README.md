@@ -3,7 +3,35 @@ Serenity Fan (kaf121)
 
 ## Part 1: Calculating required sample sizes and minimum detectable effects 
 
+[
+Construct unbiased regression models to estimate the treatment parameter, and run these regressions at various sample sizes.
+
+Calculate the "power" of these regression models, defined as "the proportion of regressions in which p<0.05 for the treatment effect". Based on this definition, find the "minimum sample size" required to obtain 80% power for regression models with and without the non-biasing controls.
+
 ![Beta_FixedPop_Graph](beta_graph_fixed.png)  
+] 
+
+I employ the same Data Generating Process (DGP) as from the W9 assignment, as applied to the simulation of a cluster RCT rehabilitation program for manual scavengers, subjected to an exogenous mechanization of their (sanitation) labor. The dependent variable is income (in INR, i.e. rupees), while the independent variables are the treatment (an employment matching & certification program), years of education, years spent working in manual scavenging, door-to-door transit time (from household to city centre), and an indicator variable for gender (female=1, male=0). Randomization occurs at the panchiyat (village) / municipality level, i.e. we work with the Uttar Pradesh government to decide, within our 3 pilot districts of Budaon, Shahjahanpur, and Farrukhabad, which villages receive mechanized de-sludging machines. For the purpose of this code, we vary and iterate the number of districts as 1, 2, 3, 4, 6, 8, 11, 16, 23, 32, 45, 64 (in half-unit-exponential increments) - noting that in reality, UP contains 75 districts. Each district in turn is assumed to contain 10 villages/municipalities, of which each village/municipality contains 10 households, such that N increments as N = 100, 200, 300, 400, 600, 800, ... , 6400. 
+
+I calculate 5 different regressions of increasing complexity: 
+* Model 1 (Base binary): 
+income = Beta_0 + Beta_1 * treatment
+* Model 2 (Add village indicators): 
+income = Beta_0 + Beta_1 * treatment + Beta_2 * village_1 + ... + Beta_j * village_j, where j is the number of villages, and hence there will be j village indicators. 
+* Model 3 (Add confounder, years worked in manual scavenging): 
+income = Beta_0 + Beta_1 * treatment + Beta_2 * village + ... + Beta_j * village_j + scav 
+* Multivariate (Add covariate, transit time): 
+income = Beta_0 + Beta_1 * treatment + Beta_2 * village + ... + Beta_j * village_j + scav + transit_time
+* Multivariate (Add covariate, years of education): 
+income = Beta_0 + Beta_1 * treatment + Beta_2 * village + ... + Beta_j * village_j + scav + transit_time + educ
+
+Results of the power calculations corresponding to each regression are shown in the tables below. The 'minimum sample size' required to attain the power criterion of 0.8 (80%) is found as follows: 
+
+* Model 1: Approximately N=1100 (Power=0.788)
+* Model 2: Ranging between N=[1600, 2300], i.e. Power=[0.700, 0.852]
+* Model 3: Ranging between N=[1600, 2300], i.e. Power=[0.710, 0.854]
+* Model 4: Ranging between N=[1600, 2300], i.e. Power=[0.722, 0.864]
+* Model 5: Approximately N=1600, i.e. Power=0.788 
 
 * Regression 1: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
