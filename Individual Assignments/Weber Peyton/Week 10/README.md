@@ -1,14 +1,18 @@
+# PPOL 768-01 Research Design and Implementation Week 10 Assignment 
 Author: Peyton Weber
-Last Edited: April 4, 2023
 
-| samplesize | beta_biased | beta_nobias | pvalue_biased | pvalue_nobias | sig_biased | sig_nobias |
-|------------|-------------|-------------|---------------|---------------|------------|------------|
-| 2          | -6.332589   | 4.88729     | 0.0029947     | 0.0385465     | 0.99       | 0.892      |
-| 4          | -6.239778   | 4.964988    | 0.0001757     | 0.006718      | 0.998      | 0.978      |
-| 8          | -6.321542   | 5.002093    | 1.73E-14      | 0.0001108     | 1          | 1          |
-| 16         | -6.255576   | 4.967335    | 0.00E+00      | 4.94E-12      | 1          | 1          |
-| 32         | -6.331969   | 4.999689    | 0             | 3.15E-33      | 1          | 1          |
-| 64         | -6.326482   | 4.985631    | 0             | 0.00E+00      | 1          | 1          |
-| 128        | -6.330445   | 4.985039    | 0             | 0             | 1          | 1          |
-| 256        | -6.335084   | 4.967908    | 0             | 0             | 1          | 1          |
-| Total      | -6.309183   | 4.969997    | 0.0003957     | 0.0056637     | 0.9985     | 0.98375    |
+## Part One 
+
+![Part One Results](part_one_first_part_image.png)
+
+The table below shows results for the unbiased model: 
+![Part One, Second Half; With Controls](part_one_second_part_with_controls.png)
+
+The table below shows results for the biased model:
+![Part One, Second Half; Without Controls](part_one_second_part_without_controls.png)
+
+## Part Two
+
+![Part Two Average Betas](part_two_beta_means_image.png)
+
+![Part Two Confidence Intervals by N](part_two_mean_of_CIs_width_image.png)
