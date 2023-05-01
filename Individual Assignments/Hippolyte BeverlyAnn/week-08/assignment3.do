@@ -9,7 +9,7 @@ clear
 	set seed 3005					// Use set seed to maintain the observations 
 
 	set obs 10000					// Create a dataset that generates 10000 observations 
-	gen x = runiform()				// Generate dataset
+	gen x = rnormal()				// Generate dataset
 
 	save tiida.dta, replace 		// Save dataset 
 	
@@ -26,7 +26,7 @@ program define wkeight,rclass						// Define the program
 	
 	sample `samplesize', count 						// Randomly generate a subset of the data 
 	
-	gen error=runiform()
+	gen error=rnormal()
 	
 	gen y = 3 + 4*x + 5*error						// Generate y variable 
 	
@@ -34,6 +34,7 @@ program define wkeight,rclass						// Define the program
 	reg y x
 	matrix results = r(table)
 	
+	return scalar sample = e(N)
 	return scalar beta = results[1,1]
 	return scalar pval = results[4,1]
 	return scalar ul = results[6,1]
@@ -47,10 +48,11 @@ save `combined', replace emptyok						// Empty local file
 
 forvalues i = 1/4 {										// Define loop
 	local ss = 10^`i'									// Establish local file to run simulations N number of times
-
-	simulate beta=r(beta) pvalues=r(pval), reps(500) : wkeight, samplesize(`ss')	// Run simulation
+	tempfile sims
+	simulate N=r(sample) beta=r(beta) pvalues=r(pval), reps(500) seed(3005) saving(`sims') : wkeight, samplesize(`ss')	// Run simulation
 	gen sampleesize=`ss'									// Generate local file to save N number of simulations
 	
+	use `sims',  clear
 	append using `combined'								// Append local file everytime the simulation is run N number of times 
 	save `combined', replace							// Save local file
 	
@@ -58,16 +60,11 @@ forvalues i = 1/4 {										// Define loop
 
 use `combined', clear									// Run local file
 
-tempfile sims
-simulate column_beta=r(beta) column_pvalues=r(pval) column_std=r(std) column_ll=r(ll) column_ul=r(ul), reps(500) saving(`sims'): wkeight, samplesize(10000)
+** Graph
+hist beta, by(N)
+graph export part2.png, replace 
 
-use `sims'
 
-hist column_beta 
-display column_beta, column_std, column_ll, column_ul
-graph export part1sample10000.png, replace 
-
-exit 
 
 	
 													
