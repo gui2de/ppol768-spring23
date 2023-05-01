@@ -33,7 +33,7 @@ Results of the power calculations corresponding to each regression are shown in 
 * Model 4: Ranging between N=[1600, 2300], i.e. Power=[0.722, 0.864]
 * Model 5: Approximately N=1600, i.e. Power=0.788 
 
-* Regression 1: Power Calculations 
+### Regression 1: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               |
@@ -51,7 +51,7 @@ Results of the power calculations corresponding to each regression are shown in 
 |  6400  |     1 |         0  |         .     |         .     | 
 
    
-* Regression 2: Power Calculations 
+### Regression 2: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               |
@@ -69,7 +69,7 @@ Results of the power calculations corresponding to each regression are shown in 
 |  6400  |  .99  |  .0044542  |  .9812682     |  .9987318     |
 
 
-* Regression 3: Power Calculations 
+### Regression 3: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               | 
@@ -86,7 +86,7 @@ Results of the power calculations corresponding to each regression are shown in 
 |  4500  |  .976 |  .0068514  |  .9625688     |  .9894312     |
 |  6400  |  .992 |  .003988   |  .9841822     |  .9998178     | 
 
-* Regression 4: Power Calculations 
+### Regression 4: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               | 
@@ -103,7 +103,7 @@ Results of the power calculations corresponding to each regression are shown in 
 |  4500  |  .976 |  .0068514  |  .9625688     |  .9894312     |
 |  6400  |  .994 |  .0034572  |  .9872227     | 1.000777      |
 
-* Regression 5: Power Calculations 
+### Regression 5: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |
 |--------|-------|------------|---------------|---------------|
 |        |       |            |               |               | 
