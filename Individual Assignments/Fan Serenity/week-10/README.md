@@ -1,5 +1,6 @@
 # Week 10 - Power Calculations Assignment 
-Serenity Fan (kaf121)
+Author: Serenity Fan (kaf121)
+Last Updated: April 30th, 2023
 
 ## Part 1: Calculating required sample sizes and minimum detectable effects 
 
@@ -27,11 +28,13 @@ income = Beta_0 + Beta_1 * treatment + Beta_2 * village + ... + Beta_j * village
 
 Results of the power calculations corresponding to each regression are shown in the tables below. The 'minimum sample size' required to attain the power criterion of 0.8 (80%) is found as follows: 
 
-* Model 1: Approximately N=1100 (Power=0.788)
-* Model 2: Ranging between N=[1600, 2300], i.e. Power=[0.700, 0.852]
-* Model 3: Ranging between N=[1600, 2300], i.e. Power=[0.710, 0.854]
-* Model 4: Ranging between N=[1600, 2300], i.e. Power=[0.722, 0.864]
-* Model 5: Approximately N=1600, i.e. Power=0.788 
+* Model 1: Approximately N=1100 households (Power=0.788)
+* Model 2: Ranging between N=[1600, 2300] households, i.e. Power=[0.700, 0.852]
+* Model 3: Ranging between N=[1600, 2300] households, i.e. Power=[0.710, 0.854]
+* Model 4: Ranging between N=[1600, 2300] households, i.e. Power=[0.722, 0.864]
+* Model 5: Approximately N=1600 households, i.e. Power=0.788 
+
+In general, for all models, power values are low (close to 0) for small values of N, and increase monotonically, converging to 1 for larger values of N. 
 
 ### Regression 1: Power Calculations 
 |   N    | Power |  Std. err. | 95% CI, Lower | 95% CI, Upper |

@@ -48,28 +48,31 @@ program define normal_reg_sanitation, rclass
 
 	*generate income_pres = rnormal(10000, 2000)
 
-	*Confounders: affect both the outcome and the likelihood of receiving treatment
-	gen scav_years = runiform(1, 30) // Years spent working as manual scavengers: assume that individuals who have worked as manual scavengers for shorter amounts of time are more likely to change into other, higher-paid fields when provided training + mentorship program
+	*Confounder: affects both the outcome and the likelihood of receiving treatment
+	gen scav_years = runiform(0, 30) // Years spent working as manual scavengers: assume that individuals who have worked as manual scavengers for shorter amounts of time are more likely to change into other, higher-paid fields when provided training + mentorship program
 
-	*Covariate: Affects outcome but not treatment 
+	*Covariates: Affects outcome but not treatment 
 	gen transit_time = rnormal(60,10) // Time (minutes) to nearest urban centre, ie. proxy for access to 'good' job opportunities: individuals living closer to urban centres should have better job outcomes subject to attending program  
 	gen educ = runiform(0,10) // Years of education  
 
 	*Affects treatment but not outcome 
 	gen female = round(runiform(0,1), 1)
 
-	*Generate Treatment: Randomize by district 
+	*Generate Treatment
 	generate treatment = 0 
 	  gen v_elig = rnormal() // Village-eligibility randomizer
 	    bysort village: egen v_rmean = mean(v_elig)
-		gen v_elig_ind = v_rmean > 0 
+		gen v_elig_ind = v_rmean > 0 // In expectation, 50% of villages assigned to treatment, 50% to control 
 	  gen gen_elig = rnormal() // Randomizing gender 
 		gen gen_elig_ind = female > gen_elig //Men have 50% chance (chance that 0 is greater than normal dist); women have 84% chance (chance that 1 is greater than normal dist)  
 	  
 	*Check the distribution above, to confirm women have greater chance of getting treatment 
 	bysort female: sum gen_elig_ind
 	  
-	replace treatment = 1 if v_elig_ind==1 & gen_elig_ind==1
+	  gen scav_elig = runiform(0, 30)  
+	    gen scav_elig_ind = scav_years < scav_elig // Dalits with (approaching) 0 years of MS experience are almost certainly eligible; dalits with 30 years of experience are ineligible; decreasing linear ramp between the two endpoints; in expectation, 50% will be eligible on this criterion alone
+	 
+	replace treatment = 1 if v_elig_ind==1 & gen_elig_ind==1 & scav_elig_ind==1
 	*replace treatment = 1 if district<=5 & scav_years<=10 & female==1 
 	sum treatment // Overall proportion assigned treatment 
 
@@ -175,11 +178,8 @@ forvalues i=0.5(0.5)6 {
 		save `combined', replace
 		
 }
-/* 
-forvalues j=1/5 {
-	histogram, beta_coeff, by(N) 
-} 
-*/ 
+
+ 
 
 
 *Load back in all the simulation regression data 
@@ -208,11 +208,17 @@ forvalues j = 1/5 {
 save "stats_power_part1_v2.dta", replace
 
 
+*Graphing 
+use stats_power_part1_v2.dta, clear 
+
+forvalues j=1/5 {
+	histogram beta_coeff`j', by(N) 
+	graph export reg_`j'_overN.png, replace 
+} 
 
 
 
-
-
+/* 
 
 *_________________________________________________
 
@@ -426,7 +432,7 @@ save "stats_power_part1_v2.dta", replace
 
 
 
-
+*/ 
 
 
 
