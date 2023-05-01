@@ -22,14 +22,14 @@ To understand how power varies by sample size, I evaluated the 3 regressions bel
 
 Each regression was evaluated at sample sizes (individuals/town) from 5 to 40 in increments of 5 and simulated with data 500 times.
 
-![Figure 1](outputs/powerbysamplesize.png)
+![Figure 1](outputs/powerbysamplesize1.png)
 
 In the increments here, the smallest sample size at which >80% of regressions will return a beta coefficient on the treatment variable with a p-value <= .05 is 10 for model 2 and 15 for model 3. The first model does not have sufficient power at any sample size tested.
 
 Then, I moved on to calculate the minimum detectable effects with a fixed samplesize of 10. 
 
 
-![Figure 2](outputs/mde_all.png)
+![Figure 2](outputs/mde_all2.png)
 
 ## Part 2: Calculating power for DGPs with clustered random errors
 In this section, error is introduced in the regional effects, making clusters.
