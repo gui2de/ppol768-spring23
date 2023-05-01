@@ -3,7 +3,7 @@
 *Author: Peyton Weber
 *Last edited: April 4, 2023, April 14, 2023,  April 30, 2023
 
-*PLEASE NOTE: Coding below was heavily relied upon the code previously submitted by my peers. 
+*PLEASE NOTE: Coding below was heavily relied upon the code previously submitted by my peers!  
 
 cd "/Users/peytonweber/Desktop/GitHub/ppol768-spring23/Individual Assignments/Weber Peyton/Week 10"
 *Reviewer to adjust working directory appropriately. 
@@ -137,8 +137,8 @@ foreach i in 100 234 235 1957 1958{
     *append using `sims`x''
 *}
 
-gen sig = 0 // *Generate sig variable if the result is significant at 5% level 
-replace sig = 1 if p<=0.05 // *Generate sig variable if the result is significant at 5% level
+gen sig = 0 // *Generate variable if the result is stat significant at 5% level 
+replace sig = 1 if p<=0.05 // *Generate variable if the result is stat significant at 5% level
 bysort model samplesize: egen sig_pob = mean(sig)  
 collapse (mean) sig_pob, by(model samplesize)
 table samplesize model, stat(mean sig) 
@@ -146,7 +146,7 @@ table samplesize model, stat(mean sig)
 sum sig
 mean sig, over(samplesize) // *The minimum sample size to get 80% power is 235?
 
-exit 
+********************ALLOWING TREATMENT SIZE TO VARY***************************** 
 
 clear
 
@@ -195,7 +195,7 @@ program define ppol768_2, rclass
 	
 	use "week-10-part-two.dta"
 
-	gen wkly_inc = rnormal(800,250) ///
+	gen weekly_inc = rnormal(800,250) ///
 			+ (`treatment_effect' * treatment) ///
 			+ (8 * hoursworked) /// 
 			+ (4.5 * age) ///
@@ -205,13 +205,13 @@ program define ppol768_2, rclass
 
 	return scalar N = 255
 	gen treatment_effect = `treatment_effect'
-	reg wkly_inc treatment i.state hoursworked age 
+	reg weekly_inc treatment i.state hoursworked age 
 		mat results1 = r(table)
 		return scalar beta1 = results1[1,1]
 		return scalar SEM1 = results1[2,1]
 		return scalar pval1 = results1[4,1]
 
-	reg wkly_inc treatment 
+	reg weekly_inc treatment 
 		mat results2 = r(table)
 		return scalar beta2 = results2[1,1]
 		return scalar SEM2 = results2[2,1]
@@ -235,16 +235,20 @@ foreach x in `te' {
     append using `sims`x''
 }
 gen sig1 = 0
-replace sig1 = 1 if pval1 < 0.05
+replace sig1 = 1 if pval1 <= 0.05
 sum sig1
 
-mean sig1, over(treatment_effect) // *The minimum detectable effect size for regression with controls is 93.
+mean sig1, over(treatment_effect) // *The minimum detectable effect size for regression with controls is 92.
 
 gen sig2 = 0
-replace sig2 = 1 if pval2 < 0.05
+replace sig2 = 1 if pval2 <= 0.05
 sum sig2
 
-mean sig2, over(treatment_effect) // *The minimum detectable effect size for regression without controls is 91. 
+mean sig2, over(treatment_effect) // *The minimum detectable effect size for regression without controls is 92. 
+
+exit
+
+********************************Part Two:***************************************
 
 clear
 
