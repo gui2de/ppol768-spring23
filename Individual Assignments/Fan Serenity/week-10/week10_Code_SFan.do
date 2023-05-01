@@ -429,11 +429,12 @@ save "stats_power_part1_MDE_v2.dta", replace
 use stats_power_part1_MDE_v2.dta, clear 
 
 
-
+/* 
 forvalues j=1/5 {
 	histogram beta_coeff`j', by(treat_size) 
 	graph export reg_`j'_over_treatsize.png, replace 
 } 
+*/ 
 
 /*
 *if runID==1 {
