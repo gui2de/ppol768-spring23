@@ -532,7 +532,7 @@ sort N
 *order N_avg, after(N)
 *replace N_avg = round(N_avg)
 
-save "stats_multilvl_part1_v1.dta", replace
+save "stats_multilvl_part2_v1.dta", replace
 
 
 *Generate power  

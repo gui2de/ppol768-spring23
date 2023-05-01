@@ -32,18 +32,23 @@ I run 5 different regression models, where:
 
 The graphs below show the distribution of the betas and their biasedness/convergence, for each of the five models above, respectively. While all models demonstrate convergence (thinner confidence intervals) as N increases, models 1 and 2 are noticeably biased. The red horizontal line at 500 shows the 'true value' of the treatment effect, given that the treatment is a normal distribution of mean 500. However, from Model 3 onward, the addition of the confounder variable, years worked in manual scavenging, is added into the model, de-biases the treatment coefficient estimates, such that Models 3-5 do converge towards the true value. 
 
+### Model 1
 ![part1_beta1_hist](part1_reg_1_overN.png)
 ![part1_box1](part1_boxplot_1.png)
 
+### Model 2 
 ![part1_beta2_hist](part1_reg_2_overN.png)
 ![part1_box2](part1_boxplot_2.png)
 
+### Model 3
 ![part1_beta3_hist](part1_reg_3_overN.png)
 ![part1_box3](part1_boxplot_3.png)
 
+### Model 4 
 ![part1_beta4_hist](part1_reg_4_overN.png)
 ![part1_box4](part1_boxplot_4.png)
 
+### Model 5 
 ![part1_beta5_hist](part1_reg_5_overN.png)
 ![part1_box5](part1_boxplot_5.png)
 
@@ -62,24 +67,31 @@ Likewise, Models 1-5 from part 1 are the same here (but applied to the modified 
 
 Then, the analogous plots to those produced above are as follows. Like Part 1, all Models converge. However, we see that all Models are now biased; the introduction of the social capital term in the DGP increases the value to which Models 1-6 converge by approximately ~3000 INR. However, Model 7 is different: the collider operates in the opposite (negative) direction, resulting in a large negative beta value! 
 
+### Model 1
 ![part2_beta1_hist](part2_reg_1_overN.png)
 ![part2_box1](part2_boxplot_1.png)
 
+### Model 2
 ![part2_beta2_hist](part2_reg_2_overN.png)
 ![part2_box2](part2_boxplot_2.png)
 
+### Model 3
 ![part2_beta3_hist](part2_reg_3_overN.png)
 ![part2_box3](part2_boxplot_3.png)
 
+### Model 4
 ![part2_beta4_hist](part2_reg_4_overN.png)
 ![part2_box4](part2_boxplot_4.png)
 
+### Model 5 
 ![part2_beta5_hist](part2_reg_5_overN.png)
 ![part2_box5](part2_boxplot_5.png)
 
+### Model 6
 ![part2_beta6_hist](part2_reg_6_overN.png)
 ![part2_box6](part2_boxplot_6.png)
 
+### Model 7
 ![part2_beta6_hist](part2_reg_7_overN.png)
 ![part2_box6](part2_boxplot_7.png)
 
