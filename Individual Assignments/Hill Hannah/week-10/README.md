@@ -1,18 +1,62 @@
 # Assignment for Week 10
+This week's assignment builds off of last week's assignment with same variables and similar program structure.
 
-## Setup
 
-As usual, create a branch from `instructions` at the indicated commit. Name the new branch `week10-yourNetID`. Create a folder called `week-10` inside your `Individual Assignments` folder. Create a `README.md` file inside that folder, and an `outputs` folder there as well. You will create one or more do-files; have them create outputs corresponding to the assignment below (in the `outputs` folder); then write a summary of your results in the `README.md` folder including figures and tables as you now know how to do. When you are done, create a pull request targeting the `main` branch and request a reviewer.
+
 
 ## Part 1: Calculating required sample sizes and minimum detectable effects
+Table 1 illustrates, by model, increasing sample size corresponding to increasing significant power values. In Model 1, the bivariate relationship requires a much smaller sample size than the other two models that incorporate covariates and a confounding variable. The minimum required sample size for Model 1 is n = 594 that renders a power of 8.14 while Model 2's minimum required sample size is exponentially higher at n = 10,197 that renders a power of .80. Lastly, Model 3 (which contains the confounding variable) requires a minimum sample size of n = 1,287 that renders a power of .832.
 
-1. Develop some data generating process for data X’s and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
-2. This DGP should include strata groups and continuous covariates, as well as random noise. Make sure that the strata groups affect the outcome Y and are of different sizes, and make the probability that an individual unit receives treatment vary across strata groups. You will want to create the strata groups first, then use a command like `expand` or `merge` to add them to an individual-level data set.
-3. Make sure that at least one of the continuous covariates also affects both the outcome and the likelihood of receiving treatment (a "confounder"). Make sure that another one of the covariates affects the outcome but not the treatment. Make sure that another one affects the treatment but not the outcome.
-4. Construct unbiased regression models to estimate the treatment parameter, and run these regressions at various sample sizes.
-5. Calculate the "power" of these regression models, defined as "the proportion of regressions in which p<0.05 for the treatment effect". Based on this definition, find the "minimum sample size" required to obtain 80% power for regression models with and without the non-biasing controls.
-6. Now, choose a sample size. Go back to the DGP and allow the size of the treatment effect to vary. With the sample size fixed, find the "minimum detectable effect size" at which you can obtain 80% power for regression models with and without the non-biasing controls.
-7. Fully describe your results in your `README.md` file, including figures and tables as appropriate.
+
+### Table 1: Calculating Required Sample Sizes
+| Sample Size | Model | Significant Power |
+|:-----:|:------:|:------:|
+|198	|1	|.394|
+|297	|1	|.56|
+|396	|1	|.662|
+|495	|1	|.75|
+|**(594)**	|**(1)**	|**(.814)**|
+|693	|1	|.854|
+|792	|1	|.872|
+|891	|1	|.902|
+|990	|1	|.9|
+|**(10197)**|	**(2)**	|**(.8)**|
+|10296|	2	|.798|
+|10395|	2	|.804|
+|10494|	2	|.828|
+|10593|	2	|.814|
+|990	|3	|.76|
+|1089	|3	|.752|
+|1188	|3	|.788|
+|**(1287)**	|**(3)**	|**(.832)**|
+|1386	|3	|.806|
+|1485	|3	|.842|
+
+
+
+### Table 2: Finding the Minimum Detectable Effect Size
+Below, Table 2 illustrates minimum detectable size of effect for each model's treatment. In Model 1, the minimum detectable effect size is 27 corresponding to a power of .808. As the models increase in complexity and incorporate additional covariates and a confounding variable, the size of the minimum detectable effect size also increases. Model 2 sees a treatment effect size of 30 while Model 3 sees an effect size of 31.
+
+
+| Size of Treatment Effect| Model | Significant Power |
+|:-----:|:------:|:------:|
+|25 |	1	|.72 |
+|26	|1	|.738|
+|**(27)**	|**(1)**	|**(.808)**|
+|28	|1	|.804|
+|29	|1	|.834|
+|30	|1	|.842|
+|28	|2	|.75|
+|29	|2	|.762|
+|**(30)**	|**(2)**	|**(.8)**|
+|31	|2	|.82|
+|32	|2	|.81|
+|28	|3	|.748|
+|29	|3	|.778|
+|30	|3	|.792|
+|**(31)**	|**(3)**	|**(.818)**|
+|32	|3	|.792|
+
 
 ## Part 2: Calculating power for DGPs with clustered random errors
 
