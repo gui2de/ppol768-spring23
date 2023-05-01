@@ -246,80 +246,124 @@ sum sig2
 
 mean sig2, over(treatment_effect) // *The minimum detectable effect size for regression without controls is 92. 
 
-exit
-
 ********************************Part Two:***************************************
-
 clear
-
-set seed 0418202
-
-set obs 50
+*set seed 0418202
+set obs 51
 
 gen state = _n
 
-gen u_i = rnormal(3,5) // *Create larger state effects 
+gen u_i = rnormal(60,4) // *Create larger state effects 
 
-expand int(runiform(10000,100000))
+gen rand = runiform(1,10)
 
-gen u_ij = rnormal(1,2)
+xtile cluster = rand, nq(10) 
 
-bysort state: gen person = _n
+gen uc_i = rnormal(5,1)
 
-gen temprand_person = runiform()
+expand 30+int(50-30+1)*runiform() // *Ensuring each state has approximately 30-50 factories. 
 
-gen unemployed = runiform()<0.032 // *Create var that affects treatment but not the outcome. 
+gen factory = _n
 
-gen hoursworked = rnormal(25,5) if unemployed != 0 // *Create the confounder. 
+gen ucf_i = rnormal(50,3) 
 
-keep if hoursworked < 20 | unemployed == 1
+gen activity = rnormal(100,5)
 
-gen treatment = temprand_person<0.5
+gen treatment = cluster > 5 
 
-gen age = runiform(18,64)
+gen emission = 1000 /// 
+	+ (-100)*treatment ///    
+	+ 80*activity ///  
+	+ u_i + uc_i + ucf_i
 
-gen wkly_inc = rnormal(800,250) ///
-			+ (100 * treatment) ///
-			+ (8 * hoursworked) /// 
-			+ (4.5 * age) ///
-			+ u_i + u_ij
+gen emission1 = 1-00 /// 
+	+ (-100)*treatment ///    
+	+ 80*activity ///    
+	+ uc_i + ucf_i ///
 
-save "week-10-part-three.dta", replace
+*bysort state: gen person = _n
+*gen temprand_person = runiform()
+*gen unemployed = runiform()<0.032 // *Create var that affects treatment but not the outcome. 
+*gen hoursworked = rnormal(25,5) if unemployed != 0 // *Create the confounder. 
+*keep if hoursworked < 20 | unemployed == 1
+*gen treatment = temprand_person<0.5
+*gen age = runiform(18,64)
 
-capture program drop ppol768_3
-program define ppol768_3, rclass
+*gen weekly_inc = rnormal(800,250) ///
+			*+ (100 * treatment) ///
+			*+ (8 * hoursworked) /// 
+			*+ (4.5 * age) ///
+			*+ u_i + u_ij
+
+save "week-10-part-three.dta", replace 
+
+capture program drop ppol768_parttwo1
+program define ppol768_parttwo1, rclass
     syntax, samplesize(integer)
-	clear
-	use "week-10-part-three.dta"
+	use "week-10-part-three.dta", clear
 	sample `samplesize', count
 
-	return scalar N = `samplesize' 
+	*return scalar N = `samplesize' 
 
-	reg wkly_inc treatment i.state hoursworked age
-		mat results = r(table)
-		return scalar beta = results[1,1]
-		return scalar SEM = results[2,1]
-		return scalar pval = results[4,1]
-		return scalar ll = results[5,1]
-		return scalar ul = results[6,1] 
+	reg emission treatment activity
+		mat a = r(table)
+		return scalar beta = a[1,1]
+		*return scalar SEM = results[2,1]
+		*return scalar pval = results[4,1]
+		return scalar c_lower = a[5,1]
+		return scalar c_upper = a[6,1] 
 
 
 end
 
-local samples 500 1000 5000 10000
+capture program drop ppol768_parttwo2
+program define ppol768_parttwo2, rclass
+	syntax, samplesize(integer)
+	use "week-10-part-three.dta", clear
+	sample `samplesize', count
+	reg emission1 treatment activity 
+	mat a = r(table)
+		return scalar beta = a[1,1]
+		return scalar c_lower = a[5,1]
+		return scalar c_upper = a[6,1] 
+		
+end 
 
-foreach x in `samples'{
-	tempfile sims`x'
-	simulate N = r(N) beta = r(beta) SEM = r(SEM) pval = r(pval) ll = r(ll) ul = r(ul), reps(100) seed(89770) saving(`sims`x''): ppol768_3, samplesize(`x') 
-	save `sims`x'', replace
+clear
+tempfile combined
+save `combined', replace emptyok
+
+forvalues i=100(500)2000{
+	forvalues j=1(1)2{
+	tempfile sims
+	simulate beta=r(beta) c_upper=r(c_upper) c_lower=r(c_lower), reps(300) seed(1234) saving(`sims') : ppol768_parttwo`j', samplesize(`i')
+	use `sims' , clear 
+	gen samplesize=`i'
+	gen model = `j'
+	append using `combined'
+	save `combined', replace
+	}
 }
 
-local samples 1000 5000 10000
-use `sims500'
+gen ci_wide = c_upper - c_lower
 
-foreach x in `samples' {
-    append using `sims`x''
-}
+table samplesize model, stat(mean beta) // Beta means 
+table samplesize model, stat(mean ci_wide) //mean of ci width  
 
-mean beta, over(N)// *The standard errors became increasingly smaller as the sample size grew! 
+*local samples 500 1000 5000 10000
+
+*foreach x in `samples'{
+*	tempfile sims`x'
+*	simulate N = r(N) beta = r(beta) SEM = r(SEM) pval = r(pval) ll = r(ll) ul = r(ul), reps(100) seed(89770) saving(`sims`x''): ppol768_3, samplesize(`x') 
+*	save `sims`x'', replace
+*}
+
+*local samples 1000 5000 10000
+*use `sims500'
+
+*foreach x in `samples' {
+*    append using `sims`x''
+*}
+
+*mean beta, over(N)// *The standard errors became increasingly smaller as the sample size grew! 
 
