@@ -1,5 +1,4 @@
 
-*
 
 clear 
 capture program drop par
@@ -131,3 +130,43 @@ foreach x in `samples' {
 		legend(order(1 "N = 256" 2 "N = 4,096" 3 "N = 2,097,152"))
 	
 	graph save "Graph" "week8_part2.gph", replace
+	
+	
+	 table () (N) if N == 10 | N == 100 | N == 1000 | N == 10000, stat(sd beta) stat(mean beta pval SEM) stat(range beta pval SEM) nototal
+	 
+	 
+* Experimenting with increasing/decreasing repetitions (limiting number of sample size options to save time)
+
+	local samples 4 128 2048 32768 524288 2097152 
+
+foreach x in `samples' {
+	tempfile sims`x'
+	simulate N = r(N) beta = r(beta) SEM = r(SEM) pval = r(pval), reps(100) seed(9999) saving(`sims`x''): week8part2, samplesize(`x')
+}
+
+local samples 128 2048 32768 524288 2097152 
+
+use `sims4'
+foreach x in `samples' {
+	append using `sims`x''
+}
+ 
+	table (N) (), stat(sd beta) stat(mean beta pval SEM) stat(range beta pval SEM) nototal
+	
+	
+		local samples 4 128 2048 32768 524288 2097152 
+
+foreach x in `samples' {
+	tempfile sims`x'
+	simulate N = r(N) beta = r(beta) SEM = r(SEM) pval = r(pval), reps(1000) seed(9999) saving(`sims`x''): week8part2, samplesize(`x')
+}
+
+local samples 128 2048 32768 524288 2097152 
+
+use `sims4'
+foreach x in `samples' {
+	append using `sims`x''
+}
+ 
+	table (N) (), stat(sd beta) stat(mean beta pval SEM) stat(range beta pval SEM) nototal
+
