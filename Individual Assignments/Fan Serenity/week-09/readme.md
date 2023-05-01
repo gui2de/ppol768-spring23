@@ -27,19 +27,19 @@ I run 5 different regression models, where:
 
 The graphs below show the distribution of the betas and their biasedness/convergence, for each of the five models above, respectively:
 
-![part1_beta1_hist](part1_reg_1_over_N.png)
+![part1_beta1_hist](part1_reg_1_overN.png)
 ![part1_box1](part1_boxplot_1.png)
 
-![part1_beta2_hist](part1_reg_2_over_N.png)
+![part1_beta2_hist](part1_reg_2_overN.png)
 ![part1_box2](part1_boxplot_2.png)
 
-![part1_beta3_hist](part1_reg_3_over_N.png)
+![part1_beta3_hist](part1_reg_3_overN.png)
 ![part1_box3](part1_boxplot_3.png)
 
-![part1_beta4_hist](part1_reg_4_over_N.png)
+![part1_beta4_hist](part1_reg_4_overN.png)
 ![part1_box4](part1_boxplot_4.png)
 
-![part1_beta5_hist](part1_reg_5_over_N.png)
+![part1_beta5_hist](part1_reg_5_overN.png)
 ![part1_box5](part1_boxplot_5.png)
 
 
