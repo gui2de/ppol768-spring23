@@ -291,8 +291,119 @@ foreach p of varlist p1 p2 p3{
 	
 	
 
+/*****************************************************************
 	
+Part Two: Calculating power for DGPs with clustered random errors
+
+********************************************************************/
+
+* creating program
+capture program drop parameterestimates
+program define parameterestimates, rclass 
+syntax, samplesize(integer)
+		
+		clear
+		set obs 5
+				
+		//generating strata groups 
+		
+		generate regions = _n //generating regions instead of states b/c I want something closer to counties
+		generate u_regions = rnormal() //random effects of regions
+		generate rannum = uniform()
+		egen treatment = cut(rannum), group(3)
+		
+		expand 15  //expanding to towns 
+		
+		bysort u_regions: gen towns = _n
+		generate u_towns = rnormal()  //generating a normal distribution of different town effects
+		
+		gen police = rnormal() // generating random effects of living in a more heavily policed community, of course this isn't truly random in real life, but i'm not generating race here because I don't know how to approximate that distribution well at all
+		
+		generate urban = runiform()<0.80   // randomly assigns urban rural status
+		
+		expand  `samplesize' // creating individual level dataset
+		generate u_individual = rnormal(0,5) // indivdual level effects 
+		
+		gen individual_id = _n  //individual id
+		
+		//generating more covariates
+		gen sex = runiform()<0.5 // randomly assign 0/1 for male/female
+		
+		gen income = rnormal(75000, 30000) // randomly assigning income
+		
+		gen education = 12 + int((4)*runiform()) // randomly assigning years of education 
+
+		gen commute = runiform()>0.2 //randomly assigns 0=does not commute by car, 1 = commutes by car
+		
+		gen distance = rnormal(10, 2) // generating continuous variable representing distance in miles from nearest urban center
+		
+					
+		
+		//DGP
+		
+		gen citation_risk = 2 +  1.5 *police -  2 * ln(income)  - 2*treatment  + 4* rnormal() + 2 * commute + .5 * distance  + u_regions + u_towns + u_individual
+		
+
+		
+		//model 1
+		reg citation_risk treatment //simple regression of outcome on treatment
+		return scalar  m1_p = 2*(ttail(e(df_r), abs(_b[treatment]/_se[treatment])))
+		return scalar mde1 = 2.8 * (sqrt((_se[treatment]*_se[treatment] / e(N)) * 0.95 * 0.05))
+		mat a = r(table)
+return scalar N1 = e(N)
+return scalar beta1 = a[1,1]
+return scalar se1 = a[2,1]
+return scalar lower1 = a[5,1]
+return scalar upper1 = a[6,1]
+		
+		//model 2
+		reg citation_risk treatment police i.region // confounders
+		return scalar m2_p = 2*(ttail(e(df_r), abs(_b[treatment]/_se[treatment])))
+		return scalar mde2 = 2.8 * (sqrt((_se[treatment]*_se[treatment] / e(N)) * 0.95 * 0.05))
+				mat a = r(table)
+return scalar N2 = e(N)
+return scalar beta3 = a[1,1]
+return scalar se4 = a[2,1]
+return scalar lower4 = a[5,1]
+return scalar upper4 = a[6,1]
+		
+		//model 3
+		reg citation_risk treatment police i.region education income // confounders and covariates
+		return scalar m3_p = 2*(ttail(e(df_r), abs(_b[treat]/_se[treat])))
+		return scalar mde3 = 2.8 * (sqrt((_se[treatment]*_se[treatment] / e(N)) * 0.95 * 0.05))
+		return scalar n= e(N)
+				mat a = r(table)
+return scalar N1 = e(N)
+return scalar beta1 = a[1,1]
+return scalar se1 = a[2,1]
+return scalar lower1 = a[5,1]
+return scalar upper1 = a[6,1]
+		
+end 
+			
+
+
+/*running simulations*/
+		
+		
+
+	clear
+	tempfile combined 
+	save `combined', replace emptyok
+
 	
+	forvalues i=5(5)40 { 
+		local samplesize = `i'
+		tempfile sims
+		simulate n=r(n) p1=r(m1_p) p2=r(m2_p) p3=r(m3_p) mde1=r(mde1) mde2=r(mde2) mde3=r(mde3), reps(500) saving(`sims'): parameterestimates, samplesize(`samplesize')
+		
+
+		use `sims', clear 
+		gen samplesize = `samplesize'
+		append using `combined'
+		save `combined', replace
+		display as error "this is samplesize `i'"
+	}
 
 	
 	
