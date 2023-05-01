@@ -101,7 +101,7 @@ histogram se, by(n)
 histogram conf_int, by(n)
 
 * Table showing the variation in beta, se, lowerbound, upperbound, and conf_int, by sample size
-collapse (iqr) beta_coef se lowerbound upperbound conf_int, by(n)
+collapse beta_coef se lowerbound upperbound conf_int, by(n)
 
 
 *******************************************************************************
@@ -162,7 +162,7 @@ forvalues i = 2/21 {
 	pvalue = r(pvalue) ///
 	n = r(N) ///
 	lowerbound = r(ci_ll) upperbound = r(ci_ul), ///
-	reps(50) seed(950703) saving(`temp3', replace): ///
+	reps(500) seed(950703) saving(`temp3', replace): ///
 	p2program, sample_size(`val') 
 	
 	use `temp3'
@@ -183,7 +183,7 @@ foreach var of local vals {
 	pvalue = r(pvalue) ///
 	n = r(N) ///
 	lowerbound = r(ci_ll) upperbound = r(ci_ul), ///
-	reps(50) seed(950703) saving(`temp4', replace): ///
+	reps(500) seed(950703) saving(`temp4', replace): ///
 	p2program, sample_size(`var') 
 	
 	use `temp4'
@@ -203,7 +203,7 @@ histogram se, by(n)
 histogram conf_int, by(n)
 
 * Table showing the variation in beta, se, lowerbound, upperbound, and conf_int, by sample size
-collapse (iqr) beta_coef se lowerbound upperbound conf_int, by(n)
+collapse beta_coef se lowerbound upperbound conf_int, by(n)
 
 
 
