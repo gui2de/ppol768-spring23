@@ -60,10 +60,13 @@ Below, Table 2 illustrates minimum detectable size of effect for each model's tr
 
 ## Part 2: Calculating power for DGPs with clustered random errors
 
-1. Develop some data generating process for data X’s and for outcome Y, with some (potentially multi-armed) treatment variable and treatment effect. Like last week, you should strongly consider "simulating" data along the lines of your group project.
-2. Instead of having strata groups contributing to the main effect, create some portion of the random error term at the strata level (now, they are clusters, rather than strata). Use a moderately large number of clusters, and also assign treatment at the cluster level.
-3. Take the means and 95% confidence interval estimates (or, equivalently, their widths) from many regressions at various sample sizes in an unbiased regression.
-4. Calculate "exact" 95% confidence interval estimates using the betas you can use the `collapse` or `mean` command for this, or use something like `lpolyci` to get 95% CIs graphically. Plot the "empirical/exact" CIs against the "analytical" ones (the ones obtained from the regression). Discuss any differences.
-5. Create another DGP in which the random error terms are _only_ determined at the cluster level. Repeat the previous step here. What happens to the convergence of the "exact" CIs?
-6. Can you get the "analytical" confidence intervals to be correct using the `vce()` option in `regress`?
-7. Fully describe your results in your `README.md` file, including figures and tables as appropriate.
+The following graphs are created using the base regression: success_rate treat diversity. In these graphs, the exact confidence interval stays consistent between **1-3**. In the last graph with the largest sample size of 20,400, the analytical confidence intervals get slightly smaller than previous graphs' analytical CIs. Overall, the analytical confidence intervals are smaller than exact confidence intervals in each sample size.
+
+### Graph 1: Base Regression
+![Graph_1](https://github.com/gui2de/ppol768-spring23/blob/172090829944ea68a170383e0d19179b747a9e64/Individual%20Assignments/Hill%20Hannah/week-10/outputs/q2p1.png)
+
+
+### Graph 2: Clustered at the college level
+The regression used to create the graphs in Graph 1 was modified to include vce(cluster college) in order to incorporate clustered random errors. Here, we see the opposite finding: analytical CIs become much larger than the exact CIs in each sample size. After clustering, the exact CIs stayed consistent between **1 and 3**.
+
+![Graph_2](https://github.com/gui2de/ppol768-spring23/blob/172090829944ea68a170383e0d19179b747a9e64/Individual%20Assignments/Hill%20Hannah/week-10/outputs/q2p2.png)
