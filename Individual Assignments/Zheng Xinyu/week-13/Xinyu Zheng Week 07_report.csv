@@ -1,0 +1,32 @@
+
+This report was created by user zheng on 1May2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,xinyu_zheng_week_07
+,Form Title,Xinyu Zheng Week 07
+,Form Version,2305010215
+,Form File,C:\Users\zheng\Desktop\research design\week14/Xinyu Zheng Week 07.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"79","text","electricity_usage_other"
+,"85","text","gas_usage_other"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.
