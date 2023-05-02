@@ -4,7 +4,7 @@
 Part 1. 
 ===================
 
-![Power](img/Power_talbe.png)
+![Power](img/Power_table.png)
 
 So far, I have developed some DGP including "strata groups", "continuos covariates", and "random noise" as well as "confounder". After constructing unbiased and biased regression model, I could estimate the treatment parameter and run regressions at various sample sizes.
 
