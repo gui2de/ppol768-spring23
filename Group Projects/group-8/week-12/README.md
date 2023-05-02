@@ -55,7 +55,7 @@ Figure 1: X-Axis refers to enumerator ID.
 
 
 
-![graph_svytime](C:\Users\maxis\Desktop\ppol 768 backup\week-12\graph_svytime.jpg)
+![graph_svytime](Group Projects/group-8/week-12/graph_invalid.jpg)
 
 Figure 2: Y axis refers to enumerator ID. 
 
