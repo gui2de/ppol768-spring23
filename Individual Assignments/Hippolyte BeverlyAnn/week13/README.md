@@ -1,7 +1,7 @@
 Week 13 Assignment Submission
 
-This survey has been updated and includes changes from feedback submitted to the first version.
+** Author : BeverlyAnn Hippolyte
 
-Link to google sheet:
+[Link to google sheet]:(https://docs.google.com/spreadsheets/d/1A0hkhvOPOPDYAeBFPEuyDakYFX_SNoxlWewLzjp8TOM/edit#gid=1318829691)
 
-Link to survey: 
+[Link to survey]:(https://gui2de.surveycto.com/collect/Crime_in_Vieux_Fort?caseid=)
