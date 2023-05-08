@@ -1,3 +1,4 @@
+
 **Chance Hope**
 
 **Week 9**
@@ -53,3 +54,4 @@ Beta 5= Income Age Grade Mediator Collider
 | Average     | 6.994       | -0.038           | 7.001            | 7.008                             | 0.039                                      |
 
 Controlling for the collider variable did not appear to change the observed treatment effect. Controlling for the mediator reduces the observed effect of the treatment. The mediator absorbs the effect of treatment so that treatment is no longer correlated with Y. As shown by the above figure and table, the variance of the treatment effects decreases as N increases for all regressions. 
+
