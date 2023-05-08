@@ -108,3 +108,4 @@ twoway (line beta3 samplesize, color(pink)) ///
        , ytitle("beta estimates") xtitle("sample size") ///
        legend(order(3 "beta3" 5 "beta5")) 
   
+

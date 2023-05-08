@@ -1,3 +1,4 @@
+
 # Week 09 Assignement
 
 ## Part 1
@@ -53,3 +54,4 @@ I also tried to use histogram to illustrate the frequency of the beta estimates 
 * regression 2 omits *channel* from the regression. Although *treatment* is related to *channel*, beta2 is significantly biased from the true estimator. It is upwardly biased from the true estimator because *treatment* and *channel* is positively related and *channel* and *outcome* is also positively related.  
 * regression 3 includes both the treatment and the channel. Beta3 is also significantly biased from the true estimator despite that _channel_ is in the regression. 
 * Both regression 4 and regression 5 includes collider, which is both related to *outcome* and *treatment*. The beta estimates for both of these regression are significantly biased from true estimator.
+
