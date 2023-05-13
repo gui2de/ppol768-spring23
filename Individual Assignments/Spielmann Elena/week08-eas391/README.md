@@ -6,12 +6,12 @@
 ## Part 1:
 
 
-![Graph of Betas by Sample Size](img/beta_graph_1.png)
+![Graph of Betas by Sample Size](beta_graph_1.png)
 
 
 These graphs depict the relationship between the accuracy of beta estimates and the sample size. With a sample size of 10, the estimates for beta are more variable, have a higher standard error, and larger confidence intervals compared to a sample size of 10,000. Additionally, the graph shows how the estimates of beta converge to the real value of 1.5 as the sample size increases. The estimate is closest to the real value when the sample size is 10,000, out of all the other sample sizes.
 
-![Graph of Betas Against Real Value](img/beta_ss_graph.png)
+![Graph of Betas Against Real Value](beta_ss_graph.png)
 
 As the sample size increases and the estimates for betas become more accurate, we also observe a reduction in the standard error and the confidence interval. This is because the accuracy of the estimates improves with larger sample sizes. This is demonstrated in the table below, where the standard error and confidence interval decrease as the sample size increases.
 
