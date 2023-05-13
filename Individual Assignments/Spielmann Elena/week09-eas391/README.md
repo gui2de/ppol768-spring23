@@ -1,56 +1,79 @@
 
-# Week 9 Assignment 
+# Week 9 Assignment
 
-## Part 1: 
+#Elena Spielmann
+# Week 9 Assignment
 
-The true parameter of the treatment variable in my data is =0.5. I simulated 500 repetitions for the population size of 10, 100, 1,000 and 10,000. I used 6 different regressions to illustrate the effect of the independent variables on the dependent. I will include figures of three of them. The first one is from a regression using only the output and the treatment variable. 
+### Data Code Book
 
+_city_: US city in New York(strata for this assignment)
 
-![Treatment on Y](img/simple_m1.png)
+_heart_rate_: individual's heart rate (beats per minute)
 
-We can see that it is a terrible model because the estimates for treatment are not even near the real number of 0.5 so we cannot see that number in the graph at all. 
+_nudge_: treatment dummy set equal to 1 when individuals receive a nudge; 0 otherwise
 
-When observing the estimates from the model that has a 2 covariates we can see this gives a more accurate number than the simple model shown above but there is still variance and the blue line depicting the average of the estimates is not too close to the 0.5 line. 
+_age_: individual's age in years. Related ability to interact with technology but not related to heart rate (in this hypothetical)
 
-![Treatment Covariates on Y](img/covariates_m3.png)
+_gym_membership_: months of gym membership. Related to heart rate but not nudge (in this  hypothetical)
 
+_education_: level of education in years. Related to both nudge status and heart rate.
 
-This following model gives a more accurate estimate as we can see by the blue line being so close to the red line , which is the real value of 0.5. This model includes all the variables created. Below the graph is a detailed table with the estimation results by the sample size. For most models we can see that a higher sample size led to estimation results closer to 0.5.
+### Regression Models
 
-![Including everything](img/bestfit_m6.png)
+*Bivariate*: A simple bivariate regression of heart rate on nudge status.
 
+*City + Confounder*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects and level of education (confounder).
 
-|   samplesize  |   **treat**   |  **treat_reg**  | **treat_reg_conf** | **treat_reg_conf_cov** | **treat_reg_conf_cov_cov** | **treat_reg_cov_conf** |
-|:------------:|:------------:|:--------------:|:------------------:|:-----------------------:|:---------------------------:|:----------------------:|
-|      10       |    0.8576105 |    0.5646204   |      0.4939662     |        0.4926975         |          0.5007111          |         0.5003421       |
-|     100       |    0.8527666 |    0.5685398   |      0.4948949     |        0.489905          |          0.5012968          |         0.502144        |
-|     1000      |    0.8614281 |    0.558754    |      0.4954137     |        0.4961921         |          0.4941667          |         0.4942273       |
-|     10000     |    0.846387  |    0.5623459   |      0.4984491     |        0.4994617         |          0.4959594          |         0.4944329       |
+*Biased Model 1*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects, level of education (confounder), and age (related to nudge status, not heart rate).
 
+*Biased Model 2*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects, level of education (confounder), and gym membership(related to heart rate, not nudge status).
 
-## Part 2:
+*Biased Model 3*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects, level of education (confounder), age and gym membership.
 
-The collider makes the models biased and be very far from the true parameter of 0.5. The figure below shows a regression model with a variable and the channel variable. We can see that it at least does come close to 0.5 which is pictured by the red line. 
+Discussion
+![Combination Graph Part 1](p1_comb.png)
 
+After accounting for city fixed effects and a confounding variable, the range of Beta estimates was significantly reduced compared to the simple bivariate model. As the sample size increased, the estimates converged around the true nudge effect of 2 (indicated by the green line) in both the unbiased and biased models. However, the biased models were less precise in their estimates than the unbiased models.
 
-![Model without collider](img/model2.png)
-
-Once the collider is included the estimates are not even close to the real parameter so the red line is not even pictured. This is illustrated below. 
-
-![Model with Collider](img/model3_collider.png)
+**Table 1**
 
 
-Including variables that are not colliders help to make the model more accurate as we can see with the figure from model 6 which includes covariates and the channel variable. 
+Summary statistics: Mean SD semean Min Max
+     for variables: bivar unbias bias1 bias2 bias3
 
-![Best estimations](img/model6.png)
+             |   e(Mean)      e(SD)  e(semean)     e(Min)     e(Max)
+-------------+-------------------------------------------------------
+       bivar |  8.943715   1.054968    .038522   6.041209   13.89576
+      unbias |   4.00221   .1297604   .0047382     3.4501   4.782087
+       bias1 |   4.00221   .1297604   .0047382     3.4501   4.782087
+       bias2 | -1.333333   5.28e-08   1.93e-09  -1.333333  -1.333333
+       bias3 | -1.333333   5.28e-08   1.93e-09  -1.333333  -1.333333
 
-The table below also demonstrates how the colliders produce worst estimates. The model 3 and 5 have the collider and the estimates are farther from 0.5 than the rest of the models. 
 
+Table 1 shows that, the mean of the Beta estimates fluctuated across all sample sizes for both the unbiased and biased models. The standard error of the mean was smaller across all models, except for the bivariate model, where it was larger. Biased Model 2&3 had the smallest standard error of the mean.
 
-| samplesize | model1    | model2    | model3    | model4    | model5    | model6    |
-|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-| 10        | 0.4982979 | 0.5017726 | 0.4447476 | 0.5032026 | 0.4812069 | 0.5013121 |
-| 100       | 0.5089313 | 0.5076342 | 0.452105  | 0.5067627 | 0.4809594 | 0.5006137 |
-| 1000      | 0.4955122 | 0.4947185 | 0.444821  | 0.4935192 | 0.4797296 | 0.4981278 |
-| 10000     | 0.4992943 | 0.4954647 | 0.4423817 | 0.4967986 | 0.4791314 | 0.4982367 |
- 
+## Part 2: Biasing a parameter estimate using controls
+
+### Data Code Book
+
+All variables from Part 1 are also applicable for Part 2. The following are additional variables:
+
+_channel_stepcount_: A continuous variable measuring an individuals daily step count.
+
+_collider_social_: A continuous variable measuring an individual's social support either in person or through social media to exercise in some capacity.
+
+### Regression Models
+*Bivariate*: A simple bivariate regression of heart rate on nudge status.
+
+*City + Confounder*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects and age (confounder).
+
+*Biased Model 1*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects, age (confounder), and step count (a channel).
+
+*Biased Model 2*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects, age (confounder), and social support(a collider).
+
+*Biased Model 3*: A multivariate regression of heart rate on nudge status, controlling for city fixed effects, age (confounder), step count (a channel), and social support (a collider).
+
+*Discussion*
+![Combination Graph Part 1](p2_comb.png)
+
+The first two models in Part 2 use the same variables as the Bivariate and City + Confounder models in Part 1, but neither accurately reflect the true nudge effect of 2. This is because the outcome variable, heart rate, is influenced by the channel variable, step count, which is in turn influenced by the nudge itself (2 * nudge). Therefore, in the "City + Confounder" model, which should be unbiased, the estimated effect of nudge becomes inflated since it is essentially being considered multiple times during the outcome variable generation process (nudge effect + channel = 2nudge + 2nudge = 4*nudge). Biased Model 1 controls for the channel variable (step count), yet the Beta estimates produced remain upwardly biased. However, the most significant change occurs in Biased Models 2 & 3, which control for the collider variable, social support The effects change completely, and the estimated Beta stays a constant negative value. This demonstrates why colliders should be excluded from models entirely. Despite my expectation that the City + Confounder model would be unbiased, I was surprised to see that all Beta estimates in all models were biased. This is because the channel was included in the DGP for the outcome variable.
