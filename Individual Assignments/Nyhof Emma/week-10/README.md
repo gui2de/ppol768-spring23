@@ -14,7 +14,7 @@ I find that the minimum sample size to get 80% power with this data is 255. The 
 
 
 ## **PART 2**
-The clearest pattern I'm seeing here is that, unsurprisingly, the variation in confidence intervals decreases as sample size increases. I'm not sure if I'm doing something wrong, but I'm seeing very little other variation/patterns based on differences in where the random error terms are determined, and whether or not controls or the VCE option are included. Hoping to come back to this. 
+The clearest pattern I'm seeing here is that, unsurprisingly, the variation in confidence intervals decreases as sample size increases. I'm not sure if I'm doing something wrong, but I'm seeing very little other variation/patterns based on differences in where the random error terms are determined, and using the VCE options doesn't seem to change things either
 
 ### Some portion of random error at strata level
 #### "Exact" confidence intervals
@@ -23,13 +23,11 @@ The clearest pattern I'm seeing here is that, unsurprisingly, the variation in c
 #### "Analytical" confidence intervals
 ![image](https://user-images.githubusercontent.com/122739454/231271276-d9aa38a1-1758-4a4b-8c2c-f049c06dd731.png)
 
-### Random error term ONLY at cluster level
-#### *Without Controls*
-#### "Exact" confidence intervals
-![image](https://user-images.githubusercontent.com/122739454/231271520-067ad8a6-2c59-469b-9c9c-bfde8ff6e596.png)
+#### Graphical results
+(Note: pay attention to y-axis range here - could not for the life of me figure out how to keep the y-axis consistent across all 4 graphs wtihout them warping)
+![week-10-graphs-part2](https://user-images.githubusercontent.com/122739454/235535465-ef2ae66a-a10f-4b5a-a939-5de9ce586551.PNG)
 
-#### "Analytical" confidence intervals
-![image](https://user-images.githubusercontent.com/122739454/231271611-1362e905-1c09-4880-a85c-e303df3d8bd2.png)
+### Random error term ONLY at cluster level
 
 #### *With Controls*
 #### "Exact" confidence intervals
@@ -37,6 +35,10 @@ The clearest pattern I'm seeing here is that, unsurprisingly, the variation in c
 
 #### "Analytic" confidenc intervals
 ![image](https://user-images.githubusercontent.com/122739454/231272271-34805ace-9a5a-406c-931e-244578a27053.png)
+
+#### Graphical results
+![week-10-graphs-p2-with controls](https://user-images.githubusercontent.com/122739454/235540381-bf7867ff-3b85-4fe8-83c9-9c7dd49e5539.PNG)
+
 
 #### *With Controls and VCE Option*
 #### "Exact" confidence intervals
@@ -46,3 +48,9 @@ The clearest pattern I'm seeing here is that, unsurprisingly, the variation in c
 ![image](https://user-images.githubusercontent.com/122739454/231272570-e7aa59cf-fb33-4519-8ec4-19555e1c31bd.png)
 
 
+#### *Without Controls*
+#### "Exact" confidence intervals
+![image](https://user-images.githubusercontent.com/122739454/231271520-067ad8a6-2c59-469b-9c9c-bfde8ff6e596.png)
+
+#### "Analytical" confidence intervals
+![image](https://user-images.githubusercontent.com/122739454/231271611-1362e905-1c09-4880-a85c-e303df3d8bd2.png)
