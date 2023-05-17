@@ -2,9 +2,10 @@
 ****** PPOL 768 : Research & Design Implementation ******
 ****** Due Date : February 20th, 2023 *******
 
-cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data"
+global wd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data"
 
 ***** Question 1 *****
+***********************************************************
 
 tempfile newschools // Create a tempfile 
 
@@ -12,7 +13,7 @@ tempfile newschools // Create a tempfile
 clear // Load dataset
 
 
-	use "q1_psle_student_raw.dta", clear
+	use "$wd/q1_psle_student_raw.dta", clear
 	
 	keep in 138
 
@@ -34,6 +35,8 @@ clear // Load dataset
 		
 		save newschools, replace 
 	
+************************************************************
+************************************************************	
 
 **** Question 2 ****
 
@@ -41,46 +44,50 @@ clear // Load dataset
 *	Merge departmente-level density data from the excel sheet (CIV_populationdensity.xlsx) 
 *	into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
-clear 
-
-tempfile popdens // Generate local file and name it popdens
-
-	use "q2_CIV_Section_0.dta", clear           	// Load dataset containing household data 
-		*decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
-		
-	
-		save popdens,replace // Save the local file 
-		
-		 use popdens // Open local file
-			
-* Load excel file 
 
 clear
 
-tempfile density 
-import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear 
+	use "$wd/q2_CIV_Section_0", clear           	// Load dataset containing household data 
+	
+	decode b06_departemen, generate(deptment) // Decode variable and generate new variable to store decoded version of the variable 
+	
+	keep deptment
+	sort deptment
+	
+	tempfile popdens // Open tempfile
+	
+		save `popdens', replace emptyok // Save the local file 
+		
+		 use `popdens' // Open local file
 
+		import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear  // import excel file 
+		
+		tempfile density  // Open tempfile 
+	
+		save `density', replace emptyok
+
+		use `density'
+		
 	 gen department = word(NOMCIRCONSCRIPTION, 1) 	// Generate new variable department and store the first word in each row of the variable in the syntax
 	 keep if department == "DEPARTEMENT"        	// Keep the row if the first word is DEPARTMENT
+	 sort department
+		replace department = lower(NOMCIRCONSCRIPTION)
+		replace department = subinstr(NOMCIRCONSCRIPTION, "DEPARTEMENT DE", "",.)
+		replace department = subinstr(NOMCIRCONSCRIPTION, "DEPARTEMENT D", "",.)
+		replace department = subinstr(NOMCIRCONSCRIPTION, "DEPARTMENT DU", "",.)
 	 
-		replace NOMCIRCONSCRIPTION = lower(NOMCIRCONSCRIPTION)
-		replace NOMCIRCONSCRIPTION = subinstr(NOMCIRCONSCRIPTION, `"DEPARTEMENT DE"', "",.)
-		replace NOMCIRCONSCRIPTION = subinstr(NOMCIRCONSCRIPTION, `"DEPARTEMENT D"', "",.)
-		replace NOMCIRCONSCRIPTION = subinstr(NOMCIRCONSCRIPTION, `" ' "', "",.)
-
-	
-	 save density
-	 
-		drop POPULATION								// Drop POPULATION variable 
-		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 variable 
-		rename DENSITEAUKM density 					// Rename DENSITEAUKM variable 
+		drop POPULATION								// Drop POPULATION 
+		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 
+		rename DENSITEAUKM density 					// Rename DENSITEAUKM 
 		
-		merge 1:m NOMCIRCONSCRIPTION using density	// Merge the dataset and save the local file 
-		save popdens							// Save the local file 
- 
-* Created two datasets where I have two separate sets of data and I want to merge them 
-* But I keep getting an error that the varibale I am trying to use to do the merge does not exist.
-* I think I'm supposed to use a variable list and not a variable name.
+
+		exit
+		
+		merge 1:m NOMCIRCONSCRIPTION using density						// Merge the dataset and save the local file 
+		use popdens														// Open the local file 
+	
+		save `popdens'
+*******************************************************
 
 ***** Question 3 ********
 
@@ -92,38 +99,47 @@ Your job is to write an algorithm that would auto assign each household (i.e. ad
 Note: Your code should still work if I run it on data from another village.
 */
 
-clear 
+clear 	
 
-	tempfile enum 			  	// Generate tempfile to save local file 
+	tempfile enum 			  	// Generate tempfile to save local file '
+	save `enum', replace emptyok
 	
-	use "q3_GPS Data.dta" 		// Load the dataset
+	use "$wd/q3_GPS Data.dta" 		// Load the dataset
+
+	tempfile gpsdata
+	save `gpsdata', replace
 	
 	gen i =_n
 	order i
-	drop if i == 1
 	
-		*forvalue i=2/111{	
-
-			keep in 1/5						//  Keep the first row  
-
+forvalues i=1/111{
+	
+			use `gpsdata',clear
+	
+			keep in 1
+		
 			rename * one_*				// Rename the column variables; This will help distinguish the variables when we match, and makes matching easier 
-
-			cross using "q3_GPS Data.dta" // With this dataset we create a matrix using the command cross. 
+		
+			cross using "$wd/q3_GPS Data" // With this dataset we create a matrix using the command cross. 
 	
-			geodist one_latitude one_longitude latitude longitude, gen(dist) // Calculate the distance between the first point and all points in the dataset.
+			geodist one_latitude one_longitude latitude longitude, gen(distance) // Calculate the distance between
+				// the first point and all points in the dataset.
+					
 			drop if one_id == id // Drop the first distance because it's matched with itself
+			
+			gen enumerator_id = one_id
+			
+			drop if distance == 0 
 	
-			sort dist  // Sort the data in descending order 
-
-			keep in 1/5 // Keep the first five shortest distances in the variable dist 
+			keep in 1/6 // Keep the first  six shortest distances in the variable dist 
+			
+			append using "gpsdata"
 	 
-			append using enum // Save to the the local file
-	 
-			save, replace  // Drop the five points from the orginal dataset
-	
-		*}
-	 
-*** I was able to do the first one but I can't seem to figure out how to do the others.
+			save `gpsdata'
+	}
+*** I was able to do the first five houses and assign them to one enumerator but i can't seem to continue onto the next. //
+// I've tried several codes but thye aren't working. I referenced the video from class. I did one and it worked so i thought it would work for the others.
+*** I would also like to note that I referenced other student's code to improve on mine but this is the best I could do  
 
 
 ***** Question 4 *******
