@@ -2,29 +2,41 @@
 ****** PPOL 768 : Research & Design Implementation ******
 ****** Due Date : February 20th, 2023 *******
 
-clear
-
-cd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data"
+global wd "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data"
 
 ***** Question 1 *****
+***********************************************************
+
+tempfile newschools // Create a tempfile 
+
 
 clear // Load dataset
 
-tempfile newschools // Create a tempfile 
-save `newschools', replace emptyok // Save local file 
 
-	use "q1_psle_student_raw.dta", clear
+	use "$wd/q1_psle_student_raw.dta", clear
 	
-		forvalues i=1/3 {
+	keep in 138
+
+		do "week4" // Using the previous dofile from assignment 4 
+		
+	save newschools, replace
+
+	use newschools // Open local file 
+		
+	drop if cand == "PS"
 	
-		do "wk4q4" // Using the previous dofile from assignment 4 
-		
-		save `newschools' // save local file 
-		
-		use newschools // Open local file 
-		
+	rename (subjects1 subjects2 subjects3 subjects4 subjects5 subjects6 subjects7) (Kiswahili English Maarifa Hisabiti Science Uraia AverageGrade)
+  
+		replace prem = subinstr(prem, `"BODY TEXT="#000080" LINK="#0000ff" VLINK="#800080" BGCOLOR= "LIGHTBLUE">"', "",.) // This and the next few lines of code substitute the original variable with nothing and returns nothing
+
+		replace sex = subinstr(sex, `"P ALIGN="LEFT"  > PSLE 2021 EXAMINATION RESULTS"', "",.)
 	
-	}
+		replace name = subinstr(name, `"/"', "",.)
+		
+		save newschools, replace 
+	
+************************************************************
+************************************************************	
 
 **** Question 2 ****
 
@@ -33,25 +45,49 @@ save `newschools', replace emptyok // Save local file
 *	into the household data (CIV_Section_O.dta) i.e. add population density column to the CIV_Section_0 dataset.
 
 
-	use "q2_CIV_Section_0.dta", clear           	// Load dataset containing household data 
-		decode b06_departemen , generate (dept)		// Decode variable and generate new variable to store decoded version of the variable 
-		
-	tempfile popdens // Generate local file and name it popdens
-		save `popdens',replace // Save the local file 
-	
-** Load excel file 
-import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear 
+clear
 
+	use "$wd/q2_CIV_Section_0", clear           	// Load dataset containing household data 
+	
+	decode b06_departemen, generate(deptment) // Decode variable and generate new variable to store decoded version of the variable 
+	
+	keep deptment
+	sort deptment
+	
+	tempfile popdens // Open tempfile
+	
+		save `popdens', replace emptyok // Save the local file 
+		
+		 use `popdens' // Open local file
+
+		import excel "/Users/beverlyannhippolyte/GitHub/RDI/ppol768-spring23/Individual Assignments/Hippolyte BeverlyAnn/week-05/01_data/q2_CIV_populationdensity.xlsx", sheet("Population density") firstrow allstring clear  // import excel file 
+		
+		tempfile density  // Open tempfile 
+	
+		save `density', replace emptyok
+
+		use `density'
+		
 	 gen department = word(NOMCIRCONSCRIPTION, 1) 	// Generate new variable department and store the first word in each row of the variable in the syntax
-	 keep if department == "DEPARTEMENT"         	// Keep the row if the first word is DEPARTMENT
+	 keep if department == "DEPARTEMENT"        	// Keep the row if the first word is DEPARTMENT
+	 sort department
+		replace department = lower(NOMCIRCONSCRIPTION)
+		replace department = subinstr(NOMCIRCONSCRIPTION, "DEPARTEMENT DE", "",.)
+		replace department = subinstr(NOMCIRCONSCRIPTION, "DEPARTEMENT D", "",.)
+		replace department = subinstr(NOMCIRCONSCRIPTION, "DEPARTMENT DU", "",.)
 	 
-		drop POPULATION								// Drop POPULATION variable 
-		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 variable 
-		rename DENSITEAUKM density 					// Rename DENSITEAUKM variable 
-	 
-		merge 1:m dept using `popdens'					// Merge the dataset and save the local file 
-		save `popdens', replace								// Save the local file 
- 
+		drop POPULATION								// Drop POPULATION 
+		drop SUPERFICIEKM2							// Drop SUPERFICIEKM2 
+		rename DENSITEAUKM density 					// Rename DENSITEAUKM 
+		
+
+		exit
+		
+		merge 1:m NOMCIRCONSCRIPTION using density						// Merge the dataset and save the local file 
+		use popdens														// Open the local file 
+	
+		save `popdens'
+*******************************************************
 
 ***** Question 3 ********
 
@@ -63,34 +99,47 @@ Your job is to write an algorithm that would auto assign each household (i.e. ad
 Note: Your code should still work if I run it on data from another village.
 */
 
-clear 
+clear 	
 
-	tempfile enum 			  	// Generate tempfile to save local file 
-	save `enum', replace emptyok // Save the local file  
+	tempfile enum 			  	// Generate tempfile to save local file '
+	save `enum', replace emptyok
 	
-	use "q3_GPS Data.dta" 		// Load the dataset
+	use "$wd/q3_GPS Data.dta" 		// Load the dataset
 
-	keep in 1					//  Keep the first row  
-
-	rename * one_*				// Rename the column variables; This will help distinguish the variables when we match, and makes matching easier 
-
-	cross using "q3_GPS Data.dta" // With this dataset we create a matrix using the command cross. 
+	tempfile gpsdata
+	save `gpsdata', replace
 	
-	geodist one_latitude one_longitude latitude longitude, gen(dist) // Calculate the distance between the first point and all points in the dataset.
-	drop if one_numid == numid // Drop the first distance because it's matched with itself
+	gen i =_n
+	order i
 	
-	sort dist // Sort the data in descending order 
-
-     keep dist 1/5 // Keep the first five shortest distances in the variable dist 
+forvalues i=1/111{
+	
+			use `gpsdata',clear
+	
+			keep in 1
+		
+			rename * one_*				// Rename the column variables; This will help distinguish the variables when we match, and makes matching easier 
+		
+			cross using "$wd/q3_GPS Data" // With this dataset we create a matrix using the command cross. 
+	
+			geodist one_latitude one_longitude latitude longitude, gen(distance) // Calculate the distance between
+				// the first point and all points in the dataset.
+					
+			drop if one_id == id // Drop the first distance because it's matched with itself
+			
+			gen enumerator_id = one_id
+			
+			drop if distance == 0 
+	
+			keep in 1/6 // Keep the first  six shortest distances in the variable dist 
+			
+			append using "gpsdata"
 	 
-	 save `enum' // Save to the the local file
-	 
-	 // Drop the five points from the orginal dataset 
-	 
-	save, replace	 // Save over the original dataset
-	 
-	 // Repeat for each enumerator
-	 
+			save `gpsdata'
+	}
+*** I was able to do the first five houses and assign them to one enumerator but i can't seem to continue onto the next. //
+// I've tried several codes but thye aren't working. I referenced the video from class. I did one and it worked so i thought it would work for the others.
+*** I would also like to note that I referenced other student's code to improve on mine but this is the best I could do  
 
 
 ***** Question 4 *******
@@ -104,10 +153,7 @@ Your objective is to clean the dataset in such a way that it resembles the forma
 */
 
 clear 
-*Set up a tempfile to store the data 
 tempfile election10
-save `election10', replace emptyok
-
 
 	import excel using "q4_Tz_election_2010_raw.xls", sheet("Sheet1") cellrange(A5:K7927) firstrow allstring // Importing the xls file 
 		replace WARD = WARD[_n-1] if WARD == "" // Fill in the name of each ward in the empty cells 
@@ -117,11 +163,20 @@ save `election10', replace emptyok
 		
 		drop K // Drop the variable K
 		
+		drop sex gender electedcandidate candidatename // Drop variables 
+		
+		gen i = _n // generating i variable
+		
 		replace constituency = constituency[_n-1] if constituency == "" // Fill in the name of each constituency in the empty cells
 		replace district = district[_n-1] if district == "" // Fill in  the name of each district in the empty cells
-		
+		replace region  = region[_n-1] if region == "" // Fill in  the name of each district in the empty cells
 		destring TTLVOTES, ignore ("UNOPPOSED") replace // Change the TTLVOTES variable from string to numeric
 			
+			rename WARD ward  // Change the name of the WAARD variable 
+			
+			order i ward politicalparty ttlvotes  // Changed the order of the variables in the dataset 
+			
+			reshape wide ward, i(i) j(politicalparty), string // Trying to reshape 
 			*bysort WARD: egen vote_total = total(TTLVOTES)
 			*drop in 1
 	
@@ -136,15 +191,5 @@ Between 2010 and 2015, the number of wards in Tanzania went from 3,333 to 3,944.
 
 
 */
-clear 
-
-	tempfile tanz1015  // Create a local file 
-		save `tanz1015', replace emptyok
- 
-	use "q5_Tz_elec_10_clean.dta" // Load 2010 dataset
- 
-	use "q5_Tz_elec_15_clean.dta" // Load 2015 dataset 
- 
-	
 	
 	
