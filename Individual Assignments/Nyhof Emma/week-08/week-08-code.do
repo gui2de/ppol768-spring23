@@ -1,3 +1,10 @@
+
+
+*
+
+clear 
+capture program drop par
+
 * Week 8 Assignment
 * Emma Nyhof
 
@@ -81,3 +88,47 @@ end
 	*Extreme variation in beta when sample size is small (10), very little variation when large. SEM and CIs very large with small sample size, much smaller as it increases.
 	
 	* 6. Fully describe your results in your README.md file, including figures and tables as appropriate.
+	
+	
+********* Part 2: Sampling noise in an infitie superpopulation
+
+* 1. Write a do-file defining a program that 
+
+clear
+capture program drop week8part2
+program define week8part2, rclass
+
+	syntax, samplesize(integer)
+	clear
+	set obs `samplesize'
+	set seed 9999
+	gen x1 = rnormal(50, 10)
+	gen x2 = rnormal()
+	gen x3 = 0
+	replace x3 = 1 if x1*x2 > 0
+	gen y = x1 + x3*3
+	
+	reg y x3
+	
+	mat results = r(table)
+	return scalar N = `samplesize'
+	return scalar beta = results[1,1]
+	return scalar SEM = results[2,1]
+	return scalar pval = results[4,1]
+
+end
+	
+	local samples 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 524288 1048576 2097152 10 100 1000 10000 100000 1000000
+
+foreach x in `samples' {
+	tempfile sims`x'
+	simulate N = r(N) beta = r(beta) SEM = r(SEM) pbal = r(pval), reps(500) seed(9999) saving(`sims`x''): week8part2, samplesize(`x')
+}
+
+local samples 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 524288 1048576 2097152 10 100 1000 10000 100000 1000000
+
+use `sims4'
+foreach x in `samples' {
+	append using `sims`x''
+}
+ 
