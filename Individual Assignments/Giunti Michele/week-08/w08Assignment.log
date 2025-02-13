@@ -1,0 +1,2235 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\miche\OneDrive\Documenti\USA\School\SPRING 2023\Research Design Implementatio
+> n\ppol768-spring23\Individual Assignments\Giunti Michele\week-08\w08Assignment.log
+  log type:  text
+ opened on:  21 Mar 2023, 14:15:16
+
+. do "C:\Users\miche\AppData\Local\Temp\STD563c_000000.tmp"
+
+. ********************************************************************************
+. * PPOL 768: Week 5
+. * Assignment for Week 8
+. * Michele Giunti
+. * March 21st, 2023
+. ********************************************************************************
+. 
+. /*Note: I am copying and pasting the format because it is easier,
+> All this code is original
+> */
+. clear
+
+. /*******************************************************************************
+> 1. Sampling noise in a fixed population
+> *******************************************************************************/
+. cd "C:\Users\miche\OneDrive\Documenti\USA\School\SPRING 2023\Research Design Implementation\ppol7
+> 68-spring23\Individual Assignments\Giunti Michele\week-08"
+C:\Users\miche\OneDrive\Documenti\USA\School\SPRING 2023\Research Design Implementation\ppol768-spr
+> ing23\Individual Assignments\Giunti Michele\week-08
+
+. drop _all
+
+. set obs 10000
+Number of observations (_N) was 0, now 10,000.
+
+. 
+. set seed 69420
+
+. gen x = rnormal()
+
+. 
+. save "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementation/ppo
+> l768-spring23/Individual Assignments/Giunti Michele/week-08/sims1.dta", replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/sims1.dta saved
+
+. set seed 69420
+
+. capture program drop v1 
+
+. program define v1, rclass
+  1. syntax anything [if]
+  2. clear
+  3. use "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementation/p
+> pol768-spring23/Individual Assignments/Giunti Michele/week-08/sims1.dta"
+  4. args number_sample 
+  5. sample `number_sample', count
+  6. gen y = 3*x + rnormal()
+  7. regress y x
+  8. mat a = r(table)
+  9. return scalar N = e(N)
+ 10. return scalar beta = a[1,1]
+ 11. return scalar se = a[2,1]
+ 12. return scalar p = a[4,1]
+ 13. return scalar lower = a[5,1]
+ 14. return scalar upper = a[6,1]
+ 15. 
+. end
+
+. 
+. tempfile sims1
+
+. tempfile combined 
+
+. clear
+
+. 
+. save `combined', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000004.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000004.tmp saved as .dta format
+
+. forvalues i = 1/4{
+  2.         local sample = 10^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(500) seed(69420) : v1 `sample'
+  4.         gen samplesize=`i'
+  5.         append using `combined'
+  6.         qui save `combined', replace
+  7.         _dots `i' 0
+  8. }
+....
+. save `sims1', replace
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000003.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000003.tmp saved as .dta format
+
+. 
+. use `sims1' , clear
+(simulate: v1)
+
+. label define SAMPLE 1 "10" 2 "100" 3 "1000" 4 "10000"
+
+. label values samplesize SAMPLE
+
+. 
+. egen sdbeta = sd(beta)
+
+. 
+. bysort samplesize : tabstat beta se lower upper, col(stats) s(mean sem max min)
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.015689   .017076  4.143707  1.573174
+          se |  .3572803  .0060215  .9489551  .0975507
+       lower |  2.191799  .0222757  3.511289  .1340007
+       upper |  3.839579  .0217393  5.578012  2.531216
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.006408  .0046549  3.341442  2.708015
+          se |  .1009933  .0004607  .1449233  .0719212
+       lower |   2.80599  .0047544  3.151526   2.47916
+       upper |  3.206826  .0047334  3.569879  2.914071
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999415  .0013729  3.104433  2.911755
+          se |  .0316935  .0000428  .0347336   .028668
+       lower |  2.937222  .0013815  3.046619   2.85219
+       upper |  3.061609  .0013694   3.16297   2.97132
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.001858  .0020544         4  2.971514
+          se |  .0100267  3.17e-06  .0102467  .0098084
+       lower |  2.980203  .0004697  3.014031  2.951888
+       upper |  3.019512  .0004694  3.053619  2.991141
+------------------------------------------------------
+
+. 
+. label variable beta "Beta"
+
+. label variable se "Standard Deviation"
+
+. label variable lower "Lower CI"
+
+. label variable upper "Upper CI"
+
+. label variable p "p-value"
+
+. 
+. estpost tabstat beta se lower upper, by(samplesize) col(stats) s(mean sem max min)
+
+Summary statistics: mean semean max min
+     for variables: beta se lower upper
+  by categories of: samplesize
+
+  samplesize |   e(mean)  e(semean)     e(max)     e(min) 
+-------------+--------------------------------------------
+10           |                                            
+        beta |  3.015689    .017076   4.143707   1.573174 
+          se |  .3572803   .0060215   .9489551   .0975507 
+       lower |  2.191799   .0222757   3.511289   .1340007 
+       upper |  3.839579   .0217393   5.578012   2.531216 
+-------------+--------------------------------------------
+100          |                                            
+        beta |  3.006408   .0046549   3.341442   2.708015 
+          se |  .1009933   .0004607   .1449233   .0719212 
+       lower |   2.80599   .0047544   3.151526    2.47916 
+       upper |  3.206826   .0047334   3.569879   2.914071 
+-------------+--------------------------------------------
+1000         |                                            
+        beta |  2.999415   .0013729   3.104433   2.911755 
+          se |  .0316935   .0000428   .0347336    .028668 
+       lower |  2.937222   .0013815   3.046619    2.85219 
+       upper |  3.061609   .0013694    3.16297    2.97132 
+-------------+--------------------------------------------
+10000        |                                            
+        beta |  3.001858   .0020544          4   2.971514 
+          se |  .0100267   3.17e-06   .0102467   .0098084 
+       lower |  2.980203   .0004697   3.014031   2.951888 
+       upper |  3.019512   .0004694   3.053619   2.991141 
+-------------+--------------------------------------------
+Total        |                                            
+        beta |  3.005843   .0044665   4.143707   1.573174 
+          se |   .125056   .0034419   .9489551   .0098084 
+       lower |  2.728678   .0090952   3.511289   .1340007 
+       upper |  3.282013   .0092396   5.578012   2.531216 
+
+. esttab using "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart1.tex", replac
+> e style(tex) cells("mean semean max min") label nodepvar nomtitle nonumber collabels("Mean" "SEM"
+>  "Max" "Min")
+(output written to C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Impleme
+> ntation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart1.tex)
+
+. 
+. tw (histogram beta, by(samplesize) lc(none) fc(gray) freq width(.1) barwidth(.1))(histogram beta 
+> if p < .00001, lc(black) fc(none) freq width(.1) barwidth(.1) legend(order(1 "Beta" 2 "p < 0.05")
+> ))
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/betadeviationpart1.png", 
+> replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/betadeviationpart1.png saved as PNG format
+
+. 
+. graph bar (mean) se, over(samplesize) ytitle("Mean of Standard Error") title("Differences in Vari
+> ance per Sample Size") subtitle("Reductions in Variance Experienced by Different Sample Sizes")
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/SEMpart1.png" ,replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/SEMpart1.png saved as PNG format
+
+. 
+. graph bar (sd) beta upper lower, over(samplesize) legend( label(1 "Beta") label(2 "Upper CI") lab
+> el(3 "Lower CI") ) ytitle("Standard Deviation") title("Differences in Variance per Sample Size") 
+> subtitle("Reductions in Variance Experienced by Different Sample Sizes")
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/CIBetapart1.png" , replac
+> e
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/CIBetapart1.png saved as PNG format
+
+. 
+. save sims1, replace
+file sims1.dta saved
+
+. ******************************************************************************
+. *2. Sampling noise in an infinite superpopulation
+. *******************************************************************************/
+. clear
+
+. drop _all
+
+. 
+. set seed 69420
+
+. capture program drop v2
+
+. program define v2, rclass
+  1. syntax anything [if]
+  2. clear
+  3. args number_sample 
+  4. set obs `number_sample'
+  5. gen x = rnormal()
+  6. gen y = 3*x + rnormal()
+  7. regress y x
+  8. mat a = r(table)
+  9. return scalar N = e(N)
+ 10. return scalar beta = a[1,1]
+ 11. return scalar se = a[2,1]
+ 12. return scalar p = a[4,1]
+ 13. return scalar lower = a[5,1]
+ 14. return scalar upper = a[6,1]
+ 15. end
+
+. 
+. tempfile sims2
+
+. tempfile combined1
+
+. tempfile combined2
+
+. save `sims2', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000005.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000005.tmp saved as .dta format
+
+. clear
+
+. 
+. save `combined1', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000006.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000006.tmp saved as .dta format
+
+. forvalues i = 1/6{
+  2.         local population = 10^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(500) seed(69420) : v2 `population'
+  4.         gen table1=`i'
+  5.         qui replace table1=10^`i'
+  6.         append using `combined1'
+  7.         qui save `combined1', replace
+  8.         _dots `i' 0
+  9. }
+......
+. 
+. clear
+
+. save `combined2', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000007.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000007.tmp saved as .dta format
+
+. forvalues i = 2/21{
+  2.         local population = 2^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(500) seed(69420) : v2 `population'
+  4.         gen table2=`i'
+  5.         qui replace table2=2^`i'
+  6.         append using `combined2'
+  7.         qui save `combined2', replace
+  8.         _dots `i' 0
+  9. }
+....................
+. 
+. clear
+
+. use `sims2', clear
+
+. append using "`combined1'" "`combined2'"
+
+. save `sims2', replace
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000005.tmp saved as .dta format
+
+. 
+. 
+. replace table1 = table2 if missing(table1)
+(10,000 real changes made)
+
+. drop table2
+
+. rename table1 samplesize
+
+. sort samplesize
+
+. 
+. levelsof samplesize, local(levels) 
+4 8 10 16 32 64 100 128 256 512 1000 1024 2048 4096 8192 10000 16384 32768 65536 100000 131072 2621
+> 44 524288 1000000 1048576 2097152
+
+. foreach l of local levels {
+  2.         label define SAMPLE2 `l' "`l'", add
+  3.         }
+
+.         
+. label values samplesize SAMPLE
+
+. 
+. egen sdbeta = sd(beta), by(samplesize)
+
+. 
+. tw (line sdbeta samplesize, xscale(log) xlabel(10 100 1000 10000 100000 1000000) xtitle(N) ytitle
+> (Standard Deviation of Beta) title("Change in the Variance of Beta") subtitle("Logarithm Scale of
+>  the Decrease in Standard Deviation")) (scatter sdbeta samplesize), legend(off)
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/betadeviationpart2-500.pn
+> g", replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/betadeviationpart2-500.png saved as PNG format
+
+. 
+. tw (histogram beta if samplesize <= 10000, by(samplesize) lc(none) fc(gray) freq width(.1) barwid
+> th(.1))(histogram beta if p < .00001 & samplesize <= 10000, lc(black) fc(none) freq width(.1) bar
+> width(.1) legend(order(1 "Beta" 2 "p < 0.05"))) if samplesize <= 10000
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/facetbetapart2-500.png", 
+> replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/facetbetapart2-500.png saved as PNG format
+
+. 
+. graph bar (sd) beta upper lower if samplesize < 10000, over(samplesize, lab(angle(45))) legend( l
+> abel(1 "Beta") label(2 "Upper CI") label(3 "Lower CI") ) ytitle("Standard Deviation") title("Diff
+> erences in Variance per Sample Size") subtitle("Reductions in Variance Experienced by Different S
+> ample Sizes")
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/CIBetapart2-500.png", rep
+> lace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/CIBetapart2-500.png saved as PNG format
+
+. 
+. bysort samplesize : tabstat beta se lower upper, col(stats) s(mean sem max min)
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 4
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.955211  .0402868  6.560567 -.5488088
+          se |  .6777245  .0247738  3.902929  .0010701
+       lower |  .0391981  .1132485  4.691794 -16.43275
+       upper |  5.871224  .1146519  17.72631  .8000238
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 8
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   3.00781  .0204218  5.003979  1.133368
+          se |  .4066119  .0081487  1.239643  .0704606
+       lower |  2.012866  .0278832    3.5591 -1.045925
+       upper |  4.002753   .029185  6.811829   2.78939
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.986259   .016121  4.241395  1.760183
+          se |  .3437804  .0059425  1.041684  .1071756
+       lower |    2.1935  .0212532  3.412139  .3829617
+       upper |  3.779018  .0210629  6.643523  2.423752
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 16
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.001786  .0112278   3.76169  2.288564
+          se |  .2638717  .0032564  .5570847  .1029502
+       lower |  2.435837  .0137454  3.307327  1.261601
+       upper |  3.567734  .0126788  4.454932  2.862962
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 32
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999823  .0085506  3.526422  2.237828
+          se |  .1825505  .0015803  .3516607  .0925833
+       lower |  2.627005   .009297  3.133258   1.73388
+       upper |  3.372641   .008979  4.050699  2.741776
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 64
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999666  .0056517  3.401257  2.655382
+          se |  .1259217  .0007374  .1960465  .0834287
+       lower |  2.747952  .0057562  3.140147   2.41254
+       upper |   3.25138  .0059241   3.71538  2.885093
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.001241  .0044618  3.290491  2.687296
+          se |  .1014288  .0004663  .1365249  .0752006
+       lower |  2.799959  .0045109  3.120982  2.473125
+       upper |  3.202523  .0046022  3.513662  2.901467
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 128
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   3.00686  .0038777  3.252888  2.754437
+          se |  .0890188  .0003398  .1176748  .0695246
+       lower |  2.830695   .003921  3.087648  2.543619
+       upper |  3.183026  .0039501   3.43721  2.941386
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 256
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000316  .0028095  3.156543  2.834423
+          se |  .0626141  .0001761   .076201  .0527757
+       lower |  2.877007  .0028437  3.033776  2.686219
+       upper |  3.123625  .0028179  3.294359  2.967026
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 512
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.998526  .0019719  3.109224  2.873663
+          se |  .0443886  .0000944  .0508598  .0390827
+       lower |  2.911319  .0019732  3.016056    2.7848
+       upper |  3.085733   .001988  3.204782  2.962526
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000837  .0013652  3.091094  2.901456
+          se |  .0316932  .0000448  .0345405  .0285544
+       lower |  2.938644  .0013719  3.030659  2.836929
+       upper |   3.06303  .0013642  3.151529  2.965983
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1024
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999559  .0013481  3.094126  2.916826
+          se |  .0313482  .0000436  .0345399  .0279547
+       lower |  2.938045  .0013539  3.033145  2.856388
+       upper |  3.061073  .0013477  3.155107  2.975678
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 2048
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   3.00096  .0009976  3.065669  2.935301
+          se |   .022136  .0000221   .023496  .0205828
+       lower |  2.957548  .0009945  3.021346  2.893338
+       upper |  3.044371  .0010025  3.109992  2.976859
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 4096
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   3.00026  .0006593   3.04798  2.960126
+          se |  .0156304  .0000106  .0163237  .0149838
+       lower |  2.969615  .0006592  3.017026  2.930071
+       upper |  3.030904  .0006601  3.078956   2.99018
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 8192
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999711  .0005168  3.031039  2.962005
+          se |   .011055  5.21e-06  .0114137  .0106751
+       lower |   2.97804   .000517  3.009172  2.940114
+       upper |  3.021382  .0005168  3.052905  2.983896
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.998877   .000451   3.02756  2.963045
+          se |  .0099958  4.42e-06  .0103329  .0096762
+       lower |  2.979283  .0004514  3.007768  2.943504
+       upper |  3.018471  .0004509  3.047352  2.982585
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 16384
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999873  .0003411  3.023597   2.97725
+          se |  .0078085  2.76e-06  .0079706  .0076064
+       lower |  2.984567  .0003416  3.008371  2.961948
+       upper |  3.015178  .0003406  3.038823  2.992553
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 32768
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999447  .0002443  3.017697   2.98462
+          se |  .0055234  1.42e-06  .0056024  .0054151
+       lower |  2.988621  .0002444  3.006783  2.973675
+       upper |  3.010273  .0002443  3.028612  2.995566
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 65536
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999796  .0001776  3.013927  2.988117
+          se |  .0039062  6.50e-07  .0039536  .0038561
+       lower |  2.992139  .0001775  3.006248  2.980488
+       upper |  3.007452  .0001777  3.021606  2.995746
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000227  .0001356  3.010157  2.991509
+          se |  .0031618  4.67e-07  .0031942  .0031301
+       lower |   2.99403  .0001356  3.003954  2.985301
+       upper |  3.006424  .0001356  3.016359  2.997716
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 131072
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999985   .000126  3.008446  2.991447
+          se |  .0027622  3.54e-07  .0027889  .0027357
+       lower |  2.994571   .000126   3.00303  2.986036
+       upper |  3.005399  .0001261  3.013863  2.996859
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 262144
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000037  .0000883  3.005987  2.994437
+          se |  .0019527  1.77e-07   .001964  .0019411
+       lower |  2.996209  .0000883  3.002162  2.990612
+       upper |  3.003864  .0000883  3.009813  2.998262
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 524288
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000026  .0000612  3.004004  2.996141
+          se |  .0013812  8.55e-08  .0013863  .0013748
+       lower |  2.997319  .0000612  3.001298   2.99343
+       upper |  3.002733  .0000612  3.006709  2.998852
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000016  .0000468  3.003939  2.996938
+          se |  .0010001  4.76e-08   .001003  .0009969
+       lower |  2.998056  .0000468  3.001976  2.994979
+       upper |  3.001977  .0000468  3.005901  2.998898
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1048576
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999926  .0000431  3.002368  2.997376
+          se |  .0009765  4.21e-08  .0009796  .0009739
+       lower |  2.998012  .0000431  3.000453  2.995464
+       upper |   3.00184  .0000431  3.004283  2.999289
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 2097152
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000022  .0000302  3.001892  2.997711
+          se |  .0006905  2.18e-08  .0006922   .000689
+       lower |  2.998669  .0000302  3.000539  2.996356
+       upper |  3.001376  .0000302  3.003245  2.999066
+------------------------------------------------------
+
+. 
+. label variable beta "Beta"
+
+. label variable se "Standard Deviation"
+
+. label variable lower "Lower CI"
+
+. label variable upper "Upper CI"
+
+. label variable p "p-value"
+
+. 
+. estpost tabstat beta se lower upper, by(samplesize) col(stats) s(mean sem max min)
+
+Summary statistics: mean semean max min
+     for variables: beta se lower upper
+  by categories of: samplesize
+
+  samplesize |   e(mean)  e(semean)     e(max)     e(min) 
+-------------+--------------------------------------------
+4            |                                            
+        beta |  2.955211   .0402868   6.560567  -.5488088 
+          se |  .6777245   .0247738   3.902929   .0010701 
+       lower |  .0391981   .1132485   4.691794  -16.43275 
+       upper |  5.871224   .1146519   17.72631   .8000238 
+-------------+--------------------------------------------
+8            |                                            
+        beta |   3.00781   .0204218   5.003979   1.133368 
+          se |  .4066119   .0081487   1.239643   .0704606 
+       lower |  2.012866   .0278832     3.5591  -1.045925 
+       upper |  4.002753    .029185   6.811829    2.78939 
+-------------+--------------------------------------------
+10           |                                            
+        beta |  2.986259    .016121   4.241395   1.760183 
+          se |  .3437804   .0059425   1.041684   .1071756 
+       lower |    2.1935   .0212532   3.412139   .3829617 
+       upper |  3.779018   .0210629   6.643523   2.423752 
+-------------+--------------------------------------------
+16           |                                            
+        beta |  3.001786   .0112278    3.76169   2.288564 
+          se |  .2638717   .0032564   .5570847   .1029502 
+       lower |  2.435837   .0137454   3.307327   1.261601 
+       upper |  3.567734   .0126788   4.454932   2.862962 
+-------------+--------------------------------------------
+32           |                                            
+        beta |  2.999823   .0085506   3.526422   2.237828 
+          se |  .1825505   .0015803   .3516607   .0925833 
+       lower |  2.627005    .009297   3.133258    1.73388 
+       upper |  3.372641    .008979   4.050699   2.741776 
+-------------+--------------------------------------------
+64           |                                            
+        beta |  2.999666   .0056517   3.401257   2.655382 
+          se |  .1259217   .0007374   .1960465   .0834287 
+       lower |  2.747952   .0057562   3.140147    2.41254 
+       upper |   3.25138   .0059241    3.71538   2.885093 
+-------------+--------------------------------------------
+100          |                                            
+        beta |  3.001241   .0044618   3.290491   2.687296 
+          se |  .1014288   .0004663   .1365249   .0752006 
+       lower |  2.799959   .0045109   3.120982   2.473125 
+       upper |  3.202523   .0046022   3.513662   2.901467 
+-------------+--------------------------------------------
+128          |                                            
+        beta |   3.00686   .0038777   3.252888   2.754437 
+          se |  .0890188   .0003398   .1176748   .0695246 
+       lower |  2.830695    .003921   3.087648   2.543619 
+       upper |  3.183026   .0039501    3.43721   2.941386 
+-------------+--------------------------------------------
+256          |                                            
+        beta |  3.000316   .0028095   3.156543   2.834423 
+          se |  .0626141   .0001761    .076201   .0527757 
+       lower |  2.877007   .0028437   3.033776   2.686219 
+       upper |  3.123625   .0028179   3.294359   2.967026 
+-------------+--------------------------------------------
+512          |                                            
+        beta |  2.998526   .0019719   3.109224   2.873663 
+          se |  .0443886   .0000944   .0508598   .0390827 
+       lower |  2.911319   .0019732   3.016056     2.7848 
+       upper |  3.085733    .001988   3.204782   2.962526 
+-------------+--------------------------------------------
+1000         |                                            
+        beta |  3.000837   .0013652   3.091094   2.901456 
+          se |  .0316932   .0000448   .0345405   .0285544 
+       lower |  2.938644   .0013719   3.030659   2.836929 
+       upper |   3.06303   .0013642   3.151529   2.965983 
+-------------+--------------------------------------------
+1024         |                                            
+        beta |  2.999559   .0013481   3.094126   2.916826 
+          se |  .0313482   .0000436   .0345399   .0279547 
+       lower |  2.938045   .0013539   3.033145   2.856388 
+       upper |  3.061073   .0013477   3.155107   2.975678 
+-------------+--------------------------------------------
+2048         |                                            
+        beta |   3.00096   .0009976   3.065669   2.935301 
+          se |   .022136   .0000221    .023496   .0205828 
+       lower |  2.957548   .0009945   3.021346   2.893338 
+       upper |  3.044371   .0010025   3.109992   2.976859 
+-------------+--------------------------------------------
+4096         |                                            
+        beta |   3.00026   .0006593    3.04798   2.960126 
+          se |  .0156304   .0000106   .0163237   .0149838 
+       lower |  2.969615   .0006592   3.017026   2.930071 
+       upper |  3.030904   .0006601   3.078956    2.99018 
+-------------+--------------------------------------------
+8192         |                                            
+        beta |  2.999711   .0005168   3.031039   2.962005 
+          se |   .011055   5.21e-06   .0114137   .0106751 
+       lower |   2.97804    .000517   3.009172   2.940114 
+       upper |  3.021382   .0005168   3.052905   2.983896 
+-------------+--------------------------------------------
+10000        |                                            
+        beta |  2.998877    .000451    3.02756   2.963045 
+          se |  .0099958   4.42e-06   .0103329   .0096762 
+       lower |  2.979283   .0004514   3.007768   2.943504 
+       upper |  3.018471   .0004509   3.047352   2.982585 
+-------------+--------------------------------------------
+16384        |                                            
+        beta |  2.999873   .0003411   3.023597    2.97725 
+          se |  .0078085   2.76e-06   .0079706   .0076064 
+       lower |  2.984567   .0003416   3.008371   2.961948 
+       upper |  3.015178   .0003406   3.038823   2.992553 
+-------------+--------------------------------------------
+32768        |                                            
+        beta |  2.999447   .0002443   3.017697    2.98462 
+          se |  .0055234   1.42e-06   .0056024   .0054151 
+       lower |  2.988621   .0002444   3.006783   2.973675 
+       upper |  3.010273   .0002443   3.028612   2.995566 
+-------------+--------------------------------------------
+65536        |                                            
+        beta |  2.999796   .0001776   3.013927   2.988117 
+          se |  .0039062   6.50e-07   .0039536   .0038561 
+       lower |  2.992139   .0001775   3.006248   2.980488 
+       upper |  3.007452   .0001777   3.021606   2.995746 
+-------------+--------------------------------------------
+100000       |                                            
+        beta |  3.000227   .0001356   3.010157   2.991509 
+          se |  .0031618   4.67e-07   .0031942   .0031301 
+       lower |   2.99403   .0001356   3.003954   2.985301 
+       upper |  3.006424   .0001356   3.016359   2.997716 
+-------------+--------------------------------------------
+131072       |                                            
+        beta |  2.999985    .000126   3.008446   2.991447 
+          se |  .0027622   3.54e-07   .0027889   .0027357 
+       lower |  2.994571    .000126    3.00303   2.986036 
+       upper |  3.005399   .0001261   3.013863   2.996859 
+-------------+--------------------------------------------
+262144       |                                            
+        beta |  3.000037   .0000883   3.005987   2.994437 
+          se |  .0019527   1.77e-07    .001964   .0019411 
+       lower |  2.996209   .0000883   3.002162   2.990612 
+       upper |  3.003864   .0000883   3.009813   2.998262 
+-------------+--------------------------------------------
+524288       |                                            
+        beta |  3.000026   .0000612   3.004004   2.996141 
+          se |  .0013812   8.55e-08   .0013863   .0013748 
+       lower |  2.997319   .0000612   3.001298    2.99343 
+       upper |  3.002733   .0000612   3.006709   2.998852 
+-------------+--------------------------------------------
+1000000      |                                            
+        beta |  3.000016   .0000468   3.003939   2.996938 
+          se |  .0010001   4.76e-08    .001003   .0009969 
+       lower |  2.998056   .0000468   3.001976   2.994979 
+       upper |  3.001977   .0000468   3.005901   2.998898 
+-------------+--------------------------------------------
+1048576      |                                            
+        beta |  2.999926   .0000431   3.002368   2.997376 
+          se |  .0009765   4.21e-08   .0009796   .0009739 
+       lower |  2.998012   .0000431   3.000453   2.995464 
+       upper |   3.00184   .0000431   3.004283   2.999289 
+-------------+--------------------------------------------
+2097152      |                                            
+        beta |  3.000022   .0000302   3.001892   2.997711 
+          se |  .0006905   2.18e-08   .0006922    .000689 
+       lower |  2.998669   .0000302   3.000539   2.996356 
+       upper |  3.001376   .0000302   3.003245   2.999066 
+-------------+--------------------------------------------
+Total        |                                            
+        beta |  2.998348   .0019548   6.560567  -.5488088 
+          se |  .0941897   .0017391   3.902929    .000689 
+       lower |  2.737643   .0069702   4.691794  -16.43275 
+       upper |  3.259054   .0069053   17.72631   .8000238 
+
+. esttab using "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart2-500.tex", re
+> place style(tex) cells("mean semean max min") label nodepvar nomtitle nonumber collabels("Mean" "
+> SEM" "Max" "Min")
+(output written to C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Impleme
+> ntation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart2-500.tex)
+
+. 
+. save sims2, replace
+file sims2.dta saved
+
+. ******************************************************************************
+. *2b. Sampling noise in an infinite superpopulation (Increase Repetitions)
+. *******************************************************************************/
+. 
+. clear
+
+. drop _all
+
+. 
+. set seed 69420
+
+. capture program drop v2b
+
+. program define v2b, rclass
+  1. syntax anything [if]
+  2. clear
+  3. args number_sample 
+  4. set obs `number_sample'
+  5. gen x = rnormal()
+  6. gen y = 3*x + rnormal()
+  7. regress y x
+  8. mat a = r(table)
+  9. return scalar N = e(N)
+ 10. return scalar beta = a[1,1]
+ 11. return scalar se = a[2,1]
+ 12. return scalar p = a[4,1]
+ 13. return scalar lower = a[5,1]
+ 14. return scalar upper = a[6,1]
+ 15. end
+
+. 
+. tempfile sims2b
+
+. tempfile combined1b
+
+. tempfile combined2b
+
+. save `sims2b', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000008.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000008.tmp saved as .dta format
+
+. clear
+
+. 
+. save `combined1b', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_000009.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000009.tmp saved as .dta format
+
+. forvalues i = 1/6{
+  2.         local population = 10^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(800) seed(69420) : v2b `population'
+  4.         gen table1=`i'
+  5.         qui replace table1=10^`i'
+  6.         append using `combined1b'
+  7.         qui save `combined1b', replace
+  8.         _dots `i' 0
+  9. }
+......
+. 
+. clear
+
+. save `combined2b', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_00000a.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_00000a.tmp saved as .dta format
+
+. forvalues i = 2/21{
+  2.         local population = 2^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(800) seed(69420) : v2b `population'
+  4.         gen table2=`i'
+  5.         qui replace table2=2^`i'
+  6.         append using `combined2b'
+  7.         qui save `combined2b', replace
+  8.         _dots `i' 0
+  9. }
+....................
+. 
+. clear
+
+. use `sims2b', clear
+
+. append using "`combined1b'" "`combined2b'"
+
+. save `sims2b', replace
+file C:\Users\miche\AppData\Local\Temp\ST_563c_000008.tmp saved as .dta format
+
+. 
+. 
+. replace table1 = table2 if missing(table1)
+(16,000 real changes made)
+
+. drop table2
+
+. rename table1 samplesize
+
+. sort samplesize
+
+. 
+. levelsof samplesize, local(levels) 
+4 8 10 16 32 64 100 128 256 512 1000 1024 2048 4096 8192 10000 16384 32768 65536 100000 131072 2621
+> 44 524288 1000000 1048576 2097152
+
+. foreach l of local levels {
+  2.         label define SAMPLE2b `l' "`l'", add
+  3.         }
+
+.         
+. label values samplesize SAMPLE
+
+. egen sdbeta = sd(beta), by(samplesize)
+
+. 
+. tw (line sdbeta samplesize, xscale(log) xlabel(10 100 1000 10000 100000 1000000) xtitle(N) ytitle
+> (Standard Deviation of Beta) title("Change in the Variance of Beta") subtitle("Logarithm Scale of
+>  the Decrease in Standard Deviation")) (scatter sdbeta samplesize), legend(off)
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/betadeviationpart2-800.pn
+> g" , replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/betadeviationpart2-800.png saved as PNG format
+
+. 
+. tw (histogram beta if samplesize <= 10000, by(samplesize) lc(none) fc(gray) freq width(.1) barwid
+> th(.1))(histogram beta if p < .00001 & samplesize <= 10000, lc(black) fc(none) freq width(.1) bar
+> width(.1) legend(order(1 "Beta" 2 "p < 0.05"))) if samplesize <= 10000
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/facetbetapart2-800.png" ,
+>  replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/facetbetapart2-800.png saved as PNG format
+
+. 
+. graph bar (sd) beta upper lower if samplesize < 10000, over(samplesize, lab(angle(45))) legend( l
+> abel(1 "Beta") label(2 "Upper CI") label(3 "Lower CI") ) ytitle("Standard Deviation") title("Diff
+> erences in Variance per Sample Size") subtitle("Reductions in Variance Experienced by Different S
+> ample Sizes")
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/CIBetapart2-800.png" , re
+> place
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/CIBetapart2-800.png saved as PNG format
+
+. 
+. bysort samplesize : tabstat beta se lower upper, col(stats) s(mean sem max min)
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 4
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.988312  .0334894  10.43353 -2.523935
+          se |  .7151147  .0215444  5.058801  .0010701
+       lower | -.0885786  .0977011  4.691794 -20.56086
+       upper |  6.065202  .0994157  30.19464 -.5120217
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 8
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999638   .016536  5.003979  1.133368
+          se |  .3980663  .0062155  1.239643  .0704606
+       lower |  2.025605  .0226428  3.973219 -1.045925
+       upper |  3.973672  .0222889  6.811829  2.421796
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.984987  .0128438  4.241395  1.736668
+          se |  .3452591  .0046539  1.041684  .1071756
+       lower |  2.188818  .0167189  3.412139  .3147087
+       upper |  3.781156  .0167558  6.643523  2.423752
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 16
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000307  .0093789  3.871449  2.259672
+          se |  .2656066  .0025706  .5570847  .0941218
+       lower |  2.430638   .011143  3.463643  1.261601
+       upper |  3.569977  .0106093  4.612933  2.860248
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 32
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.994141  .0066039  3.529637  2.237828
+          se |  .1819976   .001231  .3516607  .0867428
+       lower |  2.622452  .0072184  3.133258   1.73388
+       upper |  3.365829  .0069106  4.050699  2.741776
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 64
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.998808  .0044071  3.401257  2.655382
+          se |  .1266835   .000592  .1960465  .0834287
+       lower |  2.745571  .0045569  3.140147   2.41254
+       upper |  3.252045  .0045695   3.71538  2.885093
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.001623  .0034867  3.290491  2.687296
+          se |  .1010722  .0003663  .1365249  .0699035
+       lower |  2.801048  .0035646  3.120982  2.473125
+       upper |  3.202197  .0035588  3.513662  2.901467
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 128
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.004708  .0030413   3.26098  2.744069
+          se |  .0892936  .0002741  .1176748  .0695246
+       lower |  2.827998  .0030737  3.087648  2.543619
+       upper |  3.181417  .0031048  3.447999  2.911595
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 256
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000336   .002166  3.156543  2.815427
+          se |  .0627029   .000141   .076201  .0520072
+       lower |  2.876852  .0021883  3.033776  2.686219
+       upper |   3.12382  .0021791  3.294359  2.940191
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 512
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999626  .0015919  3.120037  2.854179
+          se |  .0443811  .0000738  .0508598   .037947
+       lower |  2.912434  .0015866  3.033076  2.769239
+       upper |  3.086818  .0016104  3.216184  2.939119
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999364  .0011245   3.11444  2.901456
+          se |  .0316636   .000035  .0345405  .0283927
+       lower |  2.937229  .0011308   3.05264  2.836929
+       upper |  3.061498  .0011222  3.176241  2.965983
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1024
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   2.99937   .001086  3.094126  2.910543
+          se |  .0313194  .0000348  .0345399  .0279547
+       lower |  2.937912  .0010924  3.033145  2.849665
+       upper |  3.060828  .0010838  3.155107  2.968675
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 2048
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000553  .0007965  3.065669   2.93284
+          se |  .0221115  .0000179  .0237148  .0205333
+       lower |   2.95719  .0007938  3.021346  2.887852
+       upper |  3.043916  .0008007  3.109992  2.976859
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 4096
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000162  .0005167   3.05165  2.960126
+          se |  .0156305  8.50e-06  .0164563  .0149385
+       lower |  2.969518  .0005171  3.021249  2.930071
+       upper |  3.030807  .0005169   3.08205   2.99018
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 8192
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999968  .0003965  3.031039  2.962005
+          se |  .0110556  4.24e-06  .0114463  .0106751
+       lower |  2.978297  .0003966  3.009172  2.940114
+       upper |   3.02164  .0003967  3.052905  2.983896
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999298  .0003512   3.02756  2.963045
+          se |  .0099949  3.52e-06  .0103329  .0096762
+       lower |  2.979706  .0003517  3.007768  2.943504
+       upper |   3.01889  .0003508  3.047352  2.982585
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 16384
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999856  .0002727  3.023597   2.97725
+          se |   .007811  2.14e-06  .0079775  .0076064
+       lower |  2.984546  .0002729  3.008371  2.961948
+       upper |  3.015167  .0002725  3.038823  2.992553
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 32768
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999788  .0001958  3.018829  2.984092
+          se |  .0055233  1.09e-06  .0056074  .0054151
+       lower |  2.988962  .0001958  3.007979  2.973233
+       upper |  3.010614  .0001958   3.02968  2.994951
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 65536
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999863  .0001379  3.013927  2.985349
+          se |  .0039063  5.40e-07  .0039536  .0038533
+       lower |  2.992207  .0001379  3.006248  2.977616
+       upper |  3.007519  .0001379  3.021606  2.993082
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000171  .0001105  3.010157  2.991509
+          se |  .0031621  3.66e-07  .0031942  .0031301
+       lower |  2.993973  .0001106  3.003954  2.985301
+       upper |  3.006369  .0001105  3.016359  2.997716
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 131072
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000007  .0000986  3.008446  2.991447
+          se |  .0027622  2.74e-07  .0027889  .0027357
+       lower |  2.994593  .0000986   3.00303  2.986036
+       upper |  3.005421  .0000986  3.013863  2.996859
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 262144
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000053  .0000673  3.007339  2.993632
+          se |  .0019528  1.37e-07   .001964  .0019411
+       lower |  2.996226  .0000673  3.003503  2.989809
+       upper |   3.00388  .0000673  3.011174  2.997455
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 524288
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000031  .0000488  3.005143  2.995835
+          se |  .0013811  6.76e-08  .0013863  .0013748
+       lower |  2.997324  .0000488  3.002438  2.993133
+       upper |  3.002738  .0000488  3.007848  2.998537
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   2.99999  .0000364  3.003939  2.996404
+          se |      .001  3.66e-08   .001003  .0009966
+       lower |   2.99803  .0000364  3.001976  2.994446
+       upper |   3.00195  .0000364  3.005901  2.998362
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1048576
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999919  .0000356  3.002768  2.995758
+          se |  .0009765  3.34e-08  .0009796  .0009738
+       lower |  2.998005  .0000356  3.000852  2.993844
+       upper |  3.001833  .0000356  3.004683  2.997671
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 2097152
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000019  .0000247   3.00234  2.997711
+          se |  .0006905  1.71e-08  .0006922   .000689
+       lower |  2.998666  .0000247  3.000988  2.996356
+       upper |  3.001372  .0000247  3.003692  2.999066
+------------------------------------------------------
+
+. 
+. label variable beta "Beta"
+
+. label variable se "Standard Deviation"
+
+. label variable lower "Lower CI"
+
+. label variable upper "Upper CI"
+
+. label variable p "p-value"
+
+. 
+. estpost tabstat beta se lower upper, by(samplesize) col(stats) s(mean sem max min)
+
+Summary statistics: mean semean max min
+     for variables: beta se lower upper
+  by categories of: samplesize
+
+  samplesize |   e(mean)  e(semean)     e(max)     e(min) 
+-------------+--------------------------------------------
+4            |                                            
+        beta |  2.988312   .0334894   10.43353  -2.523935 
+          se |  .7151147   .0215444   5.058801   .0010701 
+       lower | -.0885786   .0977011   4.691794  -20.56086 
+       upper |  6.065202   .0994157   30.19464  -.5120217 
+-------------+--------------------------------------------
+8            |                                            
+        beta |  2.999638    .016536   5.003979   1.133368 
+          se |  .3980663   .0062155   1.239643   .0704606 
+       lower |  2.025605   .0226428   3.973219  -1.045925 
+       upper |  3.973672   .0222889   6.811829   2.421796 
+-------------+--------------------------------------------
+10           |                                            
+        beta |  2.984987   .0128438   4.241395   1.736668 
+          se |  .3452591   .0046539   1.041684   .1071756 
+       lower |  2.188818   .0167189   3.412139   .3147087 
+       upper |  3.781156   .0167558   6.643523   2.423752 
+-------------+--------------------------------------------
+16           |                                            
+        beta |  3.000307   .0093789   3.871449   2.259672 
+          se |  .2656066   .0025706   .5570847   .0941218 
+       lower |  2.430638    .011143   3.463643   1.261601 
+       upper |  3.569977   .0106093   4.612933   2.860248 
+-------------+--------------------------------------------
+32           |                                            
+        beta |  2.994141   .0066039   3.529637   2.237828 
+          se |  .1819976    .001231   .3516607   .0867428 
+       lower |  2.622452   .0072184   3.133258    1.73388 
+       upper |  3.365829   .0069106   4.050699   2.741776 
+-------------+--------------------------------------------
+64           |                                            
+        beta |  2.998808   .0044071   3.401257   2.655382 
+          se |  .1266835    .000592   .1960465   .0834287 
+       lower |  2.745571   .0045569   3.140147    2.41254 
+       upper |  3.252045   .0045695    3.71538   2.885093 
+-------------+--------------------------------------------
+100          |                                            
+        beta |  3.001623   .0034867   3.290491   2.687296 
+          se |  .1010722   .0003663   .1365249   .0699035 
+       lower |  2.801048   .0035646   3.120982   2.473125 
+       upper |  3.202197   .0035588   3.513662   2.901467 
+-------------+--------------------------------------------
+128          |                                            
+        beta |  3.004708   .0030413    3.26098   2.744069 
+          se |  .0892936   .0002741   .1176748   .0695246 
+       lower |  2.827998   .0030737   3.087648   2.543619 
+       upper |  3.181417   .0031048   3.447999   2.911595 
+-------------+--------------------------------------------
+256          |                                            
+        beta |  3.000336    .002166   3.156543   2.815427 
+          se |  .0627029    .000141    .076201   .0520072 
+       lower |  2.876852   .0021883   3.033776   2.686219 
+       upper |   3.12382   .0021791   3.294359   2.940191 
+-------------+--------------------------------------------
+512          |                                            
+        beta |  2.999626   .0015919   3.120037   2.854179 
+          se |  .0443811   .0000738   .0508598    .037947 
+       lower |  2.912434   .0015866   3.033076   2.769239 
+       upper |  3.086818   .0016104   3.216184   2.939119 
+-------------+--------------------------------------------
+1000         |                                            
+        beta |  2.999364   .0011245    3.11444   2.901456 
+          se |  .0316636    .000035   .0345405   .0283927 
+       lower |  2.937229   .0011308    3.05264   2.836929 
+       upper |  3.061498   .0011222   3.176241   2.965983 
+-------------+--------------------------------------------
+1024         |                                            
+        beta |   2.99937    .001086   3.094126   2.910543 
+          se |  .0313194   .0000348   .0345399   .0279547 
+       lower |  2.937912   .0010924   3.033145   2.849665 
+       upper |  3.060828   .0010838   3.155107   2.968675 
+-------------+--------------------------------------------
+2048         |                                            
+        beta |  3.000553   .0007965   3.065669    2.93284 
+          se |  .0221115   .0000179   .0237148   .0205333 
+       lower |   2.95719   .0007938   3.021346   2.887852 
+       upper |  3.043916   .0008007   3.109992   2.976859 
+-------------+--------------------------------------------
+4096         |                                            
+        beta |  3.000162   .0005167    3.05165   2.960126 
+          se |  .0156305   8.50e-06   .0164563   .0149385 
+       lower |  2.969518   .0005171   3.021249   2.930071 
+       upper |  3.030807   .0005169    3.08205    2.99018 
+-------------+--------------------------------------------
+8192         |                                            
+        beta |  2.999968   .0003965   3.031039   2.962005 
+          se |  .0110556   4.24e-06   .0114463   .0106751 
+       lower |  2.978297   .0003966   3.009172   2.940114 
+       upper |   3.02164   .0003967   3.052905   2.983896 
+-------------+--------------------------------------------
+10000        |                                            
+        beta |  2.999298   .0003512    3.02756   2.963045 
+          se |  .0099949   3.52e-06   .0103329   .0096762 
+       lower |  2.979706   .0003517   3.007768   2.943504 
+       upper |   3.01889   .0003508   3.047352   2.982585 
+-------------+--------------------------------------------
+16384        |                                            
+        beta |  2.999856   .0002727   3.023597    2.97725 
+          se |   .007811   2.14e-06   .0079775   .0076064 
+       lower |  2.984546   .0002729   3.008371   2.961948 
+       upper |  3.015167   .0002725   3.038823   2.992553 
+-------------+--------------------------------------------
+32768        |                                            
+        beta |  2.999788   .0001958   3.018829   2.984092 
+          se |  .0055233   1.09e-06   .0056074   .0054151 
+       lower |  2.988962   .0001958   3.007979   2.973233 
+       upper |  3.010614   .0001958    3.02968   2.994951 
+-------------+--------------------------------------------
+65536        |                                            
+        beta |  2.999863   .0001379   3.013927   2.985349 
+          se |  .0039063   5.40e-07   .0039536   .0038533 
+       lower |  2.992207   .0001379   3.006248   2.977616 
+       upper |  3.007519   .0001379   3.021606   2.993082 
+-------------+--------------------------------------------
+100000       |                                            
+        beta |  3.000171   .0001105   3.010157   2.991509 
+          se |  .0031621   3.66e-07   .0031942   .0031301 
+       lower |  2.993973   .0001106   3.003954   2.985301 
+       upper |  3.006369   .0001105   3.016359   2.997716 
+-------------+--------------------------------------------
+131072       |                                            
+        beta |  3.000007   .0000986   3.008446   2.991447 
+          se |  .0027622   2.74e-07   .0027889   .0027357 
+       lower |  2.994593   .0000986    3.00303   2.986036 
+       upper |  3.005421   .0000986   3.013863   2.996859 
+-------------+--------------------------------------------
+262144       |                                            
+        beta |  3.000053   .0000673   3.007339   2.993632 
+          se |  .0019528   1.37e-07    .001964   .0019411 
+       lower |  2.996226   .0000673   3.003503   2.989809 
+       upper |   3.00388   .0000673   3.011174   2.997455 
+-------------+--------------------------------------------
+524288       |                                            
+        beta |  3.000031   .0000488   3.005143   2.995835 
+          se |  .0013811   6.76e-08   .0013863   .0013748 
+       lower |  2.997324   .0000488   3.002438   2.993133 
+       upper |  3.002738   .0000488   3.007848   2.998537 
+-------------+--------------------------------------------
+1000000      |                                            
+        beta |   2.99999   .0000364   3.003939   2.996404 
+          se |      .001   3.66e-08    .001003   .0009966 
+       lower |   2.99803   .0000364   3.001976   2.994446 
+       upper |   3.00195   .0000364   3.005901   2.998362 
+-------------+--------------------------------------------
+1048576      |                                            
+        beta |  2.999919   .0000356   3.002768   2.995758 
+          se |  .0009765   3.34e-08   .0009796   .0009738 
+       lower |  2.998005   .0000356   3.000852   2.993844 
+       upper |  3.001833   .0000356   3.004683   2.997671 
+-------------+--------------------------------------------
+2097152      |                                            
+        beta |  3.000019   .0000247    3.00234   2.997711 
+          se |  .0006905   1.71e-08   .0006922    .000689 
+       lower |  2.998666   .0000247   3.000988   2.996356 
+       upper |  3.001372   .0000247   3.003692   2.999066 
+-------------+--------------------------------------------
+Total        |                                            
+        beta |  2.998881   .0016052   10.43353  -2.523935 
+          se |  .0954277   .0014424   5.058801    .000689 
+       lower |  2.732508   .0058277   4.691794  -20.56086 
+       upper |  3.265253   .0058402   30.19464  -.5120217 
+
+. esttab using "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart2-800.tex", re
+> place style(tex) cells("mean semean max min") label nodepvar nomtitle nonumber collabels("Mean" "
+> SEM" "Max" "Min")
+(output written to C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Impleme
+> ntation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart2-800.tex)
+
+. 
+. save sims2b, replace
+file sims2b.dta saved
+
+. ******************************************************************************
+. *2c. Sampling noise in an infinite superpopulation (Decrease Repetitions)
+. *******************************************************************************/
+. 
+. clear
+
+. drop _all
+
+. 
+. set seed 69420
+
+. capture program drop v2c
+
+. program define v2c, rclass
+  1. syntax anything [if]
+  2. clear
+  3. args number_sample 
+  4. set obs `number_sample'
+  5. gen x = rnormal()
+  6. gen y = 3*x + rnormal()
+  7. regress y x
+  8. mat a = r(table)
+  9. return scalar N = e(N)
+ 10. return scalar beta = a[1,1]
+ 11. return scalar se = a[2,1]
+ 12. return scalar p = a[4,1]
+ 13. return scalar lower = a[5,1]
+ 14. return scalar upper = a[6,1]
+ 15. end
+
+. 
+. tempfile sims2c
+
+. tempfile combined1c
+
+. tempfile combined2c
+
+. save `sims2c', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_00000b.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_00000b.tmp saved as .dta format
+
+. clear
+
+. 
+. save `combined1c', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_00000c.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_00000c.tmp saved as .dta format
+
+. forvalues i = 1/6{
+  2.         local population = 10^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(300) seed(69420) : v2c `population'
+  4.         gen table1=`i'
+  5.         qui replace table1=10^`i'
+  6.         append using `combined1c'
+  7.         qui save `combined1c', replace
+  8.         _dots `i' 0
+  9. }
+......
+. 
+. clear
+
+. save `combined2c', replace emptyok
+(dataset contains 0 observations)
+(file C:\Users\miche\AppData\Local\Temp\ST_563c_00000d.tmp not found)
+file C:\Users\miche\AppData\Local\Temp\ST_563c_00000d.tmp saved as .dta format
+
+. forvalues i = 2/21{
+  2.         local population = 2^`i'
+  3.         qui simulate beta = r(beta) se = r(se) lower = r(lower) upper = r(upper) p = r(p), rep
+> s(300) seed(69420) : v2c `population'
+  4.         gen table2=`i'
+  5.         qui replace table2=2^`i'
+  6.         append using `combined2c'
+  7.         qui save `combined2c', replace
+  8.         _dots `i' 0
+  9. }
+....................
+. 
+. clear
+
+. use `sims2c', clear
+
+. append using "`combined1c'" "`combined2c'"
+
+. save `sims2c', replace
+file C:\Users\miche\AppData\Local\Temp\ST_563c_00000b.tmp saved as .dta format
+
+. 
+. 
+. replace table1 = table2 if missing(table1)
+(6,000 real changes made)
+
+. drop table2
+
+. rename table1 samplesize
+
+. sort samplesize
+
+. 
+. levelsof samplesize, local(levels) 
+4 8 10 16 32 64 100 128 256 512 1000 1024 2048 4096 8192 10000 16384 32768 65536 100000 131072 2621
+> 44 524288 1000000 1048576 2097152
+
+. foreach l of local levels {
+  2.         label define SAMPLE3c `l' "`l'", add
+  3.         }
+
+.         
+. label values samplesize SAMPLE
+
+. egen sdbeta = sd(beta), by(samplesize)
+
+. 
+. tw (line sdbeta samplesize, xscale(log) xlabel(10 100 1000 10000 100000 1000000) xtitle(N) ytitle
+> (Standard Deviation of Beta) title("Change in the Variance of Beta") subtitle("Logarithm Scale of
+>  the Decrease in Standard Deviation")) (scatter sdbeta samplesize), legend(off)
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/betadeviationpart2-300.pn
+> g" , replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/betadeviationpart2-300.png saved as PNG format
+
+. 
+. tw (histogram beta if samplesize <= 10000, by(samplesize) lc(none) fc(gray) freq width(.1) barwid
+> th(.1))(histogram beta if p < .00001 & samplesize <= 10000, lc(black) fc(none) freq width(.1) bar
+> width(.1) legend(order(1 "Beta" 2 "p < 0.05"))) if samplesize <= 10000
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/facetbetapart2-300.png" ,
+>  replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/facetbetapart2-300.png saved as PNG format
+
+. 
+. graph bar (sd) beta upper lower if samplesize < 10000, over(samplesize, lab(angle(45))) legend( l
+> abel(1 "Beta") label(2 "Upper CI") label(3 "Lower CI") ) ytitle("Standard Deviation") title("Diff
+> erences in Variance per Sample Size") subtitle("Reductions in Variance Experienced by Different S
+> ample Sizes")
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/CIBetapart2-300.png" , re
+> place
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/CIBetapart2-300.png saved as PNG format
+
+. 
+. bysort samplesize : tabstat beta se lower upper, col(stats) s(mean sem max min)
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 4
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.001599  .0514519  6.312181  .0501516
+          se |  .6645258  .0337498  3.902929  .0010701
+       lower |  .1423752  .1523993  4.691794 -16.43275
+       upper |  5.860822  .1557016  17.72631  2.114253
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 8
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.992041  .0276316  5.003979  1.133368
+          se |  .4010514  .0103431  1.051543  .0709862
+       lower |  2.010704   .037444  3.333555 -1.045925
+       upper |  3.973379  .0374968  6.811829   2.78939
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.011256  .0201647  4.241395  1.857257
+          se |  .3360874  .0075502  1.041684  .1071756
+       lower |  2.236237    .02573  3.412139   .479367
+       upper |  3.786275  .0275223  6.643523  2.423752
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 16
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.980894  .0139456  3.726948  2.309415
+          se |   .264684  .0040413  .5436468  .1121098
+       lower |  2.413203  .0171805  3.154518  1.366969
+       upper |  3.548585   .015622  4.440965  2.875516
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 32
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999753  .0108916  3.526422  2.524911
+          se |  .1810857  .0021694  .3516607  .0925833
+       lower |  2.629927   .011582  3.124834  2.044475
+       upper |  3.369579   .011932  4.050699  2.799079
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 64
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   2.99811  .0074755  3.391703  2.655382
+          se |    .12571   .000941  .1960465  .0840419
+       lower |  2.746819  .0076291  3.125173   2.41254
+       upper |  3.249401  .0077872   3.71538  2.885093
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   2.99984  .0056519  3.280281  2.761585
+          se |  .1011182  .0005898  .1316518  .0772076
+       lower |  2.799174  .0057783  3.078875  2.531867
+       upper |  3.200506  .0057653  3.481687  2.950007
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 128
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.002059  .0049015  3.247063  2.765543
+          se |  .0894236  .0004209  .1176748  .0695246
+       lower |  2.825092   .004941  3.087648    2.5897
+       upper |  3.179025  .0050024  3.419652  2.941386
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 256
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.997065  .0036117  3.156543  2.842733
+          se |  .0626498  .0002244   .076201  .0535324
+       lower |  2.873686  .0036633  3.033776   2.71844
+       upper |  3.120444  .0036138  3.294359  2.967026
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 512
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.995114  .0025357   3.09458  2.873663
+          se |  .0444207  .0001201   .050716  .0390827
+       lower |  2.907844  .0025346  3.007862    2.7848
+       upper |  3.082384  .0025587  3.181345  2.962526
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000175  .0017397  3.073025  2.917519
+          se |  .0317276  .0000582  .0345405  .0291049
+       lower |  2.937915  .0017342  3.011111    2.8535
+       upper |  3.062436  .0017526  3.135332  2.981538
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1024
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.998915  .0017167  3.079783  2.916826
+          se |  .0312984  .0000561  .0345399  .0279547
+       lower |  2.937499  .0017242  3.018873  2.857975
+       upper |  3.060331  .0017163  3.140693  2.975678
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 2048
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000817  .0012634  3.058225  2.935301
+          se |  .0221169  .0000279   .023496   .020922
+       lower |  2.957443  .0012604  3.013718  2.893338
+       upper |  3.044191  .0012689  3.102732  2.976859
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 4096
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000073  .0008761   3.04798  2.960126
+          se |  .0156232  .0000135  .0163237  .0149838
+       lower |  2.969443   .000875  3.017026  2.930071
+       upper |  3.030703  .0008779  3.078956   2.99018
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 8192
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   2.99988  .0006757  3.028024  2.962005
+          se |  .0110583  6.78e-06  .0114137  .0107342
+       lower |  2.978203  .0006759  3.006503  2.940114
+       upper |  3.021557  .0006758  3.049545  2.983896
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 10000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.998913  .0006047  3.023606  2.963045
+          se |  .0099922  5.62e-06  .0102505  .0096762
+       lower |  2.979326   .000605  3.004109  2.943504
+       upper |    3.0185  .0006046  3.043102  2.982585
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 16384
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999713  .0004406  3.020366   2.97725
+          se |  .0078134  3.51e-06  .0079706  .0076064
+       lower |  2.984398  .0004412  3.005177  2.961948
+       upper |  3.015028    .00044  3.035556  2.992553
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 32768
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   2.99979  .0003084  3.017697   2.98462
+          se |  .0055241  1.79e-06  .0055983  .0054151
+       lower |  2.988962  .0003087  3.006783  2.973675
+       upper |  3.010617  .0003082  3.028612  2.995566
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 65536
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999567  .0002153  3.013927  2.988863
+          se |   .003907  8.33e-07  .0039536  .0038561
+       lower |   2.99191  .0002153  3.006248  2.981237
+       upper |  3.007225  .0002154  3.021606  2.996488
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 100000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |   3.00033  .0001763  3.010157  2.991509
+          se |  .0031616  5.91e-07  .0031942  .0031345
+       lower |  2.994133  .0001762  3.003954  2.985301
+       upper |  3.006526  .0001764  3.016359  2.997716
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 131072
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999929  .0001625  3.008446  2.991447
+          se |  .0027623  4.75e-07  .0027889  .0027357
+       lower |  2.994514  .0001625   3.00303  2.986036
+       upper |  3.005343  .0001626  3.013863  2.996859
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 262144
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |    2.9999  .0001103  3.005665  2.994437
+          se |  .0019528  2.27e-07  .0019635  .0019411
+       lower |  2.996072  .0001103  3.001832  2.990612
+       upper |  3.003727  .0001103  3.009498  2.998262
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 524288
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000023  .0000796  3.004004  2.996298
+          se |  .0013813  1.08e-07  .0013863  .0013748
+       lower |  2.997315  .0000796  3.001298  2.993595
+       upper |   3.00273  .0000796  3.006709  2.999002
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1000000
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999972  .0000601  3.002348  2.996938
+          se |      .001  6.08e-08  .0010028  .0009969
+       lower |  2.998012  .0000601  3.000389  2.994979
+       upper |  3.001933  .0000601  3.004306  2.998898
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 1048576
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  2.999845  .0000512  3.002368  2.997807
+          se |  .0009765  5.41e-08  .0009796  .0009739
+       lower |  2.997931  .0000512  3.000453  2.995893
+       upper |  3.001759  .0000512  3.004283  2.999721
+------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-> samplesize = 2097152
+
+    Variable |      Mean  se(mean)       Max       Min
+-------------+----------------------------------------
+        beta |  3.000036  .0000376  3.001892  2.998122
+          se |  .0006905  2.80e-08   .000692  .0006892
+       lower |  2.998682  .0000376  3.000539  2.996769
+       upper |  3.001389  .0000376  3.003245  2.999475
+------------------------------------------------------
+
+. 
+. label variable beta "Beta"
+
+. label variable se "Standard Deviation"
+
+. label variable lower "Lower CI"
+
+. label variable upper "Upper CI"
+
+. label variable p "p-value"
+
+. 
+. estpost tabstat beta se lower upper, by(samplesize) col(stats) s(mean sem max min)
+
+Summary statistics: mean semean max min
+     for variables: beta se lower upper
+  by categories of: samplesize
+
+  samplesize |   e(mean)  e(semean)     e(max)     e(min) 
+-------------+--------------------------------------------
+4            |                                            
+        beta |  3.001599   .0514519   6.312181   .0501516 
+          se |  .6645258   .0337498   3.902929   .0010701 
+       lower |  .1423752   .1523993   4.691794  -16.43275 
+       upper |  5.860822   .1557016   17.72631   2.114253 
+-------------+--------------------------------------------
+8            |                                            
+        beta |  2.992041   .0276316   5.003979   1.133368 
+          se |  .4010514   .0103431   1.051543   .0709862 
+       lower |  2.010704    .037444   3.333555  -1.045925 
+       upper |  3.973379   .0374968   6.811829    2.78939 
+-------------+--------------------------------------------
+10           |                                            
+        beta |  3.011256   .0201647   4.241395   1.857257 
+          se |  .3360874   .0075502   1.041684   .1071756 
+       lower |  2.236237     .02573   3.412139    .479367 
+       upper |  3.786275   .0275223   6.643523   2.423752 
+-------------+--------------------------------------------
+16           |                                            
+        beta |  2.980894   .0139456   3.726948   2.309415 
+          se |   .264684   .0040413   .5436468   .1121098 
+       lower |  2.413203   .0171805   3.154518   1.366969 
+       upper |  3.548585    .015622   4.440965   2.875516 
+-------------+--------------------------------------------
+32           |                                            
+        beta |  2.999753   .0108916   3.526422   2.524911 
+          se |  .1810857   .0021694   .3516607   .0925833 
+       lower |  2.629927    .011582   3.124834   2.044475 
+       upper |  3.369579    .011932   4.050699   2.799079 
+-------------+--------------------------------------------
+64           |                                            
+        beta |   2.99811   .0074755   3.391703   2.655382 
+          se |    .12571    .000941   .1960465   .0840419 
+       lower |  2.746819   .0076291   3.125173    2.41254 
+       upper |  3.249401   .0077872    3.71538   2.885093 
+-------------+--------------------------------------------
+100          |                                            
+        beta |   2.99984   .0056519   3.280281   2.761585 
+          se |  .1011182   .0005898   .1316518   .0772076 
+       lower |  2.799174   .0057783   3.078875   2.531867 
+       upper |  3.200506   .0057653   3.481687   2.950007 
+-------------+--------------------------------------------
+128          |                                            
+        beta |  3.002059   .0049015   3.247063   2.765543 
+          se |  .0894236   .0004209   .1176748   .0695246 
+       lower |  2.825092    .004941   3.087648     2.5897 
+       upper |  3.179025   .0050024   3.419652   2.941386 
+-------------+--------------------------------------------
+256          |                                            
+        beta |  2.997065   .0036117   3.156543   2.842733 
+          se |  .0626498   .0002244    .076201   .0535324 
+       lower |  2.873686   .0036633   3.033776    2.71844 
+       upper |  3.120444   .0036138   3.294359   2.967026 
+-------------+--------------------------------------------
+512          |                                            
+        beta |  2.995114   .0025357    3.09458   2.873663 
+          se |  .0444207   .0001201    .050716   .0390827 
+       lower |  2.907844   .0025346   3.007862     2.7848 
+       upper |  3.082384   .0025587   3.181345   2.962526 
+-------------+--------------------------------------------
+1000         |                                            
+        beta |  3.000175   .0017397   3.073025   2.917519 
+          se |  .0317276   .0000582   .0345405   .0291049 
+       lower |  2.937915   .0017342   3.011111     2.8535 
+       upper |  3.062436   .0017526   3.135332   2.981538 
+-------------+--------------------------------------------
+1024         |                                            
+        beta |  2.998915   .0017167   3.079783   2.916826 
+          se |  .0312984   .0000561   .0345399   .0279547 
+       lower |  2.937499   .0017242   3.018873   2.857975 
+       upper |  3.060331   .0017163   3.140693   2.975678 
+-------------+--------------------------------------------
+2048         |                                            
+        beta |  3.000817   .0012634   3.058225   2.935301 
+          se |  .0221169   .0000279    .023496    .020922 
+       lower |  2.957443   .0012604   3.013718   2.893338 
+       upper |  3.044191   .0012689   3.102732   2.976859 
+-------------+--------------------------------------------
+4096         |                                            
+        beta |  3.000073   .0008761    3.04798   2.960126 
+          se |  .0156232   .0000135   .0163237   .0149838 
+       lower |  2.969443    .000875   3.017026   2.930071 
+       upper |  3.030703   .0008779   3.078956    2.99018 
+-------------+--------------------------------------------
+8192         |                                            
+        beta |   2.99988   .0006757   3.028024   2.962005 
+          se |  .0110583   6.78e-06   .0114137   .0107342 
+       lower |  2.978203   .0006759   3.006503   2.940114 
+       upper |  3.021557   .0006758   3.049545   2.983896 
+-------------+--------------------------------------------
+10000        |                                            
+        beta |  2.998913   .0006047   3.023606   2.963045 
+          se |  .0099922   5.62e-06   .0102505   .0096762 
+       lower |  2.979326    .000605   3.004109   2.943504 
+       upper |    3.0185   .0006046   3.043102   2.982585 
+-------------+--------------------------------------------
+16384        |                                            
+        beta |  2.999713   .0004406   3.020366    2.97725 
+          se |  .0078134   3.51e-06   .0079706   .0076064 
+       lower |  2.984398   .0004412   3.005177   2.961948 
+       upper |  3.015028     .00044   3.035556   2.992553 
+-------------+--------------------------------------------
+32768        |                                            
+        beta |   2.99979   .0003084   3.017697    2.98462 
+          se |  .0055241   1.79e-06   .0055983   .0054151 
+       lower |  2.988962   .0003087   3.006783   2.973675 
+       upper |  3.010617   .0003082   3.028612   2.995566 
+-------------+--------------------------------------------
+65536        |                                            
+        beta |  2.999567   .0002153   3.013927   2.988863 
+          se |   .003907   8.33e-07   .0039536   .0038561 
+       lower |   2.99191   .0002153   3.006248   2.981237 
+       upper |  3.007225   .0002154   3.021606   2.996488 
+-------------+--------------------------------------------
+100000       |                                            
+        beta |   3.00033   .0001763   3.010157   2.991509 
+          se |  .0031616   5.91e-07   .0031942   .0031345 
+       lower |  2.994133   .0001762   3.003954   2.985301 
+       upper |  3.006526   .0001764   3.016359   2.997716 
+-------------+--------------------------------------------
+131072       |                                            
+        beta |  2.999929   .0001625   3.008446   2.991447 
+          se |  .0027623   4.75e-07   .0027889   .0027357 
+       lower |  2.994514   .0001625    3.00303   2.986036 
+       upper |  3.005343   .0001626   3.013863   2.996859 
+-------------+--------------------------------------------
+262144       |                                            
+        beta |    2.9999   .0001103   3.005665   2.994437 
+          se |  .0019528   2.27e-07   .0019635   .0019411 
+       lower |  2.996072   .0001103   3.001832   2.990612 
+       upper |  3.003727   .0001103   3.009498   2.998262 
+-------------+--------------------------------------------
+524288       |                                            
+        beta |  3.000023   .0000796   3.004004   2.996298 
+          se |  .0013813   1.08e-07   .0013863   .0013748 
+       lower |  2.997315   .0000796   3.001298   2.993595 
+       upper |   3.00273   .0000796   3.006709   2.999002 
+-------------+--------------------------------------------
+1000000      |                                            
+        beta |  2.999972   .0000601   3.002348   2.996938 
+          se |      .001   6.08e-08   .0010028   .0009969 
+       lower |  2.998012   .0000601   3.000389   2.994979 
+       upper |  3.001933   .0000601   3.004306   2.998898 
+-------------+--------------------------------------------
+1048576      |                                            
+        beta |  2.999845   .0000512   3.002368   2.997807 
+          se |  .0009765   5.41e-08   .0009796   .0009739 
+       lower |  2.997931   .0000512   3.000453   2.995893 
+       upper |  3.001759   .0000512   3.004283   2.999721 
+-------------+--------------------------------------------
+2097152      |                                            
+        beta |  3.000036   .0000376   3.001892   2.998122 
+          se |  .0006905   2.80e-08    .000692   .0006892 
+       lower |  2.998682   .0000376   3.000539   2.996769 
+       upper |  3.001389   .0000376   3.003245   2.999475 
+-------------+--------------------------------------------
+Total        |                                            
+        beta |  2.999062   .0025102   6.312181   .0501516 
+          se |   .093144    .002256   3.902929   .0006892 
+       lower |  2.741801    .008988   4.691794  -16.43275 
+       upper |  3.256323   .0090757   17.72631   2.114253 
+
+. esttab using "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart2-300.tex", re
+> place style(tex) cells("mean semean max min") label nodepvar nomtitle nonumber collabels("Mean" "
+> SEM" "Max" "Min")
+(output written to C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Impleme
+> ntation/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/tab/tabstatpart2-300.tex)
+
+. 
+. save sims2c, replace
+file sims2c.dta saved
+
+. 
+. ******************************************************************************
+. *3. Comparison of two populations
+. *******************************************************************************/
+. clear
+
+. use sims1
+(simulate: v1)
+
+. gen id = 1
+
+. save sims1, replace
+file sims1.dta saved
+
+. 
+. clear
+
+. use sims2
+
+. 
+. drop if samplesize != 10 & samplesize != 100 & samplesize != 1000 & samplesize != 10000
+(11,000 observations deleted)
+
+. 
+. gen id = 2
+
+. append using sims1
+
+. 
+. recode samplesize (10 = 1) (100 = 2) (1000 = 3) (10000 = 4)
+(2,000 changes made to samplesize)
+
+. 
+. tw (histogram beta if id == 1, by(samplesize) color(green%30) freq width(.1) barwidth(.1)) (histo
+> gram beta if id == 2, by(samplesize) color(red%30) freq width(.1) barwidth(.1) legend(order(1 "Si
+> mulation 1" 2 "Simulation 2")))
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/BetaDifference.png" , rep
+> lace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/BetaDifference.png saved as PNG format
+
+. 
+. graph bar (mean) se, over(samplesize) over(id, relabel(1 "Simulation 1" 2 "Simulation 2")) scheme
+> (s1color) stack ytitle("Mean of Standard Error") title("Differences in Variance per Sample Size")
+>  subtitle("Reductions in Variance Experienced by Different Sample Sizes")
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/VarianceDifference.png" ,
+>  replace
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/VarianceDifference.png saved as PNG format
+
+. 
+. graph bar (mean) lower upper, over(samplesize) over(id, relabel(1 "Simulation 1" 2 "Simulation 2"
+> )) scheme(s1color) ytitle("Mean") title("Differences in Confidence Intervals per Sample Size") su
+> btitle("Changes in CI Experienced by Different Sample Sizes") legend(order(1 "Lower" 2 "Upper"))
+
+. graph export "C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design Implementa
+> tion/ppol768-spring23/Individual Assignments/Giunti Michele/week-08/img/CIDifference.png" , repla
+> ce
+file C:/Users/miche/OneDrive/Documenti/USA/School/SPRING 2023/Research Design
+    Implementation/ppol768-spring23/Individual Assignments/Giunti
+    Michele/week-08/img/CIDifference.png saved as PNG format
+
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+end of do-file
+
+. log close
+      name:  <unnamed>
+       log:  C:\Users\miche\OneDrive\Documenti\USA\School\SPRING 2023\Research Design Implementatio
+> n\ppol768-spring23\Individual Assignments\Giunti Michele\week-08\w08Assignment.log
+  log type:  text
+ closed on:  21 Mar 2023, 14:45:40
+---------------------------------------------------------------------------------------------------

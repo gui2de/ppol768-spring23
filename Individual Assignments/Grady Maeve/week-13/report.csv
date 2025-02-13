@@ -1,0 +1,120 @@
+
+This report was created by user Maeve on 1May2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,cmg_wk07_survey
+,Form Title,cmg_wk07_Survey
+,Form Version,2305011529
+,Form File,C:/Users/Maeve/GitHub/ppol768-spring23/Individual Assignments/Grady Maeve/week-13/cmg_wk07_Survey.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (choice sheet)
+----------------------------------------------------------------------
+
+"The string values in [label] column in the choice sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file in the following cases:"
+
+,"row" ,"label" 
+,"23","visiting friends "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"18","state","state_code","state_name"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA LIST LABEL
+----------------------------------------------------------------------
+
+"There is no column in the choice sheet with the name [label:stata]. This is best practice as it "
+"allows you to automatically import choice list labels optimized for Stata's value labels, making "
+"the data set easier to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (survey sheet)
+----------------------------------------------------------------------
+
+"The string values in [name] column in the survey sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file"
+
+,"row" ,"name" 
+,"73","random "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA FIELD LABEL
+----------------------------------------------------------------------
+
+"There is no column in the survey sheet with the name [label:stata]. This is best practice as this "
+"allows you to automatically import variable labels optimized for Stata, making the data set easier "
+"to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"67","integer","count_activities_sensitive"
+,"71","integer","count_activities_nonsensitive"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: UNUSED CHOICE LISTS
+----------------------------------------------------------------------
+
+"There are lists in the choice sheet that are not used by any field in the survey sheet. While that "
+"is allowed in ODK syntax it is an indication of a typo that might casue errors later. Make sure "
+"that the following list items are indeed not supposed to be used:"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"4","region","1","District of Columbia"
+,"5","region","2","Maryland"
+,"6","region","3","Virginia"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Unused_Choice_Lists
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.
