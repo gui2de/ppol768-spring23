@@ -1,0 +1,62 @@
+This report was created by user lidiaguzman on 29Apr2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,lg94_w07_form
+,Form Title,lg94 W07 Form
+,Form Version,2304291605
+,Form File,/Users/lidiaguzman/Desktop/RD_LAB/ppol768-spring23/Individual Assignments/Guzman Lidia/week-13/lg94_W07_Form.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+There are non numeric values in the [value] column of the choice sheet
+
+",""row"" ,""list_name"" ,""value"" ,""label"" ,""labelstata"" "
+",""4"",""country"",""Two_Letter_Country_Code"",""Country_Name"",""Country_Name"""
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: TOO LONG FIELD LABEL
+----------------------------------------------------------------------
+
+These stata labels are longer then 80 characters which means that Stata will cut them off. The 
+point of having a Stata label variable is to manually make sure that the labels documenting the 
+variables in the data set makes sense to a human reader. The following labels should be shortened:
+
+",""row"" ,""type"" ,""name"" ,""labellength"" ,""labelstata"" "
+",""35"",""select_one"",""country_satisfaction"",""122"",""How would you rate your overall experience in {university_country_label} during your time studying at {university_name}?"""
+",""41"",""integer"",""treatment"",""194"",""Please indicate the number of experiences you have had during college from the following list:I made new friends.  I went to a house-party. I joined a student organization.  I was raped."""
+",""44"",""integer"",""control"",""178"",""Please indicate the number of experiences you have had during college from the following list:I made new friends.  I went to a house-party. I joined a student organization."""
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Survey_Sheet_Stata_Labels
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+Fields of types other than note should all be required so that it cannot be skipped during the 
+interview. The following fields are not required and could therfore be skipped by the enumerator:
+
+",""row"" ,""type"" ,""name"" "
+",""23"",""integer"",""collegegraduation"""
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.

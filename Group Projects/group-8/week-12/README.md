@@ -57,6 +57,7 @@ Figure 1: X-Axis refers to enumerator ID.
 
 ![graph_svytime](Group Projects/group-8/week-12/graph_invalid.jpg)
 
+
 Figure 2: Y axis refers to enumerator ID. 
 
 Below is a table corresponding to Figure 1 and Figure 2 which shows invalid responses, average time taken to complete survey administered by each enumerator, and sample size that each enumerator was responsible for. 

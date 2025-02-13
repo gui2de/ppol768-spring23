@@ -1,0 +1,107 @@
+
+This report was created by user miche on 20Apr2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,michele_giunti_week07_form
+,Form Title,Michele Giunti Week07 Form
+,Form Version,2304200915
+,Form File,Michele Giunti Week07 Form.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"32","issue","Issue","Issue"
+,"39","state","state_name","state_name"
+,"40","county","county","county_full"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: DUPLICATED LABEL WITHIN LIST
+----------------------------------------------------------------------
+
+"There are duplicated entries in the [label] column of the choice sheet within the [ideology] "
+"list(s) for the following labels:"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"44","ideology","4","Environmentalism"
+,"46","ideology","6","Environmentalism"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Duplicated_List_Labels
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA LIST LABEL
+----------------------------------------------------------------------
+
+"There is no column in the choice sheet with the name [label:stata]. This is best practice as it "
+"allows you to automatically import choice list labels optimized for Stata's value labels, making "
+"the data set easier to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA FIELD LABEL
+----------------------------------------------------------------------
+
+"There is no column in the survey sheet with the name [label:stata]. This is best practice as this "
+"allows you to automatically import variable labels optimized for Stata, making the data set easier "
+"to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"17","text","last_name"
+,"38","select_one","vote"
+,"39","text","vote_reason"
+,"45","select_one","ideology1_likert"
+,"48","select_one","ideology2_likert"
+,"51","select_one","ideology3_likert"
+,"54","select_one","ideology4_likert"
+,"57","select_one","ideology5_likert"
+,"70","integer","issue_donate"
+,"79","integer","treatment_abortion"
+,"80","integer","treatment_gender"
+,"81","integer","treatment_guns"
+,"84","integer","control_abortion"
+,"85","integer","control_gender"
+,"86","integer","control_guns"
+,"100","select_one","state_confirm"
+,"105","integer","state_los_m"
+,"113","select_one","feedback_minor"
+,"117","text","feedback"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.

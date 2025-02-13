@@ -12,6 +12,10 @@ Welcome to our class repository!
 
 [Introductory guides and cheat sheets for Stata.](https://www.dropbox.com/sh/saq0usa4yhymjmx/AADPQ2ZY-Rs5gQ4d34IBmGNpa?dl=0)
 
+[How to access and read Stata documentation and help.](https://www.stata.com/manuals/gsu4.pdf)
+
+[Debugging errors in Stata code.](https://dimewiki.worldbank.org/Stata_Coding_Practices:_Debugging_)
+
 ## Repository Organization
 
 1. `Class Materials` contains, for each week, readings, slides (if relevant), and assignment prompts

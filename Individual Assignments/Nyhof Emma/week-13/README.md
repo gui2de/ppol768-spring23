@@ -1,0 +1,4 @@
+Survey spreadsheet: https://docs.google.com/spreadsheets/d/1BtrvBPbvx5Jucfnnevxa1lvHX8rXH6-0taUsfVmZRf4/edit#gid=1838173087
+Survey link: https://gui2de.surveycto.com/collect/nyhof_emma_week_07?caseid=
+
+Note about the ietestform output: Was given a suggestion about "non-numeric name values" which I disregarded. It was referring to the value for the question that asks about occupation. I assume it was referring to the fact that I was using the variable name for the values in the occupations dataset as the values in the dataset are actually numeric. Also, it asked that I included Stata labels, which I did in the revised iteration. When I tested the survey again it notified me that some of the labels were too long for Stata, but I left them as is because I figured that user readability was more important than Stata readability and that the researcher would still have access to the full label anyway.

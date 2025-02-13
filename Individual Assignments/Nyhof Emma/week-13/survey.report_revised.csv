@@ -1,0 +1,50 @@
+
+This report was created by user ecn20.la on 30Apr2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,nyhof_emma_week_07
+,Form Title,Nyhof, Emma Week 07
+,Form Version,2304300746
+,Form File,C:\Users\ecn20.la\Desktop\School\Research_Design_Implementation\ppol768-spring23\Individual Assignments\Nyhof Emma\week-13\Nyhof, Emma Week 07_revised.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" ,"labelstata" 
+,"4","occupation","occupation_number","occupation_label","occupation_label"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: TOO LONG FIELD LABEL
+----------------------------------------------------------------------
+
+"These stata labels are longer then 80 characters which means that Stata will cut them off. The "
+"point of having a Stata label variable is to manually make sure that the labels documenting the "
+"variables in the data set makes sense to a human reader. The following labels should be shortened:"
+
+,"row" ,"type" ,"name" ,"labellength" ,"labelstata" 
+,"24","text","person_relationship_other","81","If you selected other, please give your relationship with {person_name} below?"
+,"31","select_one","full_part_time","106","Does {person_name} work full-time (40 or more hours per week) or part-time (less than 40 hours per week)?"
+,"35","select_one","wage_check","183","You selected that {person_name} works full-time, but based on the reported annual earnings it appears this person makes less than the U.S. minimum wage. Are you sure this is correct?"
+,"41","integer","list_exp_control","224","How many of the following statements are true for you?- I think I deserve to make more money- I enjoy my job- I don't feel that there is room for growth in my career- I worry about covering all of my expenses each month"
+,"42","integer","list_exp_treatment","277","How many of the following statements are true for you? - I think I deserve to make more money - I enjoy my job - I don't feel that there is room for growth in my career - I worry about covering all of my expenses each month - I don't always report all my income to the IRS"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Survey_Sheet_Stata_Labels
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.

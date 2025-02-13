@@ -1,0 +1,134 @@
+
+This report was created by user keeganbrown on 30Apr2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,keegan_brown_week_07
+,Form Title,Keegan Brown Week 07
+,Form Version,2304301312
+,Form File,/Users/keeganbrown/Desktop/Georgetown/RD/Assignments (Non-Repository) /Brown Keegan/week-13/Keegan Brown Week 13 update.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (choice sheet)
+----------------------------------------------------------------------
+
+"The string values in [label] column in the choice sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file in the following cases:"
+
+,"row" ,"label" 
+,"8","PHD "
+,"23","Signficantly More "
+,"26","Dissisotiatives "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"30","country","Two_Letter_Country_Code","Country_Name"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA LIST LABEL
+----------------------------------------------------------------------
+
+"There is no column in the choice sheet with the name [label:stata]. This is best practice as it "
+"allows you to automatically import choice list labels optimized for Stata's value labels, making "
+"the data set easier to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (survey sheet)
+----------------------------------------------------------------------
+
+"The string values in [name] column in the survey sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file"
+
+,"row" ,"name" 
+,"15","unique "
+,"16","name "
+,"17","age "
+,"22","unique "
+,"29","program "
+,"30","year "
+,"34","alcohol "
+,"35","DC_legal "
+,"36","illegal "
+,"44","calculated "
+,"45","freq_alc "
+,"50","calculated "
+,"51","likert "
+,"55","likert "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA FIELD LABEL
+----------------------------------------------------------------------
+
+"There is no column in the survey sheet with the name [label:stata]. This is best practice as this "
+"allows you to automatically import variable labels optimized for Stata, making the data set easier "
+"to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"21","select_one","submission_x2"
+,"25","select_one","race"
+,"26","select_one","gender"
+,"27","integer","age_2"
+,"28","select_one","country"
+,"29","select_one","program"
+,"30","integer","year"
+,"34","select_one","alcohol"
+,"35","select_one","DC_legal"
+,"36","select_one","illegal"
+,"37","select_multiple","ill_type"
+,"41","select_one","no_sub"
+,"45","integer","freq_alc"
+,"46","integer","freq_thc_p"
+,"47","integer","freq_id"
+,"49","select_one","usecheck"
+,"52","select_one","use_alc_comp"
+,"53","select_one","use_drug_comp"
+,"54","select_one","use_ill_comp"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.

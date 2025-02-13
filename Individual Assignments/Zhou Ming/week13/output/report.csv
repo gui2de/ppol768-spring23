@@ -1,0 +1,175 @@
+
+This report was created by user zhouming on 30Apr2023 using the Stata command ietestform
+
+Use either of these links to read more about this command:
+,https://github.com/worldbank/iefieldkit
+,https://dimewiki.worldbank.org/wiki/Ietestform
+
+,Form ID,ming_zhou_week07_form
+,Form Title,Ming Zhou Week07 Form
+,Form Version,2304300929
+,Form File,/Users/zhouming/Desktop/Ming_zhou_week7.xlsx
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (choice sheet)
+----------------------------------------------------------------------
+
+"The string values in [list_name] column in the choice sheet are imported as strings and has leading "
+"or trailing spaces in the Excel file in the following cases:"
+
+,"row" ,"list_name" 
+,"4","sector "
+,"5","sector "
+,"6","sector "
+,"7","sector "
+,"8","sector "
+,"9","sector "
+,"10","sector "
+,"11","sector "
+,"12","sector "
+,"13","sector "
+,"14","sector "
+,"15","sector "
+
+"The string values in [label] column in the choice sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file in the following cases:"
+
+,"row" ,"label" 
+,"46","True "
+,"47","False "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON NUMERIC NAME VALUES
+----------------------------------------------------------------------
+
+"There are non numeric values in the [value] column of the choice sheet"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"48","state","state_id","state_name"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Value.2FName_Numeric
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: DUPLICATED LABEL WITHIN LIST
+----------------------------------------------------------------------
+
+"There are duplicated entries in the [label] column of the choice sheet within the [activity sector] "
+"list(s) for the following labels:"
+
+,"row" ,"list_name" ,"value" ,"label" 
+,"6","sector","3","Electricity Importer"
+,"7","sector","4","Electricity Importer"
+,"25","activity","10","Landfill gas"
+,"35","activity","20","Landfill gas"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Duplicated_List_Labels
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA LIST LABEL
+----------------------------------------------------------------------
+
+"There is no column in the choice sheet with the name [label:stata]. This is best practice as it "
+"allows you to automatically import choice list labels optimized for Stata's value labels, making "
+"the data set easier to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: SPACES BEFORE OR AFTER STRING (survey sheet)
+----------------------------------------------------------------------
+
+"The string values in [name] column in the survey sheet are imported as strings and has leading or "
+"trailing spaces in the Excel file"
+
+,"row" ,"name" 
+,"6","consented "
+,"11","Industrial "
+,"13","revenue "
+,"23","Sector "
+,"24","Activity "
+,"25","GreenHouse_Gas "
+,"33","HFC_143a "
+,"34","PFC_PFE "
+,"35","HFC_365mfc "
+,"37","HFC_245fa "
+,"41","Conslusion "
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Leading_and_Trailing_Spaces
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: MISSING END_GROUP/END_REPEAT NAME
+----------------------------------------------------------------------
+
+"It is bad practice to leave the name column empty for end_group or end_repeat fields. While this is "
+"allowed in ODK, it makes error finding harder and slower. The following repeat or end groups have "
+"empty name columns:"
+
+,"row" ,"type" ,"name" 
+,"14","end_group",""
+,"39","end_repeat",""
+,"40","end_group",""
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Matching_begin_.2Fend
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NO STATA FIELD LABEL
+----------------------------------------------------------------------
+
+"There is no column in the survey sheet with the name [label:stata]. This is best practice as this "
+"allows you to automatically import variable labels optimized for Stata, making the data set easier "
+"to read."
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Stata_Labels_Columns
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+TEST: NON-REQUIRED NON-NOTE TYPE FIELD
+----------------------------------------------------------------------
+
+"Fields of types other than note should all be required so that it cannot be skipped during the "
+"interview. The following fields are not required and could therfore be skipped by the enumerator:"
+
+,"row" ,"type" ,"name" 
+,"7","text","ID"
+,"13","integer","revenue"
+,"29","integer","year"
+,"30","integer","N20"
+,"31","integer","CH4"
+,"32","integer","CO2"
+,"33","integer","HFC_143a"
+,"34","integer","PFC_PFE"
+,"35","integer","HFC_365mfc"
+,"36","integer","HFC_43_10mee"
+,"37","integer","HFC_245fa"
+
+
+Read more about this test and why this is an error or does not follow the best practices we recommend here:
+https://dimewiki.worldbank.org/wiki/Ietestform#Required_Column
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+This is the end of the report.
