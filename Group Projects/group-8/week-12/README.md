@@ -4,7 +4,7 @@ Jasmine Adams, Chance Hope, J. Lei
 
 Potential Issue: 
 
-* Our project assess the impact of a credit builder loan on students' financial capabilities and access to credit via a financial capabilities survey. If we were to expand our survey to students at different schools, we'd conduct high frequency checks to assess enumerator errors and gauge whether respondents understanding the questions. Detecting and addressing these incongruencies would help improve data quality and the overall data collection process.
+* Our project assesses the impact of a credit builder loan on students' financial capabilities and access to credit via a financial capabilities survey. If we were to expand our survey to students at different schools, we'd conduct high frequency checks to assess enumerator errors and gauge whether respondents understanding the questions. Detecting and addressing these incongruencies would help improve data quality and the overall data collection process.
 
 High Frequency Check:
 
@@ -55,7 +55,8 @@ Figure 1: X-Axis refers to enumerator ID.
 
 
 
-![graph_svytime](C:\Users\maxis\Desktop\ppol 768 backup\week-12\graph_svytime.jpg)
+![graph_svytime](Group Projects/group-8/week-12/graph_invalid.jpg)
+
 
 Figure 2: Y axis refers to enumerator ID. 
 
